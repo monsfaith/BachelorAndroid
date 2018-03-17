@@ -192,24 +192,23 @@ public class MyActivitiesTab2Fragment extends Fragment implements FragmentInterf
                         } else {
                             planMainRepository.update2(idPlan, cv);
                             Plan plan = planMainRepository.getByType(idPlan);
-                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
                             if (getCurrentTime() < plan.getFromTime().getTime() || getCurrentTime() == plan.getFromTime().getTime()) {
                                 setHabitNotification(planMainRepository.getByType(idPlan).getFromTime().getTime(), idPlan);
                                 Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(plan.getFromTime()), Toast.LENGTH_LONG).show();
                             } else if (getCurrentTime() < plan.getToTime().getTime()) {
-                                if (getNotificationClass(idPlan) != null){
+                                //if (getNotificationClass(idPlan) != null){
                                     setHabitNotification(getCurrentTime(), idPlan);
-                                }
-                                Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(getCurrentTime()), Toast.LENGTH_LONG).show();
+                                //}
+                                Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(getCurrentTime()) + " " + sdf.format(plan.getToTime().getTime()), Toast.LENGTH_LONG).show();
 
                             } else {
                                 Calendar calendar = Calendar.getInstance();
                                 calendar.setTime(plan.getFromTime());
                                 calendar.add(Calendar.DAY_OF_MONTH, 1);
-                                if (getNotificationClass(idPlan) != null){
-                                    setHabitNotification(cal.getTimeInMillis(), idPlan);
-                                }
-                                Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(cal.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                                setHabitNotification(cal.getTimeInMillis(), idPlan);
+
+                                Toast.makeText(getActivity(), "Upozornenie od zajtra" + sdf.format(cal.getTimeInMillis()), Toast.LENGTH_LONG).show();
 
                             }
 
@@ -331,7 +330,7 @@ public class MyActivitiesTab2Fragment extends Fragment implements FragmentInterf
         i.putExtra("REQUESTCODE",type);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), type*100, i, 0);
         //setExactPlanNotification(alarmManager, pendingIntent, 2,200);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, planMainRepository.getByType(type).getRepetition(), pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time,300000 , pendingIntent);
 
         Intent cancelIntent = new Intent(getActivity(), CancelEveningHabitNotificationReceiver.class);
         cancelIntent.putExtra("CANCEL",type);
@@ -340,14 +339,14 @@ public class MyActivitiesTab2Fragment extends Fragment implements FragmentInterf
         alarmManager.set(AlarmManager.RTC_WAKEUP, planMainRepository.getByType(type).getToTime().getTime(), cancelPendingIntent);
     }
 
-    private Class<?> getNotificationClass(int idPlan){
+    /*private Class<?> getNotificationClass(int idPlan){
         switch (idPlan){
             case 2: return MorningHabitNotificationReceiver.class;
             case 3: return LunchHabitNotificationReceiver.class;
             case 4:return EveningHabitNotificationReceiver.class;
             default: return null;
         }
-    }
+    }*/
 
     private Class<?> getCancelNotificationClass(int idPlan){
         switch (idPlan){

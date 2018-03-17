@@ -1,5 +1,6 @@
 package running.java.mendelu.cz.bakalarskapraca.db;
 
+import android.app.Notification;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -115,6 +116,41 @@ public class ExamMainRepository {
 
     }
 
+    public Exam getClosestExam(){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+
+        try {
+            Exam result = null;
+            Cursor c = db.query(Exam.TABLE,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    Exam.DATE + " DESC");
+
+            try {
+
+                while (c.moveToNext()) {
+                    result = new Exam(c);
+
+                }
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+
+
+
+    }
+
+
 
     public int update1(Exam exam, ContentValues cv){
         SQLiteDatabase db = mainOpenHelper.getWritableDatabase();
@@ -135,6 +171,23 @@ public class ExamMainRepository {
             db.close();
         }
 
+    }
+
+    public long decreaseDays(long id){
+        SQLiteDatabase db = mainOpenHelper.getWritableDatabase();
+        Exam exam = getById(id);
+        int days = exam.getDays();
+        if (days != 0){
+            days--;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("days", days);
+
+        try {
+            return db.update(Exam.TABLE, contentValues, "_id= "+id, null);
+        } finally {
+            db.close();
+        }
     }
 
 

@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 
-import java.util.Date;
-
 import running.java.mendelu.cz.bakalarskapraca.R;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
 
@@ -23,18 +21,29 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Intent shownIntent = new Intent(context, ExamNotificationStartActivity.class);
-        //shownIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent shownIntent = new Intent(context, StartMainNotificationsActivity.class);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 500, shownIntent,0);
+        //pripomenutie
+        Intent postponeIntent = new Intent(context, ExamPostponeNotificationActivity.class);
 
-        //PendingIntent pendingIntent = PendingIntent.getActivity(context, 200, shownIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //zacatie planu
+        Intent doExamIntent = new Intent(context, StartMainNotificationsActivity.class);
+
 
         ExamMainRepository examMainRepository = new ExamMainRepository(context);
         int size = examMainRepository.findAllExams().size();
 
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 500, shownIntent,0);
+        PendingIntent doIntent = PendingIntent.getActivity(context, 500, doExamIntent, 0);
+        PendingIntent delayIntent = PendingIntent.getActivity(context,500, postponeIntent ,0);
+        PendingIntent notTodayIntent = intent.getParcelableExtra("NOTTODAY");
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context).setContentIntent(pendingIntent).setSmallIcon(R.drawable.ic_menu_camera).setSound(Settings.System.DEFAULT_NOTIFICATION_URI).setContentTitle("Treba sa ucit " + size).setContentText("blalblal").setAutoCancel(true);
+
+        NotificationCompat.Action actionDelay = new NotificationCompat.Action(R.drawable.ic_menu_send, "odlozit", delayIntent);
+        NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_menu_share, "robit", doIntent);
+        NotificationCompat.Action actionNot = new NotificationCompat.Action(R.drawable.ic_menu_share, "dnes nie", notTodayIntent);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context).setContentIntent(pendingIntent).setSmallIcon(R.drawable.ic_menu_camera).setSound(Settings.System.DEFAULT_NOTIFICATION_URI).setContentTitle("Treba sa ucit " + size).addAction(actionDelay).addAction(action).addAction(actionNot).setContentText("blalblal").setAutoCancel(true);
 
         notificationManager.notify(500, builder.build());
     }

@@ -200,6 +200,7 @@ public class PlanMainRepository {
 
     }
 
+
     public long updateAssociation(Date date){
         SQLiteDatabase db = mainOpenHelper.getWritableDatabase();
         Calendar cal = Calendar.getInstance();

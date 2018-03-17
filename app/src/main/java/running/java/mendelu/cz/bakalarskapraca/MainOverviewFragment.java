@@ -38,12 +38,10 @@ import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.CancelEveningHabitNotificationReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.CancelMorningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.DatabaseRecordReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.DatabaseTimeChangeReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.EveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.ExamNotificationReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.LunchHabitNotificationReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.MorningHabitNotificationReceiver;
 
 
 /**
@@ -101,6 +99,7 @@ public class MainOverviewFragment extends Fragment {
         if (planMainRepository.getAllPlans().size() != 4) {
             init();
             setDatabaseNotification();
+            setDatabasePlanTimeDaily();
         } else {
             dailyPlan = planMainRepository.getByType(1);
             morningPlan = planMainRepository.getByType(2);
@@ -136,51 +135,57 @@ public class MainOverviewFragment extends Fragment {
 
         if (morningPlan.getNotification() == false) {
             int id = morningPlan.getType();
+            Calendar calendar = Calendar.getInstance();
             if (getCurrentTime() < morningPlan.getFromTime().getTime() || getCurrentTime() == morningPlan.getFromTime().getTime()) {
                 setEveningHabitNotification(morningPlan.getFromTime().getTime(), id);
                 updateSetNotification(2);
             } else if (getCurrentTime() < morningPlan.getToTime().getTime()) {
-                setEveningHabitNotification(getCurrentTime(), id);
+                calendar.setTimeInMillis(getCurrentTime());
+                calendar.add(Calendar.MINUTE,1);
+                setEveningHabitNotification(calendar.getTimeInMillis(), id);
                 updateSetNotification(2);
             } else {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(morningPlan.getFromTime());
-                cal.add(Calendar.DAY_OF_MONTH, 1);
-                setEveningHabitNotification(cal.getTimeInMillis(), id);
+                calendar.setTime(morningPlan.getFromTime());
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                setEveningHabitNotification(calendar.getTimeInMillis(), id);
                 updateSetNotification(2);
             }
         }
 
         if (lunchPlan.getNotification() == false) {
             int id = lunchPlan.getType();
+            Calendar calendar = Calendar.getInstance();
             if (getCurrentTime() < lunchPlan.getFromTime().getTime() || getCurrentTime() == lunchPlan.getFromTime().getTime()) {
                 setEveningHabitNotification(lunchPlan.getFromTime().getTime(), id);
                 updateSetNotification(3);
             } else if (getCurrentTime() < lunchPlan.getToTime().getTime()) {
+                calendar.setTimeInMillis(getCurrentTime());
+                calendar.add(Calendar.MINUTE,1);
                 setEveningHabitNotification(getCurrentTime(), id);
                 updateSetNotification(3);
             } else {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(lunchPlan.getFromTime());
-                cal.add(Calendar.DAY_OF_MONTH, 1);
-                setEveningHabitNotification(cal.getTimeInMillis(), id);
+                calendar.setTime(lunchPlan.getFromTime());
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                setEveningHabitNotification(calendar.getTimeInMillis(), id);
                 updateSetNotification(3);
             }
         }
 
         if (eveningPlan.getNotification() == false) {
             int id = eveningPlan.getType();
+            Calendar calendar = Calendar.getInstance();
             if (getCurrentTime() < eveningPlan.getFromTime().getTime() || getCurrentTime() == eveningPlan.getFromTime().getTime()) {
                 setEveningHabitNotification(eveningPlan.getFromTime().getTime(), id);
                 updateSetNotification(4);
             } else if (getCurrentTime() < eveningPlan.getToTime().getTime()) {
-                setEveningHabitNotification(getCurrentTime(), id);
+                calendar.setTimeInMillis(getCurrentTime());
+                calendar.add(Calendar.MINUTE,1);
+                setEveningHabitNotification(calendar.getTimeInMillis(), id);
                 updateSetNotification(4);
             } else {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(eveningPlan.getFromTime());
-                cal.add(Calendar.DAY_OF_MONTH, 1);
-                setEveningHabitNotification(cal.getTimeInMillis(), id);
+                calendar.setTime(eveningPlan.getFromTime());
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                setEveningHabitNotification(calendar.getTimeInMillis(), id);
                 updateSetNotification(4);
             }
         }
@@ -259,13 +264,14 @@ public class MainOverviewFragment extends Fragment {
     private void setEveningHabitNotification(long time, int idPlan){
         AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(getActivity(), EveningHabitNotificationReceiver.class);
-        i.putExtra("REQUESTCODE",idPlan*100);
+        i.putExtra("REQUESTCODE",idPlan);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), idPlan*100, i, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, planMainRepository.getByType(idPlan).getRepetition(), pendingIntent);
 
         Intent cancelIntent = new Intent(getActivity(), CancelEveningHabitNotificationReceiver.class);
+        cancelIntent.putExtra("CANCEL",idPlan);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getActivity(), idPlan*100, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, time, cancelPendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, planMainRepository.getByType(idPlan).getToTime().getTime(), cancelPendingIntent);
     }
 
 
@@ -274,11 +280,34 @@ public class MainOverviewFragment extends Fragment {
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.MINUTE, 1);
         Intent i = new Intent(getContext(), ExamNotificationReceiver.class);
+
+        Intent delayIntent = new Intent();
+        delayIntent.setAction("odlozit");
+        PendingIntent pendingIntentDelay = PendingIntent.getBroadcast(getActivity(), 500, delayIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent notTodayIntent = new Intent();
+        delayIntent.setAction("dnes nie");
+        PendingIntent pendingIntentNotToday = PendingIntent.getBroadcast(getActivity(), 500, notTodayIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent doIntent = new Intent();
+        doIntent.setAction("odlozit");
+        PendingIntent pendingIntentDo = PendingIntent.getBroadcast(getActivity(), 500, doIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        i.putExtra("DELAY",pendingIntentDelay);
+        i.putExtra("DO",pendingIntentDo);
+        i.putExtra("NOTTODAY",pendingIntentNotToday);
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
+        //Maybe intent
+        /*Intent maybeReceive = new Intent();
+        maybeReceive.setAction(MAYBE_ACTION);
+        PendingIntent pendingIntentMaybe = PendingIntent.getBroadcast(this, 12345, maybeReceive, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.addAction(R.drawable.calendar_question, "Partly", pendingIntentMaybe);*/
+
         //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 300000, pendingIntent);
 
     }
 
@@ -286,10 +315,24 @@ public class MainOverviewFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         Intent i = new Intent(getContext(), DatabaseRecordReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 700, i, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 700, i, 0);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
         long time = planMainRepository.getLastTime();
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pendingIntent);
+
+    }
+
+    //ulozit kazdy den novy datum k casom planom v databazi
+    private void setDatabasePlanTimeDaily(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,30);
+        long time = calendar.getTimeInMillis();
+        Intent i = new Intent(getContext(), DatabaseTimeChangeReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 800, i, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pendingIntent);
 
     }
@@ -459,12 +502,12 @@ public class MainOverviewFragment extends Fragment {
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,12);
         long lunchFromTime = dailyCalendar.getTimeInMillis();
-        dailyCalendar.set(Calendar.HOUR_OF_DAY,16);
+        dailyCalendar.set(Calendar.HOUR_OF_DAY,17);
         long lunchToTime = dailyCalendar.getTimeInMillis();
         lunchPlan = new Plan(lunchFromTime, lunchToTime, 3, true);
         planMainRepository.insert(lunchPlan);
 
-        dailyCalendar.set(Calendar.HOUR_OF_DAY,16);
+        dailyCalendar.set(Calendar.HOUR_OF_DAY,17);
         long eveningFromTime = dailyCalendar.getTimeInMillis();
         dailyCalendar.set(Calendar.HOUR_OF_DAY,22);
         long eveningToTime = dailyCalendar.getTimeInMillis();

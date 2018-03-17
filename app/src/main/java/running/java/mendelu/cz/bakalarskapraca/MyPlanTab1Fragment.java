@@ -51,6 +51,8 @@ import running.java.mendelu.cz.bakalarskapraca.db.HabitMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.notifications.CancelEveningHabitNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.EveningHabitNotificationReceiver;
 
 /**
  * Created by Monika on 12.02.2018.
@@ -169,6 +171,22 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
                     planMainRepository.update2(1,contentValues);
                     setVisible(0);
 
+                    cancelDividedNotification(2);
+                    cancelDividedNotification(3);
+                    cancelDividedNotification(4);
+
+                    Plan dailyPlan = planMainRepository.getByType(1);
+                    if (getCurrentTime() < dailyPlan.getFromTime().getTime() || getCurrentTime() == dailyPlan.getFromTime().getTime()) {
+                        setDailyNotification(dailyPlan.getFromTime().getTime(), 1);
+                    } else if (getCurrentTime() < dailyPlan.getToTime().getTime() || getCurrentTime() == dailyPlan.getToTime().getTime()) {
+                        setDailyNotification(getCurrentTime(), 1);
+                    } else {
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(dailyPlan.getFromTime());
+                        cal.add(Calendar.DAY_OF_MONTH, 1);
+                        setDailyNotification(cal.getTimeInMillis(), 1);
+                    }
+
 
                 } else {
                     Toast.makeText(getActivity(), "Denný plán je vhodné zapínať pri neprebiehajúcom učiacom móde. ", Toast.LENGTH_LONG).show();
@@ -179,6 +197,9 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("ENABLED",false);
                     planMainRepository.update2(1,contentValues);
+                    setNotificationTime(2);
+                    setNotificationTime(3);
+                    setNotificationTime(4);
                     setVisible(1);
 
                 }
@@ -191,13 +212,9 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
             dailyPlanCardView.setVisibility(View.VISIBLE);
             settingsButtonDaily.setVisibility(View.VISIBLE);
             tx.setVisibility(View.VISIBLE);
-
-
-
-
-
             Toast.makeText(getActivity(), "Je nastaveny denny plan " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
             setVisible(0);
+
         } else {
             switchDaily.setChecked(false);
             progressDailyBar.setVisibility(View.GONE);
@@ -212,24 +229,52 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
 
     }
 
+    //aktualny cas
+    private long getCurrentTime(){
+        long time = System.currentTimeMillis();
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time);
+        cal.set(Calendar.SECOND,0);
+        cal.set(Calendar.MILLISECOND,0);
+        return cal.getTimeInMillis();
+    }
+
+    //nastavenie jednotlivych upozorneni na zaklade aktualneho casu a casu upozorneni v databaze
+    private void setNotificationTime(int idPlan) {
+        Plan plan = planMainRepository.getByType(idPlan);
+        if (getCurrentTime() < plan.getFromTime().getTime() || getCurrentTime() == plan.getFromTime().getTime()) {
+            setDividedNotifications(plan.getFromTime().getTime(), idPlan);
+        } else if (getCurrentTime() < plan.getToTime().getTime()) {
+            setDividedNotifications(getCurrentTime(), idPlan);
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(plan.getFromTime());
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+            setDividedNotifications(cal.getTimeInMillis(), idPlan);
+        }
+    }
+
     //odstranenie notifikacii pre jednotlive plany
-    private void cancelDividedNotifications(int type, Class<?> cancelClass){
+    private void cancelDividedNotification(int type){
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        Intent cancelIntent = new Intent(getActivity(), cancelClass);
+        Intent cancelIntent = new Intent(getActivity(), CancelEveningHabitNotificationReceiver.class);
+        cancelIntent.putExtra("CANCEL",type);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getActivity(), type*100, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), cancelPendingIntent);
 
     }
 
     //nastavenie delenych notifikacii
-    private void setDividedNotifications(long time, int type, Class<?> notifClass, Class<?> cancelClass){
+    private void setDividedNotifications(long time, int type){
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(getActivity(), notifClass);
+        Intent i = new Intent(getActivity(), EveningHabitNotificationReceiver.class);
+        i.putExtra("REQUESTCODE",type);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), type*100, i, 0);
         //setExactPlanNotification(alarmManager, pendingIntent, 2,200);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, planMainRepository.getByType(type).getRepetition(), pendingIntent);
 
-        Intent cancelIntent = new Intent(getActivity(), cancelClass);
+        Intent cancelIntent = new Intent(getActivity(), CancelEveningHabitNotificationReceiver.class);
+        cancelIntent.putExtra("CANCEL",type);
         //cancelIntent.putExtra("CANCELINTENT", pendingIntent);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getActivity(), type*100, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, planMainRepository.getByType(type).getToTime().getTime(), cancelPendingIntent);
@@ -241,14 +286,16 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
     }
 
     //nastavenie notifikacii pre denny plan
-    private void setDailyNotification(long time, int type, Class<?> notifClass, Class<?> cancelClass){
+    private void setDailyNotification(long time, int type){
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(getActivity(), notifClass);
+        Intent i = new Intent(getActivity(), EveningHabitNotificationReceiver.class);
+        i.putExtra("REQUESTCODE",type);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), type*100, i, 0);
         //setExactPlanNotification(alarmManager, pendingIntent, 2,200);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, planMainRepository.getByType(type).getRepetition(), pendingIntent);
 
-        Intent cancelIntent = new Intent(getActivity(), cancelClass);
+        Intent cancelIntent = new Intent(getActivity(), CancelEveningHabitNotificationReceiver.class);
+        cancelIntent.putExtra("CANCEL",type);
         //cancelIntent.putExtra("CANCELINTENT", pendingIntent);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getActivity(), type*100, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, planMainRepository.getByType(type).getToTime().getTime(), cancelPendingIntent);

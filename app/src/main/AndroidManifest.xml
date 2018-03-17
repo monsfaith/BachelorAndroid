@@ -57,6 +57,14 @@
         </activity>
         <activity android:name=".notifications.ExamNotificationStartActivity">
         </activity>
+        <activity android:name=".notifications.ExamPostponeNotificationActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"
+            android:excludeFromRecents="true"
+            />
+        <activity android:name=".notifications.StartMainNotificationsActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"
+            android:excludeFromRecents="true"
+            />
         <receiver android:name=".notifications.MorningHabitNotificationReceiver"
             android:enabled="true"
             android:exported="true"
@@ -65,7 +73,11 @@
         <receiver android:name=".notifications.DatabaseRecordReceiver"></receiver>
         <receiver android:name=".notifications.LunchHabitNotificationReceiver">
         </receiver>
-        <receiver android:name=".notifications.EveningHabitNotificationReceiver"></receiver>
+        <receiver android:name=".notifications.EveningHabitNotificationReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
         <receiver android:name=".notifications.CancelMorningHabitNotificationReceiver"></receiver>
         <receiver android:name=".notifications.CancelLunchHabitNotificationReceiver"></receiver>
         <receiver android:name=".notifications.CancelEveningHabitNotificationReceiver"></receiver>
