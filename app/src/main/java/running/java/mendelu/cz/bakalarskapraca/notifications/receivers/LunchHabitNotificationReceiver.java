@@ -1,4 +1,4 @@
-package running.java.mendelu.cz.bakalarskapraca.notifications;
+package running.java.mendelu.cz.bakalarskapraca.notifications.receivers;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,6 +9,7 @@ import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 
 import running.java.mendelu.cz.bakalarskapraca.R;
+import running.java.mendelu.cz.bakalarskapraca.notifications.HabitNotificationActivity;
 
 /**
  * Created by Monika on 13.03.2018.

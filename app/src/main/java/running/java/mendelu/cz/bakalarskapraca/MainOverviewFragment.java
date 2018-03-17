@@ -37,11 +37,11 @@ import running.java.mendelu.cz.bakalarskapraca.db.MainOpenHelper;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
-import running.java.mendelu.cz.bakalarskapraca.notifications.CancelEveningHabitNotificationReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.DatabaseRecordReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.DatabaseTimeChangeReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.EveningHabitNotificationReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.ExamNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DatabaseRecordReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DatabaseTimeChangeReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
 
 
 /**
@@ -94,8 +94,9 @@ public class MainOverviewFragment extends Fragment {
         database = mainOpenHelper.getWritableDatabase();
         planMainRepository = new PlanMainRepository(getActivity());
         habitMainRepository = new HabitMainRepository(getActivity());
+        examMainRepository = new ExamMainRepository(getActivity());
         actualPlanTextView = (TextView) view.findViewById(R.id.actualPlanTextView);
-
+        
         if (planMainRepository.getAllPlans().size() != 4) {
             init();
             setDatabaseNotification();
@@ -107,6 +108,8 @@ public class MainOverviewFragment extends Fragment {
             eveningPlan = planMainRepository.getByType(4);
         }
 
+        setDatabaseNotification();
+        setDatabasePlanTimeDaily();
         loadListView();
 
         butt.setOnClickListener(new View.OnClickListener() {
@@ -279,23 +282,14 @@ public class MainOverviewFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.MINUTE, 1);
-        Intent i = new Intent(getContext(), ExamNotificationReceiver.class);
+        Intent i = new Intent(getActivity(), ExamNotificationReceiver.class);
 
-        Intent delayIntent = new Intent();
+        /*Intent delayIntent = new Intent();
         delayIntent.setAction("odlozit");
-        PendingIntent pendingIntentDelay = PendingIntent.getBroadcast(getActivity(), 500, delayIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentDelay = PendingIntent.getBroadcast(getActivity(), 500, delayIntent, PendingIntent.FLAG_UPDATE_CURRENT);*/
 
-        Intent notTodayIntent = new Intent();
-        delayIntent.setAction("dnes nie");
-        PendingIntent pendingIntentNotToday = PendingIntent.getBroadcast(getActivity(), 500, notTodayIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Intent doIntent = new Intent();
-        doIntent.setAction("odlozit");
-        PendingIntent pendingIntentDo = PendingIntent.getBroadcast(getActivity(), 500, doIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        i.putExtra("DELAY",pendingIntentDelay);
-        i.putExtra("DO",pendingIntentDo);
-        i.putExtra("NOTTODAY",pendingIntentNotToday);
+        long id = examMainRepository.getClosestExam().getId();
+        i.putExtra("EXAMID", id);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -307,13 +301,11 @@ public class MainOverviewFragment extends Fragment {
         mBuilder.addAction(R.drawable.calendar_question, "Partly", pendingIntentMaybe);*/
 
         //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 300000, pendingIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
 
     }
 
     private void setDatabaseNotification(){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
         Intent i = new Intent(getContext(), DatabaseRecordReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 700, i, 0);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -331,7 +323,7 @@ public class MainOverviewFragment extends Fragment {
         calendar.set(Calendar.SECOND,30);
         long time = calendar.getTimeInMillis();
         Intent i = new Intent(getContext(), DatabaseTimeChangeReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 800, i, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 800, i, 0);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pendingIntent);
 

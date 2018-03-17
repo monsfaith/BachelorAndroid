@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -118,12 +119,13 @@ public class ExamMainRepository {
 
     public Exam getClosestExam(){
         SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+        Calendar calendar = Calendar.getInstance();
 
         try {
             Exam result = null;
             Cursor c = db.query(Exam.TABLE,
                     null,
-                    null,
+                    Exam.DATE + " < " + calendar.getTimeInMillis(),
                     null,
                     null,
                     null,

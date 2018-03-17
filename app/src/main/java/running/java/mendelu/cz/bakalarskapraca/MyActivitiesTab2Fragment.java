@@ -1,11 +1,9 @@
 package running.java.mendelu.cz.bakalarskapraca;
 
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,8 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -28,8 +24,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,17 +31,14 @@ import java.util.Date;
 import java.util.List;
 
 import running.java.mendelu.cz.bakalarskapraca.db.Habit;
-import running.java.mendelu.cz.bakalarskapraca.db.HabitAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitToChooseAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
-import running.java.mendelu.cz.bakalarskapraca.notifications.CancelEveningHabitNotificationReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.CancelLunchHabitNotificationReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.CancelMorningHabitNotificationReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.EveningHabitNotificationReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.LunchHabitNotificationReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.MorningHabitNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelLunchHabitNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelMorningHabitNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
 
 /**
  * Created by Monika on 12.02.2018.

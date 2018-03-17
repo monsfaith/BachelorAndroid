@@ -2,7 +2,6 @@ package running.java.mendelu.cz.bakalarskapraca.notifications;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +12,7 @@ import android.widget.Button;
 import java.util.Calendar;
 
 import running.java.mendelu.cz.bakalarskapraca.R;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
 
 /**
  * Created by Monika on 17.03.2018.

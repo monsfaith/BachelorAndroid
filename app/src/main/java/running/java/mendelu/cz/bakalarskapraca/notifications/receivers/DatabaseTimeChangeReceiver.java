@@ -1,11 +1,14 @@
-package running.java.mendelu.cz.bakalarskapraca.notifications;
+package running.java.mendelu.cz.bakalarskapraca.notifications.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
@@ -21,11 +24,20 @@ public class DatabaseTimeChangeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         planMainRepository = new PlanMainRepository(context);
-        updateTimes(1,planMainRepository);
-        updateTimes(2,planMainRepository);
-        updateTimes(3,planMainRepository);
-        updateTimes(4,planMainRepository);
 
+        Calendar calendarCurrent = Calendar.getInstance();
+        Calendar calendarMy = Calendar.getInstance();
+        calendarMy.setTime(planMainRepository.getByType(1).getFromTime());
+        boolean sameDay = calendarCurrent.get(Calendar.YEAR) == calendarMy.get(Calendar.YEAR) &&
+                calendarCurrent.get(Calendar.DAY_OF_YEAR) == calendarMy.get(Calendar.DAY_OF_YEAR);
+        if (!sameDay) {
+            updateTimes(1, planMainRepository);
+            updateTimes(2, planMainRepository);
+            updateTimes(3, planMainRepository);
+            updateTimes(4, planMainRepository);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+            Toast.makeText(context, "aktualizace na cas " + sdf.format(planMainRepository.getByType(2).getToTime().getTime()), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateTimes(long idPlan, PlanMainRepository planMainRepository){

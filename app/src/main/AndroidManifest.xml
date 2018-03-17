@@ -65,22 +65,23 @@
             android:theme="@style/Theme.AppCompat.Dialog"
             android:excludeFromRecents="true"
             />
-        <receiver android:name=".notifications.MorningHabitNotificationReceiver"
+        <receiver android:name=".notifications.receivers.MorningHabitNotificationReceiver"
             android:enabled="true"
             android:exported="true"
             />
-        <receiver android:name=".notifications.ExamNotificationReceiver"></receiver>
-        <receiver android:name=".notifications.DatabaseRecordReceiver"></receiver>
-        <receiver android:name=".notifications.LunchHabitNotificationReceiver">
+        <receiver android:name=".notifications.receivers.ExamNotificationReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.DatabaseRecordReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.LunchHabitNotificationReceiver">
         </receiver>
-        <receiver android:name=".notifications.EveningHabitNotificationReceiver">
+        <receiver android:name=".notifications.receivers.EveningHabitNotificationReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".notifications.CancelMorningHabitNotificationReceiver"></receiver>
-        <receiver android:name=".notifications.CancelLunchHabitNotificationReceiver"></receiver>
-        <receiver android:name=".notifications.CancelEveningHabitNotificationReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.CancelMorningHabitNotificationReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.CancelLunchHabitNotificationReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.CancelEveningHabitNotificationReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.DatabaseTimeChangeReceiver"></receiver>
     </application>
 
 </manifest>

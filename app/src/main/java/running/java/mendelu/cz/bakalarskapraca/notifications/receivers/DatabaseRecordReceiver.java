@@ -1,4 +1,4 @@
-package running.java.mendelu.cz.bakalarskapraca.notifications;
+package running.java.mendelu.cz.bakalarskapraca.notifications.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
