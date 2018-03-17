@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">BakalarskaPraca</string>
+    <string name="title_activity_main_view">MainViewActivity</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="today">DNES</string>
+    <string name="dnes">DNES</string>
+    <string name="showmore">Zobraziť viac</string>
+    <string name="plan">PLÁN</string>
+    <string name="zajtra">ZAJTRA</string>
+    <string name="celodenny">CELODENNÝ PLÁN</string>
+    <string name="ranny">RANNÝ PLÁN</string>
+    <string name="obedny">OBEDNÝ PLÁN</string>
+    <string name="vecerny">VEČERNÝ PLÁN</string>
+    <string name="title_activity_my_plan">MyPlanActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_my_plan_tabs">MyPlanTabsActivity</string>
+    <string name="pridat">Pridať</string>
+    <string name="title_activity_main_vie">MainActivityVie</string>
+    <string name="title_activity_navigation_main">NavigationMainActivity</string>
+    
+    <string-array name="names">
+        <item></item>
+
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="spokojnost">Spokojnosť</string>
+    <string name="pokus">Pokus</string>
+    <string name="znamka">Známka</string>
+    <string name="pridatHabit">addHabit</string>
+    <string name="backButton">back</string>
+    <string name="pridatExam">addEx</string>
+    <string name="ostatnedni">OSTATNÉ</string>
+    <string name="planaktualny">AKTUÁLNY PLÁN</string>
+    <string name="upravitExam">updateEx</string>
+    <string name="updateExam">updateE\\</string>
+    <string name="tabs_settings">tabsSettings</string>
+    <string name="settings_tabs">Upozornenia</string>
+    <string name="interval">Interval upozornení</string>
+    <string name="time">Doba upozorňovania</string>
+    <string name="infoAboutDailyPlan">Nahradiť jednotlivé plány celodenným plánom. Vhodné pre dni bez učenia.</string>
+    <string name="infoAboutDailyPlanVisible">Nahradiť celodenný plán jednotlivými plánmi.</string>
+</resources>

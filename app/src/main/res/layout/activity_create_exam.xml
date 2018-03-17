@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="running.java.mendelu.cz.bakalarskapraca.CreateExamActivity"
+    tools:gravity="top|center">
+
+
+    <ImageView
+        android:id="@+id/newExamIcon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"
+        android:paddingTop="35dp"
+        app:srcCompat="?android:attr/listChoiceIndicatorSingle" />
+
+    <TextView
+        android:id="@+id/pickSubject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newExamIcon"
+        android:paddingStart="20dp"
+        android:paddingTop="25dp"
+        android:text="TextView" />
+
+    <EditText
+        android:id="@+id/chosenSubject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pickSubject"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/cardview_light_background"
+        android:hint="Vyber predmet"
+        android:focusable="false"
+        android:inputType="textPersonName"
+        android:onClick="choseSubject" />
+
+    <View
+        android:id="@+id/strut"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/examDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@id/strut"
+        android:layout_below="@id/chosenSubject"
+        android:paddingStart="20dp"
+        android:paddingTop="15dp"
+        android:text="TextView" />
+
+    <EditText
+        android:id="@+id/chosenDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@id/strut"
+        android:layout_below="@id/examDate"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:inputType="date"
+        android:focusable="false"
+        android:background="@color/cardview_light_background"
+        android:hint="Vyber dátum"
+        android:onClick="choseDate" />
+
+    <TextView
+        android:id="@+id/examTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/strut"
+        android:layout_alignParentRight="true"
+        android:layout_alignRight="@id/chosenSubject"
+        android:layout_below="@id/chosenSubject"
+        android:layout_marginLeft="10dp"
+        android:paddingTop="15dp"
+        android:text="TextView" />
+
+
+    <EditText
+        android:id="@+id/chosenTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/strut"
+        android:layout_alignParentRight="true"
+        android:layout_alignRight="@id/examTime"
+        android:layout_below="@id/examTime"
+        android:inputType="time"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/cardview_light_background"
+        android:hint="Vyber čas"
+        android:focusable="false"
+        android:onClick="choseTime" />
+
+    <TextView
+        android:id="@+id/examDifficulty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@id/strut"
+        android:layout_below="@id/chosenDate"
+        android:paddingStart="20dp"
+        android:paddingTop="15dp"
+        android:text="TextView" />
+
+    <android.support.v7.widget.AppCompatSeekBar
+        android:id="@+id/difficultySeekBar"
+        android:layout_width="match_parent"
+        android:layout_below="@id/examDifficulty"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="wrap_content" />
+
+
+    <!--<EditText
+        android:id="@+id/chosenDifficulty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@id/strut"
+        android:layout_below="@id/examDifficulty"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:inputType="number"
+        android:focusable="false"
+        android:onClick="choseDifficulty"
+        android:background="@color/cardview_light_background"
+        android:hint="Vyber náročnosť"
+        />-->
+
+    <TextView
+        android:id="@+id/examDays"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/difficultySeekBar"
+        android:paddingTop="15dp"
+
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:text="TextView" />
+    <!--
+
+    android:layout_alignParentLeft="true"
+        android:layout_alignRight="@id/strut"
+                android:paddingStart="20dp"
+
+
+    android:layout_below="@id/chosenTime"
+            android:layout_alignLeft="@id/strut"
+            android:layout_alignParentRight="true"
+        android:layout_alignRight="@id/chosenSubject"
+                android:layout_width="0dp"
+                        android:layout_marginLeft="10dp"
+        -->
+
+
+    <EditText
+        android:id="@+id/chosenDays"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/examDays"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/cardview_light_background"
+        android:inputType="number"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:hint="Počet dní učenia"/>
+        <!--android:layout_alignParentLeft="true"
+        android:layout_alignRight="@id/strut"
+        -->
+
+
+    <TextView
+        android:id="@+id/examClassroom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@id/strut"
+        android:layout_below="@id/chosenDays"
+        android:paddingStart="20dp"
+        android:paddingTop="15dp"
+        android:text="Učebňa" />
+
+
+    <EditText
+        android:id="@+id/classroomInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@id/strut"
+        android:layout_below="@id/examClassroom"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/cardview_light_background" />
+
+    <TextView
+        android:id="@+id/examNote"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/strut"
+        android:layout_alignParentRight="true"
+        android:layout_alignRight="@id/chosenDays"
+        android:layout_below="@id/chosenDays"
+        android:layout_marginLeft="10dp"
+        android:paddingTop="15dp"
+        android:text="Poznámka" />
+
+
+    <EditText
+        android:id="@+id/noteInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/strut"
+        android:layout_alignParentRight="true"
+        android:layout_alignRight="@id/examTime"
+        android:layout_below="@id/examNote"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/cardview_light_background"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+
+    <Button
+        android:id="@+id/addExamButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/noteInput"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/cardview_light_background"
+        android:text="Pridať skúšku"
+        android:onClick="addExam" />
+
+
+</RelativeLayout>

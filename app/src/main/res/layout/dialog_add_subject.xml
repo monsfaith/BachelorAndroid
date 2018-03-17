@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/createNewSubjectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="createNewSubject"
+        android:text="Vytvoriť nový predmet" />
+
+    <ListView
+        android:id="@+id/listViewSub"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/createNewSubjectButton"
+        android:layout_height="wrap_content" />
+
+
+
+
+</RelativeLayout>

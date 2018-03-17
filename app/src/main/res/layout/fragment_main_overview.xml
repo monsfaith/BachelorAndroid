@@ -1,0 +1,32 @@
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="running.java.mendelu.cz.bakalarskapraca.MainOverviewFragment"
+    >
+
+
+ <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/activity_main_card_one"></include>
+
+            <include layout="@layout/activity_main_card_two"></include>
+
+
+        </LinearLayout>
+        </FrameLayout>
+ </ScrollView>
+</LinearLayout>
+

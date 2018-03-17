@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/subjectColoricon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/ic_notification_overlay" />
+
+            <TextView
+                android:id="@+id/examName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/subjectColoricon"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/examType"
+                android:layout_below="@id/examName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/subjectColoricon"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/examGrade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/examType"
+                android:text="@string/znamka" />
+
+            <TextView
+                android:id="@+id/concreteGrade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/examType"
+                android:layout_toRightOf="@id/examGrade"
+                android:paddingLeft="10dp"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/examTry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/examGrade"
+                android:text="@string/pokus" />
+
+            <TextView
+                android:id="@+id/concreteTry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/examGrade"
+                android:layout_toRightOf="@id/examTry"
+                android:paddingLeft="10dp"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/examSatisfaction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/examTry"
+                android:text="@string/spokojnost" />
+
+            <RatingBar
+                android:id="@+id/examRatingBar"
+                android:layout_width="match_parent"
+                android:layout_below="@id/examTry"
+                android:layout_toEndOf="@id/examSatisfaction"
+                android:paddingLeft="10dp"
+                android:numStars="5"
+                android:layout_height="wrap_content" />
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>

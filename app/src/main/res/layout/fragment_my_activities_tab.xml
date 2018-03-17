@@ -1,0 +1,237 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+            <RelativeLayout
+                android:id="@+id/relativeLayoutActivitiesDaily"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/dailyTextViewActivities"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/celodenny"
+                    android:textAppearance="@android:style/TextAppearance.Material.Title" />
+
+                <Button
+                    android:id="@+id/timeButtonDaily"
+                    style="@android:style/Widget.Material.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignBottom="@id/dailyTextViewActivities"
+                    android:layout_marginRight="10dp"
+                    android:paddingRight="15dp" />
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/cardViewDailyActivities"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/dailyTextViewActivities"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:elevation="6dp"
+                    card_view:cardCornerRadius="5dp">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerViewDailyHabitToChoose"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/dailyTextViewActivities" />
+
+
+                </android.support.v7.widget.CardView>
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/relativeLayoutActivitiesMorning"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/relativeLayoutActivitiesDaily">
+
+                <TextView
+                    android:id="@+id/morningTextViewActivities"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/ranny"
+                    android:textAppearance="@android:style/TextAppearance.Material.Title" />
+
+                <Button
+                    android:id="@+id/timeButtonMorning"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignBottom="@id/morningTextViewActivities"
+                    android:layout_marginRight="10dp"
+                    android:paddingRight="15dp"
+                    />
+
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/cardViewMorningActivities"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/morningTextViewActivities"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/cardview_light_background"
+                    android:elevation="6dp"
+                    card_view:cardCornerRadius="5dp">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerViewMorningHabitToChoose"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/morningTextViewActivities" />
+
+                </android.support.v7.widget.CardView>
+
+
+            </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutActivitiesLunch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/relativeLayoutActivitiesMorning">
+
+            <TextView
+                android:id="@+id/lunchTextViewActivities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/obedny"
+                android:textAppearance="@android:style/TextAppearance.Material.Title" />
+
+            <Button
+                android:id="@+id/timeButtonLunch"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/lunchTextViewActivities"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:paddingRight="15dp"
+                />
+
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cardViewLunchActivities"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/lunchTextViewActivities"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:elevation="6dp"
+                card_view:cardCornerRadius="5dp">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerViewLunchHabitToChoose"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/lunchTextViewActivities" />
+
+            </android.support.v7.widget.CardView>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutActivitiesEvening"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/relativeLayoutActivitiesLunch">
+
+            <TextView
+                android:id="@+id/eveningTextViewActivities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/vecerny"
+                android:textAppearance="@android:style/TextAppearance.Material.Title" />
+
+            <Button
+                android:id="@+id/timeButtonEvening"
+                style="@android:style/Widget.Material.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/eveningTextViewActivities"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:paddingRight="15dp"
+                />
+
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cardViewEveningActivities"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/eveningTextViewActivities"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:elevation="6dp"
+                card_view:cardCornerRadius="5dp">
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_below="@id/lunchTextViewActivities"
+                    android:id="@+id/recyclerViewEveningHabitToChoose"
+                    android:layout_height="match_parent" />
+
+            </android.support.v7.widget.CardView>
+
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingButtonAddActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="createNewHabitActivity"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="end|bottom"
+        android:layout_alignParentRight="true"
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:layout_margin="@dimen/fab_margin"
+        />
+
+</RelativeLayout>
+
