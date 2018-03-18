@@ -218,6 +218,8 @@ public class PlanMainRepository {
         cv.put("CANCEL", false);
         cv.put("REMIND",false);
 
+
+        //kde je najneskorsi datum
         try {
             if (db.update(PlanHabitAssociation.TABLE, cv, "date = " + yesterday, null) == 0){
                 return db.update(PlanHabitAssociation.TABLE, cv, null, null);

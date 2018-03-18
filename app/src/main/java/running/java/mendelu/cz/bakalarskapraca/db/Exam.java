@@ -29,6 +29,7 @@ public class Exam {
     static final String RATING = "rating";
     static final String NOTE = "note";
     static final String SUBJECT_ID = "subject_id";
+    static final String STUDYING = "studying";
     //znamka a hodnotenie
 
     protected ContentValues values; //package protected jsme si to udelali
@@ -47,6 +48,7 @@ public class Exam {
         this.setGrade("achjoj");
         this.setRating(0);
         this.setNote(note);
+        this.setStudying(0);
 
     }
 
@@ -183,5 +185,23 @@ public class Exam {
 
     public String getNote(){
        return values.getAsString(NOTE);
+    }
+
+    public void setStudying(int studying) {
+        this.values.put(STUDYING,studying);
+    }
+
+    public int getStudying(){
+        return values.getAsInteger(STUDYING);
+    }
+
+    public void increaseStudying(){
+        int i = values.getAsInteger(STUDYING);
+        values.put(STUDYING,i++);
+    }
+
+    public void decreaseStudying(){
+        int i = values.getAsInteger(STUDYING);
+        values.put(STUDYING,i--);
     }
 }

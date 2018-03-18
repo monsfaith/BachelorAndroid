@@ -51,4 +51,6 @@
     <string name="time">Doba upozorňovania</string>
     <string name="infoAboutDailyPlan">Nahradiť jednotlivé plány celodenným plánom. Vhodné pre dni bez učenia.</string>
     <string name="infoAboutDailyPlanVisible">Nahradiť celodenný plán jednotlivými plánmi.</string>
+    <string name="zrusit">Zrušiť</string>
+    <string name="ano">Áno</string>
 </resources>

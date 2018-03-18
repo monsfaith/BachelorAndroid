@@ -5,20 +5,20 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/infoAboutStartingPlans"
+        android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Info about starting plans" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/availableExamsRecyclerVie"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+        android:text="TextView" />
 
     <Button
-        android:id="@+id/letsDoIt"
+        android:id="@+id/cancelTomorrowDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Let's do it" />
+        android:text="@string/zrusit" />
+
+    <Button
+        android:id="@+id/startDailyPlan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ano" />
 </LinearLayout>

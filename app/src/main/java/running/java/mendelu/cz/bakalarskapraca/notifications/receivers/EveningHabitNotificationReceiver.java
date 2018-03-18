@@ -23,6 +23,7 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
         int id = 0;
         if (intent.getExtras() != null){
             id = intent.getIntExtra("REQUESTCODE", 0);
+            shownIntent.putExtra("ID",id);
         }
         //shownIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

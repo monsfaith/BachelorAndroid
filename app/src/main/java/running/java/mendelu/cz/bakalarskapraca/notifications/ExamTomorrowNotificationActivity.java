@@ -16,7 +16,6 @@ import java.util.Calendar;
 import running.java.mendelu.cz.bakalarskapraca.R;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
-import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
 
@@ -24,7 +23,7 @@ import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotif
  * Created by Monika on 17.03.2018.
  */
 
-public class ExamPostponeNotificationActivity extends AppCompatActivity {
+public class ExamTomorrowNotificationActivity extends AppCompatActivity {
 
     private Button delay15;
     private Button delay30;
@@ -37,57 +36,50 @@ public class ExamPostponeNotificationActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_postpone_exam_notification);
+
+        setContentView(R.layout.dialog_postpone_tomorrow);
         this.setFinishOnTouchOutside(false);
-        delay15 = (Button) findViewById(R.id.delay15);
-        delay30 = (Button) findViewById(R.id.delay30);
-        delay60 = (Button) findViewById(R.id.delay60);
+        planMainRepository = new PlanMainRepository(getApplicationContext());
+        startDailyPlan = (Button) findViewById(R.id.startDailyPlan);
+        cancelDialog = (Button) findViewById(R.id.cancelTomorrowDialog);
 
         if (getIntent().getExtras() != null) {
-            int id = getIntent().getIntExtra("NOTIFICATIONID", 0);
+            int id = getIntent().getIntExtra("AFTER", 0);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(id);
         }
 
-        delay15.setOnClickListener(new View.OnClickListener() {
+        startDailyPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setExamNotification(15);
-                finish();
-
-            }
-        });
-
-        delay30.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setExamNotification(30);
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("enabled", true);
+                planMainRepository.update2(1,contentValues);
+                setTimeToNotification();
+                setExamNotificationTomorrow();
                 finish();
             }
         });
 
-        delay60.setOnClickListener(new View.OnClickListener() {
+        cancelDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setExamNotification(60);
+                setExamNotificationTomorrow();
                 finish();
             }
         });
 
     }
 
-    private void setExamNotification(int time){
+    private void setExamNotificationTomorrow(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY,8);
-        calendar.set(Calendar.MINUTE,0);
+        calendar.add(Calendar.DAY_OF_MONTH,1);
         Intent i = new Intent(getApplicationContext(), ExamNotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
-
     }
-
 
     private void setDailyHabitNotification(long time){
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);

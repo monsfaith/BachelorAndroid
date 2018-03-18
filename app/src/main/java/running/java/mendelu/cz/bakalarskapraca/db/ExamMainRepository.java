@@ -83,6 +83,38 @@ public class ExamMainRepository {
 
     }
 
+    public List<Exam> findNextExams(){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+        Calendar calendar = Calendar.getInstance();
+
+        try {
+            List<Exam> result = new LinkedList<>();
+            Cursor c = db.query(Exam.TABLE,
+                    null,
+                    Exam.DATE + " > " + calendar.getTimeInMillis() + " OR " + Exam.DATE + " = " + calendar.getTimeInMillis(),
+                    null,
+                    null,
+                    null,
+                    null); //dobra metoda pro vsetky selecty, ktore budem mat v appke
+
+            try {
+
+                while (c.moveToNext()) {
+                    result.add(new Exam(c));
+
+                }
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+    }
+
     public Exam getById(long id){
         SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
 

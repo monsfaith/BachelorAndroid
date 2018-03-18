@@ -58,13 +58,17 @@
         <activity android:name=".notifications.ExamNotificationStartActivity">
         </activity>
         <activity android:name=".notifications.ExamPostponeNotificationActivity"
-            android:theme="@style/Theme.AppCompat.Dialog"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:excludeFromRecents="true"
             />
         <activity android:name=".notifications.StartMainNotificationsActivity"
-            android:theme="@style/Theme.AppCompat.Dialog"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:excludeFromRecents="true"
             />
+        <activity android:name=".notifications.ExamTomorrowNotificationActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            android:excludeFromRecents="true">
+        </activity>
         <receiver android:name=".notifications.receivers.MorningHabitNotificationReceiver"
             android:enabled="true"
             android:exported="true"
