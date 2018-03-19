@@ -14,7 +14,7 @@
         android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/examCheckB"
         android:layout_width="wrap_content"
         android:paddingRight="10dp"
         android:paddingTop="5dp"

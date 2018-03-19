@@ -6,7 +6,10 @@ import android.app.Fragment;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
@@ -28,8 +31,10 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.List;
 
+import running.java.mendelu.cz.bakalarskapraca.db.ExamNotificationAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.db.MainOpenHelper;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
@@ -90,7 +95,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
 
     @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState){
 
         View view = inflater.inflate(R.layout.fragment_my_plan_tab, container, false);
 
@@ -142,8 +147,163 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         switchDaily.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (!isChecked) {
+
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                    View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_start_exam_plan, null);
+                    RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.availableExamsRecyclerVie);
+                    final ExamNotificationAdapter examNotificationAdapter = new ExamNotificationAdapter(getActivity(), getExamResults());
+                    recyclerView.setAdapter(examNotificationAdapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    dialogBuilder.setPositiveButton("Potvrdit", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (examNotificationAdapter.numberOfSelectedExams() > 0){
+                                    switchDaily.setChecked(false);
+                                    progressDailyBar.setVisibility(View.GONE);
+                                    dailyPlanCardView.setVisibility(View.GONE);
+                                    settingsButtonDaily.setVisibility(View.GONE);
+                                    tx.setVisibility(View.GONE);
+                                    ContentValues contentValues = new ContentValues();
+                                    contentValues.put("ENABLED", false);
+                                    planMainRepository.update2(1, contentValues);
+                                    cancelDividedNotification(1);
+                                    setNotificationTime(2);
+                                    setNotificationTime(3);
+                                    setNotificationTime(4);
+                                    setVisible(1);
+                                } else {
+                                    switchDaily.setChecked(true);
+                                    Toast.makeText(getActivity(), "Ziadna skuska nebola vybrata", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        });
+
+                    dialogBuilder.setNegativeButton("Zrusit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switchDaily.setChecked(true);
+                            progressMorningBar.setVisibility(View.VISIBLE);
+                            dailyPlanCardView.setVisibility(View.VISIBLE);
+                            settingsButtonDaily.setVisibility(View.VISIBLE);
+                            tx.setVisibility(View.VISIBLE);
+                            Toast.makeText(getActivity(), "Je nastaveny denny plan " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
+                            setVisible(0);
+                        }
+                    });
+
+                    dialogBuilder.setView(view);
+                    AlertDialog examDialog = dialogBuilder.create();
+                    examDialog.show();
+
+                } else {
+                    progressDailyBar.setVisibility(View.VISIBLE);
+                    dailyPlanCardView.setVisibility(View.VISIBLE);
+                    settingsButtonDaily.setVisibility(View.VISIBLE);
+                    tx.setVisibility(View.VISIBLE);
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("enabled",true);
+                    planMainRepository.update2(1,contentValues);
+                    setVisible(0);
+
+                    cancelDividedNotification(2);
+                    cancelDividedNotification(3);
+                    cancelDividedNotification(4);
+
+                    Plan dailyPlan = planMainRepository.getByType(1);
+                    if (getCurrentTime() < dailyPlan.getFromTime().getTime() || getCurrentTime() == dailyPlan.getFromTime().getTime()) {
+                        setDailyNotification(dailyPlan.getFromTime().getTime(), 1);
+                    } else if (getCurrentTime() < dailyPlan.getToTime().getTime() || getCurrentTime() == dailyPlan.getToTime().getTime()) {
+                        setDailyNotification(getCurrentTime(), 1);
+                    } else {
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(dailyPlan.getFromTime());
+                        cal.add(Calendar.DAY_OF_MONTH, 1);
+                        setDailyNotification(cal.getTimeInMillis(), 1);
+                    }
+
+
+
+
+
                     Toast.makeText(getActivity(), "Denný plán je vhodné zapínať pri neprebiehajúcom učiacom móde. ", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        if (planMainRepository.getByType(1).getEnabled() == true){
+            switchDaily.setChecked(true);
+            progressMorningBar.setVisibility(View.VISIBLE);
+            dailyPlanCardView.setVisibility(View.VISIBLE);
+            settingsButtonDaily.setVisibility(View.VISIBLE);
+            tx.setVisibility(View.VISIBLE);
+            Toast.makeText(getActivity(), "Je nastaveny denny plan spodna cast " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
+            setVisible(0);
+
+        } else {
+            switchDaily.setChecked(false);
+            progressDailyBar.setVisibility(View.GONE);
+            dailyPlanCardView.setVisibility(View.GONE);
+            settingsButtonDaily.setVisibility(View.GONE);
+            tx.setVisibility(View.GONE);
+            Toast.makeText(getActivity(), "Je nastaveny deleny plan spodna cast " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
+            setVisible(1);
+        }
+
+        return view;
+
+    }
+
+
+    /*
+    skoro povodna horna metoda
+    if (!isChecked){
+
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                    View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_start_exam_plan, null);
+                    RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.availableExamsRecyclerVie);
+                    ExamNotificationAdapter examNotificationAdapter = new ExamNotificationAdapter(getActivity(), getExamResults());
+                    recyclerView.setAdapter(examNotificationAdapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    dialogBuilder.setPositiveButton("Potvrdit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            progressDailyBar.setVisibility(View.GONE);
+                            dailyPlanCardView.setVisibility(View.GONE);
+                            settingsButtonDaily.setVisibility(View.GONE);
+                            tx.setVisibility(View.GONE);
+                            ContentValues contentValues = new ContentValues();
+                            contentValues.put("ENABLED",false);
+                            planMainRepository.update2(1,contentValues);
+                            cancelDividedNotification(1);
+                            setNotificationTime(2);
+                            setNotificationTime(3);
+                            setNotificationTime(4);
+                            setVisible(1);
+                        }
+                    });
+
+                    dialogBuilder.setNegativeButton("Zrusit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switchDaily.setChecked(true);
+                            progressMorningBar.setVisibility(View.VISIBLE);
+                            dailyPlanCardView.setVisibility(View.VISIBLE);
+                            settingsButtonDaily.setVisibility(View.VISIBLE);
+                            tx.setVisibility(View.VISIBLE);
+                            Toast.makeText(getActivity(), "Je nastaveny denny plan " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
+                            setVisible(0);
+                        }
+                    });
+
+
+
+
+
+                    Toast.makeText(getActivity(), "Denný plán je vhodné zapínať pri neprebiehajúcom učiacom móde. ", Toast.LENGTH_LONG).show();
+
                     progressDailyBar.setVisibility(View.VISIBLE);
                     dailyPlanCardView.setVisibility(View.VISIBLE);
                     settingsButtonDaily.setVisibility(View.VISIBLE);
@@ -179,6 +339,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("ENABLED",false);
                     planMainRepository.update2(1,contentValues);
+                    cancelDividedNotification(1);
                     setNotificationTime(2);
                     setNotificationTime(3);
                     setNotificationTime(4);
@@ -210,6 +371,9 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         return view;
 
     }
+
+    */
+
 
     //aktualny cas
     private long getCurrentTime(){
@@ -575,6 +739,12 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
 
     }
 
+    private Cursor getExamResults(){
+        MainOpenHelper mainOpenHelper = new MainOpenHelper(getActivity());
+        SQLiteDatabase database = mainOpenHelper.getWritableDatabase();
+        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ?",new String[]{String.valueOf(getCurrentDate())});
+    }
+
     public void onResume(){
         super.onResume();
         checkPlans();
@@ -593,6 +763,15 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private long getCurrentDate(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY,0);
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.SECOND,0);
+        cal.set(Calendar.MILLISECOND,0);
+        return cal.getTimeInMillis();
     }
 
 }

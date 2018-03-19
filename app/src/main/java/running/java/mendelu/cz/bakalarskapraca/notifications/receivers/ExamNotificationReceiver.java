@@ -33,6 +33,11 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        int exams = 0;
+        if (intent.getExtras() != null){
+            exams = intent.getIntExtra("NOEXAMS",0);
+        }
+
         Intent shownIntent = new Intent(context, StartMainNotificationsActivity.class);
 
         //pripomenutie
@@ -55,13 +60,13 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
 
         //zrusit a odlozit, teda vymenit za novu
         PendingIntent delayIntent = PendingIntent.getActivity(context,500, postponeIntent ,PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(delayIntent);
+        /*AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(delayIntent);*/
 
         //zrusit na dnes a vytvorit novu na dalsi den
         PendingIntent notTodayIntent = PendingIntent.getActivity(context, 500, notToday,
                 PendingIntent.FLAG_CANCEL_CURRENT);
-        alarmManager.cancel(notTodayIntent);
+        //alarmManager.cancel(notTodayIntent);
 
         //long closestExamId = intent.getIntExtra("EXAMID",0);
         String subjectString = "";
@@ -71,7 +76,15 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
             subjectString = (subjectMainRepository.getById(examMainRepository.getById(exam.getId()).getSubjectId())).getName();
             days = exam.getDays();
         }
-
+        String contentTitle = "";
+        String contentText = "";
+        if (exams == 1){
+            contentTitle = "Uzi si den volna.";
+            contentText = "Neboli pridane ziadne skusky.";
+        } else {
+            contentTitle = "Treba sa ucit na predmet " + subjectString;
+            contentText = "Na ucenie zostava " + days + " dni";
+        }
 
 
         NotificationCompat.Action actionDelay = new NotificationCompat.Action(R.drawable.ic_menu_send, "odlozit", delayIntent);
@@ -82,13 +95,13 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
                 .setContentIntent(pendingShowIntent)
                 .setSmallIcon(R.drawable.ic_menu_camera)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                .setContentTitle("Treba sa ucit na predmet " + subjectString)
+                .setContentTitle(contentTitle)
                 .addAction(actionDelay)
                 .setLights(0xf9cc00, 300, 3000)
                 .addAction(action)
                 .addAction(actionNot)
                 .addAction(actionDelay)
-                .setContentText("Na ucenie zostava " + days + " dni")
+                .setContentText(contentText)
                 .setAutoCancel(true);
 
         notificationManager.notify(500, builder.build());

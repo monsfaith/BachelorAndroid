@@ -43,11 +43,14 @@ public class ExamPostponeNotificationActivity extends AppCompatActivity {
         delay30 = (Button) findViewById(R.id.delay30);
         delay60 = (Button) findViewById(R.id.delay60);
 
-        if (getIntent().getExtras() != null) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(500);
+
+        /*if (getIntent().getExtras() != null) {
             int id = getIntent().getIntExtra("NOTIFICATIONID", 0);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(id);
-        }
+        }*/
 
         delay15.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,12 +82,11 @@ public class ExamPostponeNotificationActivity extends AppCompatActivity {
     private void setExamNotification(int time){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY,8);
-        calendar.set(Calendar.MINUTE,0);
+        calendar.add(Calendar.MINUTE,time);
         Intent i = new Intent(getApplicationContext(), ExamNotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
     }
 

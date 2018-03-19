@@ -101,6 +101,7 @@ public class MainOverviewFragment extends Fragment {
             init();
             setDatabaseNotification();
             setDatabasePlanTimeDaily();
+            setExamNotification();
         } else {
             dailyPlan = planMainRepository.getByType(1);
             morningPlan = planMainRepository.getByType(2);
@@ -110,7 +111,6 @@ public class MainOverviewFragment extends Fragment {
 
         //setDatabaseNotification();
         //setDatabasePlanTimeDaily();
-
         loadListView();
 
         butt.setOnClickListener(new View.OnClickListener() {
@@ -196,7 +196,6 @@ public class MainOverviewFragment extends Fragment {
 
 
 
-        setExamNotification();
         return view;
     }
 
@@ -231,10 +230,14 @@ public class MainOverviewFragment extends Fragment {
 
     private void setExamNotification(){
         Calendar calendar = Calendar.getInstance();
-        Toast.makeText(getActivity(), examMainRepository.findAllExams().size() + " size", Toast.LENGTH_SHORT).show();
-        if (examMainRepository.findAllExams().size() != 0){
+        ContentValues contentValues = new ContentValues();
+        Toast.makeText(getActivity(), examMainRepository.findNextExams().size() + " size", Toast.LENGTH_SHORT).show();
+        if (examMainRepository.findNextExams().size() != 0){
             calendar.setTimeInMillis(System.currentTimeMillis());
+            contentValues.put("enabled",false);
+            planMainRepository.update2(1, contentValues);
             calendar.add(Calendar.MINUTE, 1);
+
             Intent i = new Intent(getActivity(), ExamNotificationReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -242,6 +245,8 @@ public class MainOverviewFragment extends Fragment {
         } else {
             calendar.set(Calendar.MINUTE,00);
             calendar.set(Calendar.HOUR_OF_DAY,8);
+            contentValues.put("enabled",true);
+            planMainRepository.update2(1, contentValues);
             setHabitNotification(calendar.getTimeInMillis(),1);
         }
 
@@ -442,7 +447,7 @@ public class MainOverviewFragment extends Fragment {
         dailyCalendar.set(Calendar.HOUR_OF_DAY, 20);
         long dailyToTime = dailyCalendar.getTimeInMillis();
 
-        dailyPlan = new Plan(dailyFromTime, dailyToTime, 1, false);
+        dailyPlan = new Plan(dailyFromTime, dailyToTime, 1, true);
         planMainRepository.insert(dailyPlan);
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,8);

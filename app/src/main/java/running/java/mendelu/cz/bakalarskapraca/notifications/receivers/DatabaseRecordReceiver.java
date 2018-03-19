@@ -23,7 +23,7 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
 
         planMainRepository = new PlanMainRepository(context);
-        long idUpdate = planMainRepository.updateAssociation(new Date());
+        long idUpdate = planMainRepository.updateAssociation();
         Toast.makeText(context, "" + idUpdate, Toast.LENGTH_LONG).show();
 
 

@@ -43,11 +43,15 @@ public class ExamTomorrowNotificationActivity extends AppCompatActivity {
         startDailyPlan = (Button) findViewById(R.id.startDailyPlan);
         cancelDialog = (Button) findViewById(R.id.cancelTomorrowDialog);
 
-        if (getIntent().getExtras() != null) {
+        /*if (getIntent().getExtras() != null) {
             int id = getIntent().getIntExtra("AFTER", 0);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(id);
-        }
+        }*/
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(500);
+
 
         startDailyPlan.setOnClickListener(new View.OnClickListener() {
             @Override

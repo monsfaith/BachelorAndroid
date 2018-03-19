@@ -25,7 +25,8 @@ public class DatabaseTimeChangeReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         planMainRepository = new PlanMainRepository(context);
 
-        Calendar calendarCurrent = Calendar.getInstance();
+        /*Calendar calendarCurrent = Calendar.getInstance();
+        calendarCurrent.setTimeInMillis(System.currentTimeMillis());
         Calendar calendarMy = Calendar.getInstance();
         calendarMy.setTime(planMainRepository.getByType(1).getFromTime());
         boolean sameDay = calendarCurrent.get(Calendar.YEAR) == calendarMy.get(Calendar.YEAR) &&
@@ -34,13 +35,21 @@ public class DatabaseTimeChangeReceiver extends BroadcastReceiver {
             updateTimes(1, planMainRepository);
             updateTimes(2, planMainRepository);
             updateTimes(3, planMainRepository);
-            updateTimes(4, planMainRepository);
-            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+            updateTimes(4, planMainRepository);*/
+        planMainRepository.updatePlanTime(1);
+        planMainRepository.updatePlanTime(2);
+        planMainRepository.updatePlanTime(3);
+        planMainRepository.updatePlanTime(4);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("enabled",true);
+        planMainRepository.update2(1,contentValues);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
             Toast.makeText(context, "aktualizace na cas " + sdf.format(planMainRepository.getByType(2).getToTime().getTime()), Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void updateTimes(long idPlan, PlanMainRepository planMainRepository){
+    /*private void updateTimes(long idPlan, PlanMainRepository planMainRepository){
         Calendar calendar = Calendar.getInstance();
         ContentValues contentValues = new ContentValues();
         Plan plan = planMainRepository.getByType(idPlan);
@@ -53,5 +62,4 @@ public class DatabaseTimeChangeReceiver extends BroadcastReceiver {
         planMainRepository.update2(idPlan,contentValues);
 
 
-    }
-}
+    }*/

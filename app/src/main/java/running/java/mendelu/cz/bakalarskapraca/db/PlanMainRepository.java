@@ -201,10 +201,9 @@ public class PlanMainRepository {
     }
 
 
-    public long updateAssociation(Date date){
+    public long updateAssociation(){
         SQLiteDatabase db = mainOpenHelper.getWritableDatabase();
         Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
         cal.set(Calendar.HOUR_OF_DAY,0);
         cal.set(Calendar.MINUTE,0);
         cal.set(Calendar.SECOND,0);
@@ -271,6 +270,35 @@ public class PlanMainRepository {
         } finally {
             db.close();
         }
+    }
+
+    //upravit datum planov na aktualny
+    public void updatePlanTime(long idPlan){
+
+       if (!sameDay()){
+           Calendar calendar = Calendar.getInstance();
+           ContentValues contentValues = new ContentValues();
+           Plan plan = getByType(idPlan);
+           calendar.setTime(plan.getFromTime());
+           calendar.add(Calendar.DAY_OF_MONTH,1);
+           contentValues.put("from_time", calendar.getTimeInMillis());
+           calendar.setTime(plan.getToTime());
+           calendar.add(Calendar.DAY_OF_MONTH, 1);
+           contentValues.put("to_time",calendar.getTimeInMillis());
+           update2(idPlan,contentValues);
+       }
+
+    }
+
+    //skontrolovat ci ide o rovnaky den alebo nie
+    private boolean sameDay(){
+        Calendar calendarCurrent = Calendar.getInstance();
+        calendarCurrent.setTimeInMillis(System.currentTimeMillis());
+        Calendar calendarMy = Calendar.getInstance();
+        calendarMy.setTime(getByType(1).getFromTime());
+        boolean sameDay = calendarCurrent.get(Calendar.YEAR) == calendarMy.get(Calendar.YEAR) &&
+                calendarCurrent.get(Calendar.DAY_OF_YEAR) == calendarMy.get(Calendar.DAY_OF_YEAR);
+        return sameDay;
     }
 
 

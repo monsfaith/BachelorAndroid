@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -86,12 +87,14 @@ public class ExamMainRepository {
     public List<Exam> findNextExams(){
         SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
         Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        String actualDate = sdf.format(calendar.getTimeInMillis());
 
         try {
             List<Exam> result = new LinkedList<>();
             Cursor c = db.query(Exam.TABLE,
                     null,
-                    Exam.DATE + " > " + calendar.getTimeInMillis() + " OR " + Exam.DATE + " = " + calendar.getTimeInMillis(),
+                    Exam.DATE + " > " + String.valueOf(calendar.getTimeInMillis()) + " OR " + Exam.DATE + " = " + String.valueOf(calendar.getTimeInMillis()),
                     null,
                     null,
                     null,

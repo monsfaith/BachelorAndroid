@@ -1,10 +1,13 @@
 package running.java.mendelu.cz.bakalarskapraca;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -36,9 +39,11 @@ import java.util.Locale;
 
 import running.java.mendelu.cz.bakalarskapraca.db.Exam;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.Subject;
 import running.java.mendelu.cz.bakalarskapraca.db.SubjectAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.SubjectMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
 
 public class CreateExamActivity extends AppCompatActivity {
 
@@ -68,6 +73,7 @@ public class CreateExamActivity extends AppCompatActivity {
     private Exam intentExam;
     private DatePickerDialog datePickerDialog;
     private int days;
+    private PlanMainRepository planMainRepository;
 
 
     @Override
@@ -84,6 +90,7 @@ public class CreateExamActivity extends AppCompatActivity {
         noteInput = (EditText) findViewById(R.id.noteInput);
         subjectMainRepository = new SubjectMainRepository(CreateExamActivity.this);
         examMainRepository = new ExamMainRepository(this);
+        planMainRepository = new PlanMainRepository(this);
 
         Toast.makeText(this, "Pocet subjektov: " + subjectMainRepository.findAllSubjects().size() + examMainRepository.findAllExams().size(), Toast.LENGTH_LONG).show();
 
@@ -376,8 +383,22 @@ public class CreateExamActivity extends AppCompatActivity {
                 formatter.setLenient(false);
 
                 Exam exam = new Exam(new Date(milliseconds), new Time(timeMilliseconds), days, 4, classroom, finalSubject, note);
-                exam.setRealization(true);
                 Long lastid = examMainRepository.insert(exam);
+                if (examMainRepository.findNextExams().size() > 0){
+                        Calendar calendar = Calendar.getInstance();
+                        //ContentValues contentValues = new ContentValues();
+                            calendar.setTimeInMillis(System.currentTimeMillis());
+                            /*contentValues.put("enabled",false);
+                            planMainRepository.update2(1, contentValues);*/
+                            calendar.add(Calendar.MINUTE, 1);
+
+                            Intent i = new Intent(getApplicationContext(), ExamNotificationReceiver.class);
+                            i.putExtra("NOEXAMS",1);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
+                            AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                        }
+
                 Toast.makeText(CreateExamActivity.this,
                         "vydarilo sa " + finalSubject + "predmet" + lastid + subjectMainRepository.getById(finalSubject).getName(),
                         Toast.LENGTH_SHORT).show();
