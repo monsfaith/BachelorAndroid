@@ -275,7 +275,7 @@ public class PlanMainRepository {
     //upravit datum planov na aktualny
     public void updatePlanTime(long idPlan){
 
-       if (!sameDay()){
+       if (!sameDay(idPlan)){
            Calendar calendar = Calendar.getInstance();
            ContentValues contentValues = new ContentValues();
            Plan plan = getByType(idPlan);
@@ -291,11 +291,11 @@ public class PlanMainRepository {
     }
 
     //skontrolovat ci ide o rovnaky den alebo nie
-    private boolean sameDay(){
+    private boolean sameDay(long idPlan){
         Calendar calendarCurrent = Calendar.getInstance();
         calendarCurrent.setTimeInMillis(System.currentTimeMillis());
         Calendar calendarMy = Calendar.getInstance();
-        calendarMy.setTime(getByType(1).getFromTime());
+        calendarMy.setTime(getByType(idPlan).getFromTime());
         boolean sameDay = calendarCurrent.get(Calendar.YEAR) == calendarMy.get(Calendar.YEAR) &&
                 calendarCurrent.get(Calendar.DAY_OF_YEAR) == calendarMy.get(Calendar.DAY_OF_YEAR);
         return sameDay;

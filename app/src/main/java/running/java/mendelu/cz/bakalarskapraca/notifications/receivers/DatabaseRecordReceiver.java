@@ -24,7 +24,7 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
 
         planMainRepository = new PlanMainRepository(context);
         long idUpdate = planMainRepository.updateAssociation();
-        Toast.makeText(context, "" + idUpdate, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "shit dabase" + idUpdate, Toast.LENGTH_LONG).show();
 
 
     }

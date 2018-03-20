@@ -97,6 +97,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:id="@+id/mydailyView"
             android:orientation="vertical"
             android:visibility="gone"
             android:layout_height="match_parent">
@@ -175,6 +176,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:id="@+id/mymorningView"
             android:orientation="vertical"
             android:layout_height="match_parent">
 
@@ -253,6 +255,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
+            android:id="@+id/mylunchView"
             android:layout_height="match_parent">
 
 
@@ -322,6 +325,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
+            android:id="@+id/myeveningView"
             android:layout_height="match_parent">
 
 

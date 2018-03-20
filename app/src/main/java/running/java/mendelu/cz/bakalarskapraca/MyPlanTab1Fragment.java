@@ -3,6 +3,7 @@ package running.java.mendelu.cz.bakalarskapraca;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
@@ -92,10 +93,11 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
     private ImageButton settingsButtonEvening;
 
     private Switch switchDaily;
+    private View myView;
 
     @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState){
+    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_my_plan_tab, container, false);
 
@@ -122,7 +124,6 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         infoAboutDailyPlan = (TextView) view.findViewById(R.id.infoAboutDailyPlan);
 
 
-
         setAdapterDaily();
         setAdapterEvening();
         setAdapterLunch();
@@ -141,96 +142,81 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
 
         setListeners(settingsButtonDaily, 1);
         setListeners(settingsButtonLunch, 3);
-        setListeners(settingsButtonEvening,4);
-        setListeners(settingsButtonMorning,2);
+        setListeners(settingsButtonEvening, 4);
+        setListeners(settingsButtonMorning, 2);
 
         switchDaily.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
-
                     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
                     View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_start_exam_plan, null);
                     RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.availableExamsRecyclerVie);
                     final ExamNotificationAdapter examNotificationAdapter = new ExamNotificationAdapter(getActivity(), getExamResults());
                     recyclerView.setAdapter(examNotificationAdapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    dialogBuilder.setPositiveButton("Potvrdit", new DialogInterface.OnClickListener() {
+                    dialogBuilder.setPositiveButton("Potvrdiť", new DialogInterface.OnClickListener() {
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (examNotificationAdapter.numberOfSelectedExams() > 0){
-                                    switchDaily.setChecked(false);
-                                    progressDailyBar.setVisibility(View.GONE);
-                                    dailyPlanCardView.setVisibility(View.GONE);
-                                    settingsButtonDaily.setVisibility(View.GONE);
-                                    tx.setVisibility(View.GONE);
-                                    ContentValues contentValues = new ContentValues();
-                                    contentValues.put("ENABLED", false);
-                                    planMainRepository.update2(1, contentValues);
-                                    cancelDividedNotification(1);
-                                    setNotificationTime(2);
-                                    setNotificationTime(3);
-                                    setNotificationTime(4);
-                                    setVisible(1);
-                                } else {
-                                    switchDaily.setChecked(true);
-                                    Toast.makeText(getActivity(), "Ziadna skuska nebola vybrata", Toast.LENGTH_SHORT).show();
-                                }
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (examNotificationAdapter.numberOfSelectedExams() > 0) {
+                                switchDaily.setChecked(false);
+                                progressDailyBar.setVisibility(View.GONE);
+                                dailyPlanCardView.setVisibility(View.GONE);
+                                settingsButtonDaily.setVisibility(View.GONE);
+                                tx.setVisibility(View.GONE);
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put("enabled", false);
+                                planMainRepository.update2(1, contentValues);
 
+
+                                //zrusenie denneho planu
+                                //cancelDividedNotification(1);
+                                NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+                                notificationManager.cancel(100);
+                                //
+
+                                setNotificationTime(2);
+                                setNotificationTime(3);
+                                setNotificationTime(4);
+                                setVisible(1);
+                            } else {
+                                switchDaily.setChecked(true);
+                                Toast.makeText(getActivity(), "zostava to ako " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
                             }
-                        });
+                        }
+                    });
 
-                    dialogBuilder.setNegativeButton("Zrusit", new DialogInterface.OnClickListener() {
+                    dialogBuilder.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switchDaily.setChecked(true);
-                            progressMorningBar.setVisibility(View.VISIBLE);
+                            progressDailyBar.setVisibility(View.VISIBLE);
                             dailyPlanCardView.setVisibility(View.VISIBLE);
                             settingsButtonDaily.setVisibility(View.VISIBLE);
                             tx.setVisibility(View.VISIBLE);
                             Toast.makeText(getActivity(), "Je nastaveny denny plan " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
                             setVisible(0);
+
                         }
                     });
-
-                    dialogBuilder.setView(view);
-                    AlertDialog examDialog = dialogBuilder.create();
-                    examDialog.show();
-
                 } else {
                     progressDailyBar.setVisibility(View.VISIBLE);
                     dailyPlanCardView.setVisibility(View.VISIBLE);
                     settingsButtonDaily.setVisibility(View.VISIBLE);
                     tx.setVisibility(View.VISIBLE);
                     ContentValues contentValues = new ContentValues();
-                    contentValues.put("enabled",true);
-                    planMainRepository.update2(1,contentValues);
-                    setVisible(0);
-
+                    contentValues.put("enabled", true);
+                    planMainRepository.update2(1, contentValues);
+                    setDailyNotificationTime(); //pre plan 1
                     cancelDividedNotification(2);
                     cancelDividedNotification(3);
                     cancelDividedNotification(4);
-
-                    Plan dailyPlan = planMainRepository.getByType(1);
-                    if (getCurrentTime() < dailyPlan.getFromTime().getTime() || getCurrentTime() == dailyPlan.getFromTime().getTime()) {
-                        setDailyNotification(dailyPlan.getFromTime().getTime(), 1);
-                    } else if (getCurrentTime() < dailyPlan.getToTime().getTime() || getCurrentTime() == dailyPlan.getToTime().getTime()) {
-                        setDailyNotification(getCurrentTime(), 1);
-                    } else {
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(dailyPlan.getFromTime());
-                        cal.add(Calendar.DAY_OF_MONTH, 1);
-                        setDailyNotification(cal.getTimeInMillis(), 1);
-                    }
-
-
-
-
-
-                    Toast.makeText(getActivity(), "Denný plán je vhodné zapínať pri neprebiehajúcom učiacom móde. ", Toast.LENGTH_LONG).show();
+                    setVisible(0);
                 }
+
             }
+
         });
 
         if (planMainRepository.getByType(1).getEnabled() == true){
@@ -252,9 +238,11 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
             setVisible(1);
         }
 
+        myView = view;
         return view;
 
     }
+
 
 
     /*
@@ -400,6 +388,22 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         }
     }
 
+    //nastavenie casu upozorneni pre plan 1
+    private void setDailyNotificationTime(){
+        Plan dailyPlan = planMainRepository.getByType(1);
+        if (getCurrentTime() < dailyPlan.getFromTime().getTime() || getCurrentTime() == dailyPlan.getFromTime().getTime()) {
+            setDailyNotification(dailyPlan.getFromTime().getTime(), 1);
+        } else if (getCurrentTime() < dailyPlan.getToTime().getTime() || getCurrentTime() == dailyPlan.getToTime().getTime()) {
+            setDailyNotification(getCurrentTime(), 1);
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(dailyPlan.getFromTime());
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+            setDailyNotification(cal.getTimeInMillis(), 1);
+        }
+
+    }
+
     //odstranenie notifikacii pre jednotlive plany
     private void cancelDividedNotification(int type){
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -425,10 +429,6 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getActivity(), type*100, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, planMainRepository.getByType(type).getToTime().getTime(), cancelPendingIntent);
 
-    }
-
-    private long getPlanFromTime(long idPlan){
-        return planMainRepository.getByType(idPlan).getFromTime().getTime();
     }
 
     //nastavenie notifikacii pre denny plan
@@ -484,52 +484,87 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
 
 
     //nastavenie buttonov na upravu notifikacii
-    private void setSettingsButtons(final int idPlan){
+    private void setSettingsButtons(final int idPlan) {
         AlertDialog.Builder myBuilder = new AlertDialog.Builder(getActivity());
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_set_notification, null);
         ImageButton setNotification25 = (ImageButton) view.findViewById(R.id.setNotification25);
         ImageButton setNotification40 = (ImageButton) view.findViewById(R.id.setNotification40);
         ImageButton setNotification60 = (ImageButton) view.findViewById(R.id.setNotification60);
 
-        myBuilder.setNegativeButton("Zrušiť",null);
+        myBuilder.setNegativeButton("Zrušiť", null);
         myBuilder.setView(view);
         final AlertDialog dialog = myBuilder.create();
-
         dialog.show();
 
-        setNotification25.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setPlanNotification(25, idPlan);
-                dialog.cancel();
 
-            }
-        });
+        if (idPlan != 1) {
+            setNotification25.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setPlanNotification(25, idPlan);
+                    setNotificationTime(idPlan);
+                    dialog.cancel();
 
-        setNotification40.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setPlanNotification(40, idPlan);
-                dialog.cancel();
-            }
-        });
+                }
+            });
 
-        setNotification60.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setPlanNotification(60, idPlan);
-                dialog.cancel();
-            }
-        });
+            setNotification40.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setPlanNotification(40, idPlan);
+                    setNotificationTime(idPlan);
+                    dialog.cancel();
+                }
+            });
+
+            setNotification60.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setPlanNotification(60, idPlan);
+                    setNotificationTime(idPlan);
+                    dialog.cancel();
+                }
+            });
+        } else {
+            setNotification25.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setPlanNotification(25, idPlan);
+                    setDailyNotificationTime();
+                    dialog.cancel();
+
+                }
+            });
+
+            setNotification40.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setPlanNotification(40, idPlan);
+                    setDailyNotificationTime();
+                    dialog.cancel();
+                }
+            });
+
+            setNotification60.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setPlanNotification(60, idPlan);
+                    setDailyNotificationTime();
+                    dialog.cancel();
+                }
+            });
+
+
+        }
     }
 
     //nastavenie minut a planov
     private void setPlanNotification(int minute, int idPlan){
         PlanMainRepository planMainRepository = new PlanMainRepository(getActivity());
         ContentValues contentValues = new ContentValues();
-        contentValues.put("REPETITION_ID",minute*60000);
+        contentValues.put("repetition_id",minute*60000);
         planMainRepository.update2(idPlan, contentValues);
-        Toast.makeText(getActivity(), "Upozornenie nastavene kazdych " + minute + " min " + planMainRepository.getByType(idPlan).getRepetition() + " "  + planMainRepository.getByType(idPlan).getType(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Upozornenie nastavene kazdych " + minute + " min " + planMainRepository.getByType(idPlan).getRepetition() + " "  + planMainRepository.getByType(idPlan).getType(), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -623,11 +658,14 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
 
     private void checkPlans(){
 
+
             if (getDailyHabits().size() == 0) {
                 dailyPlanCardView.removeAllViews();
                 dailyPlanCardView.addView(tx);
             } else {
                 dailyPlanCardView.removeView(tx);
+                View view = myView.findViewById(R.id.mydailyView);
+                dailyPlanCardView.addView(view);
             }
 
             if (getMorningHabits().size() == 0) {
@@ -635,6 +673,8 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
                 morningPlanCardView.addView(txMorning);
             } else {
                 morningPlanCardView.removeView(txMorning);
+                View view = myView.findViewById(R.id.mymorningView);
+                morningPlanCardView.addView(view);
             }
 
             if (getLunchHabits().size() == 0) {
@@ -642,6 +682,8 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
                 lunchPlanCardView.addView(txLunch);
             } else {
                 lunchPlanCardView.removeView(txLunch);
+                View view = myView.findViewById(R.id.mylunchView);
+                lunchPlanCardView.addView(view);
             }
 
             if (getEveningHabits().size() == 0) {
@@ -649,6 +691,9 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
                 eveningPlanCardView.addView(txEvening);
             } else {
                 eveningPlanCardView.removeView(txEvening);
+                View view = myView.findViewById(R.id.myeveningView);
+                eveningPlanCardView.addView(view);
+
             }
         }
 

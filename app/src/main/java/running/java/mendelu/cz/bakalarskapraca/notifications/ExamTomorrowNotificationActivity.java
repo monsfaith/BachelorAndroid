@@ -49,10 +49,6 @@ public class ExamTomorrowNotificationActivity extends AppCompatActivity {
             notificationManager.cancel(id);
         }*/
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(500);
-
-
         startDailyPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

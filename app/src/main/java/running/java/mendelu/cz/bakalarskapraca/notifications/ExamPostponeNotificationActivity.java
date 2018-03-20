@@ -43,8 +43,6 @@ public class ExamPostponeNotificationActivity extends AppCompatActivity {
         delay30 = (Button) findViewById(R.id.delay30);
         delay60 = (Button) findViewById(R.id.delay60);
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(500);
 
         /*if (getIntent().getExtras() != null) {
             int id = getIntent().getIntExtra("NOTIFICATIONID", 0);
@@ -82,7 +80,7 @@ public class ExamPostponeNotificationActivity extends AppCompatActivity {
     private void setExamNotification(int time){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.MINUTE,time);
+        calendar.set(Calendar.MINUTE,time);
         Intent i = new Intent(getApplicationContext(), ExamNotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
