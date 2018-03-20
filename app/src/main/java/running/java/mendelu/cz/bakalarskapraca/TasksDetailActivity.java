@@ -120,17 +120,18 @@ public class TasksDetailActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         cal.add(Calendar.DATE,1);
+        cal.set(Calendar.HOUR_OF_DAY,0);
+        cal.set(Calendar.MINUTE,1);
         tomorrowView.setText(sdf.format(cal.getTime()));
 
         examAdapterTomorrow = new ExamAdapter(this, examMainRepository.getExamResults(cal.getTime()));
         recyclerViewTomorrow.setAdapter(examAdapterTomorrow);
         recyclerViewTomorrow.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-
+        cal.add(Calendar.DATE,1);
         examAdapterOther = new ExamAdapter(this, examMainRepository.getOtherExamResults(cal.getTime()));
         recyclerViewOther.setAdapter(examAdapterOther);
         recyclerViewOther.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        cal.add(Calendar.DATE,1);
         otherView.setText("od " + sdf.format(cal.getTime()));
     }
 

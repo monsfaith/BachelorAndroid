@@ -41,8 +41,8 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         Intent shownIntent = new Intent(context, StartMainNotificationsActivity.class);
 
         //pripomenutie
-        Intent postponeIntent = new Intent(context, ExamPostponeNotificationActivity.class);
-        postponeIntent.putExtra("NOTIFICATIONID",500);
+        //Intent postponeIntent = new Intent(context, ExamPostponeNotificationActivity.class);
+        //postponeIntent.putExtra("NOTIFICATIONID",500);
 
         //zacatie planu
         Intent doExamIntent = new Intent(context, StartMainNotificationsActivity.class);
@@ -59,7 +59,8 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         PendingIntent doIntent = PendingIntent.getActivity(context, 500, doExamIntent, 0);
 
         //zrusit a odlozit, teda vymenit za novu
-        PendingIntent delayIntent = PendingIntent.getActivity(context,500, postponeIntent ,PendingIntent.FLAG_CANCEL_CURRENT);
+        //PendingIntent delayIntent = PendingIntent.getActivity(context,500, postponeIntent ,PendingIntent.FLAG_CANCEL_CURRENT);
+
         /*AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(delayIntent);*/
 
@@ -87,7 +88,7 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         }
 
 
-        NotificationCompat.Action actionDelay = new NotificationCompat.Action(R.drawable.ic_menu_send, "odlozit", delayIntent);
+        //NotificationCompat.Action actionDelay = new NotificationCompat.Action(R.drawable.ic_menu_send, "odlozit", delayIntent);
         NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_menu_share, "robit", doIntent);
         NotificationCompat.Action actionNot = new NotificationCompat.Action(R.drawable.ic_menu_share, "dnes nie", notTodayIntent);
 
@@ -96,13 +97,13 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
                 .setSmallIcon(R.drawable.ic_menu_camera)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setContentTitle(contentTitle)
-                .addAction(actionDelay)
                 .setLights(0xf9cc00, 300, 3000)
                 .addAction(action)
                 .addAction(actionNot)
-                .addAction(actionDelay)
+                .setPriority(Notification.PRIORITY_HIGH)
+                //.addAction(actionDelay)
                 .setContentText(contentText)
-                .setAutoCancel(true);
+                .setAutoCancel(false);
 
         notificationManager.notify(500, builder.build());
     }

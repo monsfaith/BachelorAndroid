@@ -142,7 +142,7 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
         String examNote = cursor.getString(cursor.getColumnIndex(Exam.NOTE));
 
         holder.subjectName.setText(subjectName);
-        holder.examDate.setText(android.text.format.DateFormat.format("dd.MM.yyyy", new Date(examDate)) + ", " + (android.text.format.DateFormat.format("HH:mm", new Time(examTime))));
+        holder.examDate.setText(android.text.format.DateFormat.format("dd.MM.yyyy HH:mm", new Date(examDate)) + ", " + (android.text.format.DateFormat.format("HH:mm", new Time(examTime))));
         holder.examDetails.setText((examClassroom +  ", " + examNote));
 
         holder.examEdit.setOnClickListener(new View.OnClickListener() {

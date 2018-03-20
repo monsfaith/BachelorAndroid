@@ -134,6 +134,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
 
         setDatabaseNotification();
         setDatabasePlanTimeDaily();
+        setExamNotification();
         loadListView();
 
         butt.setOnClickListener(new View.OnClickListener() {
@@ -255,7 +256,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
     private void setExamNotification(){
         Calendar calendar = Calendar.getInstance();
         ContentValues contentValues = new ContentValues();
-        Toast.makeText(getActivity(), examMainRepository.findNextExams().size() + " size", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), examMainRepository.findNextExams().size() + " size of exams", Toast.LENGTH_SHORT).show();
         //if (examMainRepository.findNextExams().size() != 0){
             calendar.setTimeInMillis(System.currentTimeMillis());
             /*contentValues.put("enabled",false);
@@ -463,9 +464,27 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         return cal.getTimeInMillis();
     }
 
+    private long getTodayBeginning(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.HOUR_OF_DAY,0);
+        return cal.getTimeInMillis();
+    }
+
+    private long getTodayEnd(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MINUTE,59);
+        cal.set(Calendar.HOUR_OF_DAY,23);
+        return cal.getTimeInMillis();
+    }
+
 
     private Cursor getExamResults(){
-        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date = ?",new String[]{String.valueOf(getCurrentDate())});
+        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? AND e.date < ?",new String[]{String.valueOf(getCurrentTime()), String.valueOf(getTodayEnd())});
+    }
+
+    private Cursor getExamResults1(){
+        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date between ? and ?",new String[]{String.valueOf(getTodayBeginning()), String.valueOf(getTodayEnd())});
     }
 
     private void init(){

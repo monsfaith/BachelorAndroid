@@ -94,7 +94,7 @@ public class ExamMainRepository {
             List<Exam> result = new LinkedList<>();
             Cursor c = db.query(Exam.TABLE,
                     null,
-                    Exam.DATE + " > " + String.valueOf(calendar.getTimeInMillis()) + " OR " + Exam.DATE + " = " + String.valueOf(calendar.getTimeInMillis()),
+                    Exam.DATE + " > " + calendar.getTimeInMillis(),
                     null,
                     null,
                     null,
@@ -241,14 +241,20 @@ public class ExamMainRepository {
     }
 
     public Cursor getExamResults(Date date){
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date);
+        cal1.set(Calendar.HOUR_OF_DAY,23);
+        cal1.set(Calendar.MINUTE,59);
+
 
         SQLiteDatabase db = mainOpenHelper.getWritableDatabase();
 
-            return db.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date = ?",new String[]{String.valueOf(date.getTime())});
+            return db.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? and e.date < ?",new String[]{String.valueOf(date.getTime()), String.valueOf(cal1.getTimeInMillis())});
         }
 
 
     public Cursor getOtherExamResults(Date date){
+
 
         SQLiteDatabase db = mainOpenHelper.getWritableDatabase();
 

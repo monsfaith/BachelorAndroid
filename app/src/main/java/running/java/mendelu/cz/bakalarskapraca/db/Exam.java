@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.provider.BaseColumns;
+import android.view.ViewAnimationUtils;
 
 import java.sql.Time;
 import java.util.Calendar;
@@ -36,8 +37,9 @@ public class Exam {
 
     public Exam(Date date, Time time, int days, int difficulty, String classroom, long subjectId, String note ){
         this.values = new ContentValues();
-        this.setDate(date);
+        //this.setDate(date);
         this.setTime(time);
+        this.setDateTime(date, time);
         this.setDays(days);
         this.setRealization(false);
         this.setSuccess(false);
@@ -88,6 +90,16 @@ public class Exam {
     {
         int bool = (success)? 1 : 0;
         values.put(SUCCESS, bool);
+    }
+
+    public void setDateTime(Date date, Time time){
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date);
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(time);
+        cal1.set(Calendar.HOUR_OF_DAY,cal2.get(Calendar.HOUR_OF_DAY));
+        cal1.set(Calendar.MINUTE,cal2.get(Calendar.MINUTE));
+        values.put(DATE, cal1.getTimeInMillis());
     }
 
     public void setSubjectId(long subjectId)
