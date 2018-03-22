@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Switch;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.List;
 
+import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamNotificationAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitMainRepository;
@@ -41,6 +43,7 @@ import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
 
 /**
  * Created by Monika on 12.02.2018.
@@ -60,6 +63,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
 
     private HabitMainRepository habitMainRepository;
     private PlanMainRepository planMainRepository;
+    private ExamMainRepository examMainRepository;
 
     private CardView dailyPlanCardView;
     private CardView morningPlanCardView;
@@ -100,9 +104,11 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_my_plan_tab, container, false);
+        myView = view;
 
         habitMainRepository = new HabitMainRepository(getActivity());
         planMainRepository = new PlanMainRepository(getActivity());
+        examMainRepository = new ExamMainRepository(getActivity());
 
         dailyRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewDailyHabits);
         morningRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewMorningHabits);
@@ -174,6 +180,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
                                 //cancelDividedNotification(1);
                                 NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
                                 notificationManager.cancel(100);
+                                cancelDividedNotification(1);
                                 //
 
                                 setNotificationTime(2);
@@ -200,6 +207,10 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
 
                         }
                     });
+                    dialogBuilder.setView(view);
+                    AlertDialog dialog = dialogBuilder.create();
+                    dialog.show();
+
                 } else {
                     progressDailyBar.setVisibility(View.VISIBLE);
                     dailyPlanCardView.setVisibility(View.VISIBLE);
@@ -664,8 +675,8 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
                 dailyPlanCardView.addView(tx);
             } else {
                 dailyPlanCardView.removeView(tx);
-                View view = myView.findViewById(R.id.mydailyView);
-                dailyPlanCardView.addView(view);
+                //LinearLayout view = (LinearLayout) myView.findViewById(R.id.mydailyView);
+                //dailyPlanCardView.addView(view);
             }
 
             if (getMorningHabits().size() == 0) {
@@ -673,8 +684,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
                 morningPlanCardView.addView(txMorning);
             } else {
                 morningPlanCardView.removeView(txMorning);
-                View view = myView.findViewById(R.id.mymorningView);
-                morningPlanCardView.addView(view);
+
             }
 
             if (getLunchHabits().size() == 0) {
@@ -682,8 +692,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
                 lunchPlanCardView.addView(txLunch);
             } else {
                 lunchPlanCardView.removeView(txLunch);
-                View view = myView.findViewById(R.id.mylunchView);
-                lunchPlanCardView.addView(view);
+
             }
 
             if (getEveningHabits().size() == 0) {
@@ -691,8 +700,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
                 eveningPlanCardView.addView(txEvening);
             } else {
                 eveningPlanCardView.removeView(txEvening);
-                View view = myView.findViewById(R.id.myeveningView);
-                eveningPlanCardView.addView(view);
+
 
             }
         }
@@ -793,6 +801,26 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
     public void onResume(){
         super.onResume();
         checkPlans();
+    }
+
+    private void setExamNotification(){
+        Calendar calendar = Calendar.getInstance();
+        ContentValues contentValues = new ContentValues();
+        Toast.makeText(getActivity(), examMainRepository.findNextExams().size() + " size of exams", Toast.LENGTH_SHORT).show();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+
+        //nova cast, podla mna
+        calendar.set(Calendar.MINUTE,00);
+        calendar.set(Calendar.HOUR_OF_DAY,8);
+
+        if (getCurrentTime() > calendar.getTimeInMillis()){
+            calendar.add(Calendar.DAY_OF_MONTH,1);
+        }
+
+        Intent i = new Intent(getActivity(), ExamNotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     @Override

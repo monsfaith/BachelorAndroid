@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class HabitNotificationActivity extends AppCompatActivity{
 
         if (getIntent().getExtras() != null){
             int id = getIntent().getIntExtra("ID",0);
+            Log.i("ID od lets do it","Prislo idcko taketo" + id);
             setAdapter(id);
         }
 

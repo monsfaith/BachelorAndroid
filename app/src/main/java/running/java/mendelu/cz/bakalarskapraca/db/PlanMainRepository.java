@@ -272,6 +272,13 @@ public class PlanMainRepository {
         }
     }
 
+    //metoda na urcenie casu kvoli aktualizacii databaze
+    public long getLastPlanTime(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(getByType(4).getToTime().getTime());
+        return cal.getTimeInMillis();
+    }
+
     //upravit datum planov na aktualny
     public void updatePlanTime(long idPlan){
 

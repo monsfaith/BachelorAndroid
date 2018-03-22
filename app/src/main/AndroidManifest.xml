@@ -53,7 +53,8 @@
         <activity android:name=".OneExamDetailActivity" />
         <activity android:name=".CreateHabitActivity">
         </activity>
-        <activity android:name=".notifications.HabitNotificationActivity">
+        <activity android:name=".notifications.HabitNotificationActivity"
+            android:excludeFromRecents="true">
         </activity>
         <activity android:name=".notifications.ExamNotificationStartActivity">
         </activity>

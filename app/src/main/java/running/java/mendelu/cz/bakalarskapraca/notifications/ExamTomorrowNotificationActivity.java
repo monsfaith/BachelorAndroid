@@ -74,6 +74,8 @@ public class ExamTomorrowNotificationActivity extends AppCompatActivity {
     private void setExamNotificationTomorrow(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.MINUTE,00);
+        calendar.set(Calendar.HOUR_OF_DAY,8);
         calendar.add(Calendar.DAY_OF_MONTH,1);
         Intent i = new Intent(getApplicationContext(), ExamNotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);

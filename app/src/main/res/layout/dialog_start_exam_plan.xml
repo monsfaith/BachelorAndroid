@@ -18,7 +18,9 @@
 
     <Button
         android:id="@+id/letsDoIt"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Let's do it" />
+        android:text="Let's do it"
+        android:textAppearance="@android:style/TextAppearance.Material.Menu" />
 </LinearLayout>

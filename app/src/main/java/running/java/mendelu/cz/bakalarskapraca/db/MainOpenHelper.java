@@ -15,7 +15,7 @@ import java.util.Date;
 public class MainOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "main.db";
-    private static final int DATABASE_VERSION = 36;
+    private static final int DATABASE_VERSION = 40;
 
     public MainOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -54,22 +54,26 @@ public class MainOpenHelper extends SQLiteOpenHelper {
                 Habit.TIME + " INTEGER " + ")");
         db.execSQL("CREATE TABLE " + Plan.TABLE_PLANS + " (" +
                 Plan.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                Plan.NAME + " TEXT, " +
+                //Plan.NAME + " TEXT, " +
                 //Plan.DATE + " INTEGER NOT NULL, " +
                 Plan.FROM_TIME + " INTEGER NOT NULL, " +
                 Plan.TO_TIME + " INTEGER NOT NULL, " +
+                Plan.FROM_HOUR + " INTEGER NOT NULL, " +
+                Plan.TO_HOUR + " INTEGER NOT NULL, " +
+                Plan.FROM_MINUTE + " INTEGER NOT NULL, " +
+                Plan.TO_MINUTE + " INTEGER NOT NULL, " +
                 Plan.TYPE + " INTEGER NOT NULL, " +
-                Plan.NOTIFICATION + " INTEGER NOT NULL, " +
+                //Plan.NOTIFICATION + " INTEGER NOT NULL, " +
                 Plan.ENABLED + " INTEGER NOT NULL, " +
-                Plan.REPETITION_ID + " INTEGER NOT NULL, " +
-                Plan.REMIND + " INTEGER " + ")");
+                Plan.REPETITION_ID + " INTEGER NOT NULL, " + ")");
+                //Plan.REMIND + " INTEGER " + ")");
         db.execSQL("CREATE TABLE " + PlanHabitAssociation.TABLE + " (" +
                 PlanHabitAssociation.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 PlanHabitAssociation.ID_HABIT + " INTEGER NOT NULL, " +
                 PlanHabitAssociation.DONE + " INTEGER NOT NULL, " +
                 PlanHabitAssociation.DATE + " INTEGER NOT NULL, " +
-                PlanHabitAssociation.REMIND + " INTEGER NOT NULL, " +
-                PlanHabitAssociation.CANCEL + " INTEGER NOT NULL, " +
+                //PlanHabitAssociation.REMIND + " INTEGER NOT NULL, " +
+                //PlanHabitAssociation.CANCEL + " INTEGER NOT NULL, " +
                 PlanHabitAssociation.ID_PLAN + " INTEGER NOT NULL " + ")");
 
     }

@@ -102,8 +102,8 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
 
         if (planMainRepository.getAllPlans().size() != 4) {
             init();
-            setDatabaseNotification();
-            setDatabasePlanTimeDaily();
+            //setDatabaseNotification();
+            //setDatabasePlanTimeDaily();
             setExamNotification();
         } else {
             dailyPlan = planMainRepository.getByType(1);
@@ -112,7 +112,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             eveningPlan = planMainRepository.getByType(4);
         }
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if (!prefs.getBoolean("firstTime", false)) {
             // <---- run your one time code here
             init();
@@ -124,7 +124,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("firstTime", true);
             editor.commit();
-        }
+        }*/
 
 
 
@@ -132,9 +132,10 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         //setDatabaseNotification();
         //setDatabasePlanTimeDaily();
 
-        setDatabaseNotification();
-        setDatabasePlanTimeDaily();
-        setExamNotification();
+        //setDatabaseNotification();
+        //setDatabasePlanTimeDaily();
+        //setExamNotification();
+
         loadListView();
 
         butt.setOnClickListener(new View.OnClickListener() {
@@ -238,17 +239,17 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
 
 */
     //nastavenie notifikacie na upozornovanie aktivit
-    private void setHabitNotification(long time, int idPlan){
+    private void setHabitNotification(long timeFrom, int idPlan, long timeTo){
         AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(getActivity(), EveningHabitNotificationReceiver.class);
         i.putExtra("REQUESTCODE",idPlan);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), idPlan*100, i, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, planMainRepository.getByType(idPlan).getRepetition(), pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeFrom, planMainRepository.getByType(idPlan).getRepetition(), pendingIntent);
 
         Intent cancelIntent = new Intent(getActivity(), CancelEveningHabitNotificationReceiver.class);
         cancelIntent.putExtra("CANCEL",idPlan);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getActivity(), idPlan*100, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, planMainRepository.getByType(idPlan).getToTime().getTime(), cancelPendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, timeTo, cancelPendingIntent);
     }
 
 
@@ -268,6 +269,9 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         //nova cast, podla mna
             calendar.set(Calendar.MINUTE,00);
             calendar.set(Calendar.HOUR_OF_DAY,8);
+            if (System.currentTimeMillis() > calendar.getTimeInMillis()){
+                calendar.add(Calendar.DAY_OF_MONTH,1);
+            }
 
 
             Intent i = new Intent(getActivity(), ExamNotificationReceiver.class);
@@ -280,7 +284,9 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             //contentValues.put("enabled",true);
             //planMainRepository.update2(1, contentValues);
             //setHabitNotification(calendar.getTimeInMillis(),1);
+
         setDailyPlan();
+
         //setHabitNotification(planMainRepository.getByType(1).getFromTime().getTime(), 1);
         }
 
@@ -310,12 +316,29 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH,1);
+
+
+        //calendar.add(Calendar.DAY_OF_MONTH,1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE,0);
         calendar.set(Calendar.SECOND,15);
-        //long time = planMainRepository.getLastTime();
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        long time = calendar.getTimeInMillis();
+
+        if (Calendar.getInstance().getTimeInMillis() > calendar.getTimeInMillis()){
+            calendar.add(Calendar.DAY_OF_MONTH,1);
+            time = calendar.getTimeInMillis();
+        }
+
+        if (planMainRepository.getLastPlanTime() > calendar.getTimeInMillis()){
+            //Calendar cali = Calendar.getInstance();
+            //cali.setTimeInMillis(planMainRepository.getLastPlanTime());
+            time = planMainRepository.getLastPlanTime();
+
+        }
+
+
+            //long time = planMainRepository.getLastTime();
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pendingIntent);
 
     }
 
@@ -443,6 +466,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
     public void onResume(){
         super.onResume();
         loadListView();
+        setPlan();
 
     }
 
@@ -483,9 +507,6 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? AND e.date < ?",new String[]{String.valueOf(getCurrentTime()), String.valueOf(getTodayEnd())});
     }
 
-    private Cursor getExamResults1(){
-        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date between ? and ?",new String[]{String.valueOf(getTodayBeginning()), String.valueOf(getTodayEnd())});
-    }
 
     private void init(){
         Calendar dailyCalendar = Calendar.getInstance();
@@ -498,28 +519,28 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         dailyCalendar.set(Calendar.HOUR_OF_DAY, 20);
         long dailyToTime = dailyCalendar.getTimeInMillis();
 
-        dailyPlan = new Plan(dailyFromTime, dailyToTime, 1, true);
+        dailyPlan = new Plan(dailyFromTime, dailyToTime, 1, true, 8, 20, 0, 0);
         planMainRepository.insert(dailyPlan);
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,8);
         long morningFromTime = dailyCalendar.getTimeInMillis();
         dailyCalendar.set(Calendar.HOUR_OF_DAY,12);
         long morningToTime = dailyCalendar.getTimeInMillis();
-        morningPlan = new Plan(morningFromTime, morningToTime, 2, true);
+        morningPlan = new Plan(morningFromTime, morningToTime, 2, true, 8, 12, 0, 0 );
         planMainRepository.insert(morningPlan);
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,12);
         long lunchFromTime = dailyCalendar.getTimeInMillis();
         dailyCalendar.set(Calendar.HOUR_OF_DAY,17);
         long lunchToTime = dailyCalendar.getTimeInMillis();
-        lunchPlan = new Plan(lunchFromTime, lunchToTime, 3, true);
+        lunchPlan = new Plan(lunchFromTime, lunchToTime, 3, true, 12, 17, 0, 0);
         planMainRepository.insert(lunchPlan);
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,17);
         long eveningFromTime = dailyCalendar.getTimeInMillis();
         dailyCalendar.set(Calendar.HOUR_OF_DAY,22);
         long eveningToTime = dailyCalendar.getTimeInMillis();
-        eveningPlan = new Plan(eveningFromTime, eveningToTime,4, true);
+        eveningPlan = new Plan(eveningFromTime, eveningToTime,4, true, 17, 22, 0, 0);
         planMainRepository.insert(eveningPlan);
     }
 
@@ -530,7 +551,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
     }
 
 
-    private void setDailyPlan(){
+    /*private void setDailyPlan2(){
         Plan dailyPlan = planMainRepository.getByType(1);
         if (getCurrentTime() < dailyPlan.getFromTime().getTime() || getCurrentTime() == dailyPlan.getFromTime().getTime()) {
             setHabitNotification(dailyPlan.getFromTime().getTime(), 1);
@@ -541,6 +562,24 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             cal.setTime(dailyPlan.getFromTime());
             cal.add(Calendar.DAY_OF_MONTH, 1);
             setHabitNotification(cal.getTimeInMillis(), 1);
+        }
+    }*/
+
+    private void setDailyPlan(){
+        Plan dailyPlan = planMainRepository.getByType(1);
+        Calendar calendarFrom = Calendar.getInstance();
+        calendarFrom.set(Calendar.HOUR_OF_DAY, dailyPlan.getFromHour());
+        calendarFrom.set(Calendar.MINUTE,dailyPlan.getFromMinute());
+        Calendar calendarTo = Calendar.getInstance();
+        calendarTo.set(Calendar.HOUR_OF_DAY,dailyPlan.getToHour());
+        calendarFrom.set(Calendar.MINUTE,dailyPlan.getToMinute());
+        if (System.currentTimeMillis() < calendarFrom.getTimeInMillis()){
+            setHabitNotification(calendarFrom.getTimeInMillis(),1, calendarTo.getTimeInMillis());
+        } else if (System.currentTimeMillis() < calendarTo.getTimeInMillis()){
+            setHabitNotification(System.currentTimeMillis(), 1,calendarTo.getTimeInMillis());
+        } else {
+            calendarFrom.add(Calendar.DAY_OF_MONTH,1);
+            setHabitNotification(calendarFrom.getTimeInMillis(),1, calendarTo.getTimeInMillis());
         }
     }
 

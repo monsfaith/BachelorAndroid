@@ -89,7 +89,9 @@ public class HabitMainRepository {
         try {
             List<PlanHabitAssociation> result = new LinkedList<>();
 
-            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 1 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
+            //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 1 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
+
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 1", null);
 
            // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
 
@@ -256,7 +258,9 @@ public class HabitMainRepository {
         try {
             List<PlanHabitAssociation> result = new LinkedList<>();
 
-            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
+            //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
+
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2", null);
 
             // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
 
@@ -348,7 +352,9 @@ public class HabitMainRepository {
         try {
             List<PlanHabitAssociation> result = new LinkedList<>();
 
-            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 3 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
+            //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 3 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
+
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 3", null);
 
             // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
 
@@ -435,7 +441,10 @@ public class HabitMainRepository {
 
         try {
             List<PlanHabitAssociation> result = new LinkedList<>();
-            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 4 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
+
+            //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 4 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
+
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 4", null);
 
             try {
 

@@ -28,7 +28,7 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
         //shownIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         int requestCode = id*100;
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, shownIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, shownIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context).setContentIntent(pendingIntent).setSmallIcon(R.drawable.ic_menu_gallery).setSound(Settings.System.DEFAULT_NOTIFICATION_URI).setContentTitle("Vecerny plan super" + requestCode).setContentText("Je cas na splnenie tvojich ritualov. Zo svojich vybranych aktivit si zrealizuj lubovolne mnozstvo. Je vsak dolezite zrealizovat aspon jednu. Nastartuj sa!").setAutoCancel(true);
 

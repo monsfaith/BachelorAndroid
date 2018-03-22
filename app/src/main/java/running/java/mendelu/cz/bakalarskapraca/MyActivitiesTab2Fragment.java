@@ -9,6 +9,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -153,59 +154,151 @@ public class MyActivitiesTab2Fragment extends Fragment implements FragmentInterf
                 timePickerTo.setIs24HourView(true);
 
                 myBuilder.setView(view);
-                AlertDialog.Builder builder = myBuilder.setPositiveButton("Potvrdiť", new DialogInterface.OnClickListener() {
+                myBuilder.setPositiveButton("Potvrdiť", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Calendar cal = Calendar.getInstance();
+                        ContentValues cv = new ContentValues();
+
                         if (Build.VERSION.SDK_INT >= 23) {
                             cal.set(Calendar.HOUR_OF_DAY, timePickerFrom.getHour());
                             cal.set(Calendar.MINUTE, timePickerFrom.getMinute());
+                            cv.put("from_hour",timePickerFrom.getHour());
+                            cv.put("from_minute",timePickerFrom.getMinute());
+
                         } else {
                             cal.set(Calendar.HOUR_OF_DAY, timePickerFrom.getCurrentHour());
                             cal.set(Calendar.MINUTE, timePickerFrom.getCurrentMinute());
+                            cv.put("from_hour",timePickerFrom.getCurrentHour());
+                            cv.put("from_minute",timePickerFrom.getCurrentMinute());
                         }
 
-                        ContentValues cv = new ContentValues();
                         long fromTime = cal.getTimeInMillis();
                         cv.put("from_time", fromTime);
                         if (Build.VERSION.SDK_INT >= 23) {
                             cal.set(Calendar.HOUR_OF_DAY, timePickerTo.getHour());
                             cal.set(Calendar.MINUTE, timePickerTo.getMinute());
+                            cv.put("to_hour",timePickerFrom.getHour());
+                            cv.put("to_minute",timePickerFrom.getMinute());
                         } else {
                             cal.set(Calendar.HOUR_OF_DAY, timePickerTo.getCurrentHour());
                             cal.set(Calendar.MINUTE, timePickerTo.getCurrentMinute());
+                            cv.put("to_hour",timePickerFrom.getCurrentHour());
+                            cv.put("to_minute",timePickerFrom.getCurrentMinute());
                         }
                         long toTime = cal.getTimeInMillis();
                         cv.put("to_time", toTime);
-                        if (new Date(fromTime).after(new Date(toTime))) {
-                            Toast.makeText(getActivity(), "Je nutné upraviť čas ukončenia upozornenia. ", Toast.LENGTH_LONG).show();
-                        } else {
+
+
+                        Calendar cali = Calendar.getInstance();
+                        //cali.add(Calendar.DAY_OF_MONTH,1);
+                        cali.set(Calendar.HOUR_OF_DAY,3);
+                        cali.set(Calendar.MINUTE,20);
+
+                        Calendar from = Calendar.getInstance();
+                        Calendar to = Calendar.getInstance();
+
+                            if (new Date(fromTime).after(new Date(toTime))) {
+                                if (idPlan == 4 && new Date(toTime).before(new Date(cali.getTimeInMillis()))){
+                                        planMainRepository.update2(idPlan, cv);
+                                        Plan plan = planMainRepository.getByType(idPlan);
+                                        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+                                        to.add(Calendar.DAY_OF_MONTH,1);
+
+                                    if (getCurrentTime() < from.getTimeInMillis()) {
+                                            setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
+                                            Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                                        } else if (System.currentTimeMillis() < to.getTimeInMillis()) {
+                                            //if (getNotificationClass(idPlan) != null){
+
+                                            setHabitNotification(System.currentTimeMillis(), idPlan, to.getTimeInMillis());
+                                            //}
+                                            Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(getCurrentTime()) + " " + sdf.format(plan.getToTime().getTime()), Toast.LENGTH_LONG).show();
+
+                                        } else {
+                                            Calendar calendar = Calendar.getInstance();
+                                            calendar.setTime(from.getTime());
+                                            calendar.add(Calendar.DAY_OF_MONTH, 1);
+                                            Calendar calendar1 = Calendar.getInstance();
+                                            calendar1.setTime(to.getTime());
+                                            calendar1.add(Calendar.DAY_OF_MONTH,1);
+                                            setHabitNotification(calendar.getTimeInMillis(), idPlan, calendar1.getTimeInMillis());
+
+                                            Toast.makeText(getActivity(), "Upozornenie od zajtra" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_LONG).show();
+
+                                        }
+
+
+                                        setTimeButtons();
+
+                                } else {
+                                    Toast.makeText(getActivity(), "Je nutné upraviť čas ukončenia upozornenia. ", Toast.LENGTH_LONG).show();
+                                }
+                            } else //(!(idPlan == 4 && new Date(toTime).before(new Date(cali.getTimeInMillis()))))
+                        {
+                                planMainRepository.update2(idPlan, cv);
+                                Plan plan = planMainRepository.getByType(idPlan);
+                                from.set(Calendar.HOUR_OF_DAY,plan.getFromHour());
+                                from.set(Calendar.MINUTE, plan.getFromMinute());
+                                to.set(Calendar.HOUR_OF_DAY, plan.getToHour());
+                                to.set(Calendar.MINUTE, plan.getToMinute());
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+                                if (System.currentTimeMillis() < from.getTimeInMillis()) {
+                                    setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
+                                    Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(plan.getFromTime()), Toast.LENGTH_LONG).show();
+                                } else if (System.currentTimeMillis() < to.getTimeInMillis()) {
+                                    //if (getNotificationClass(idPlan) != null){
+                                    setHabitNotification(System.currentTimeMillis(), idPlan, to.getTimeInMillis());
+                                    //}
+                                    Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(getCurrentTime()) + " " + sdf.format(to.getTimeInMillis()) + " " + sdf.format(System.currentTimeMillis()), Toast.LENGTH_LONG).show();
+
+                                } else {
+                                    Calendar calendar = Calendar.getInstance();
+                                    calendar.setTime(from.getTime());
+                                    calendar.add(Calendar.DAY_OF_MONTH, 1);
+                                    Calendar calendar1 = Calendar.getInstance();
+                                    calendar1.setTime(to.getTime());
+                                    calendar1.add(Calendar.DAY_OF_MONTH,1);
+                                    setHabitNotification(calendar.getTimeInMillis(), idPlan, calendar1.getTimeInMillis());
+
+                                    Toast.makeText(getActivity(), "Upozornenie od zajtra" + sdf.format(cal.getTimeInMillis()), Toast.LENGTH_LONG).show();
+
+                                }
+
+
+                                setTimeButtons();
+
+                            } /*else {
                             planMainRepository.update2(idPlan, cv);
                             Plan plan = planMainRepository.getByType(idPlan);
                             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-                            if (getCurrentTime() < plan.getFromTime().getTime() || getCurrentTime() == plan.getFromTime().getTime()) {
-                                setHabitNotification(planMainRepository.getByType(idPlan).getFromTime().getTime(), idPlan);
-                                Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(plan.getFromTime()), Toast.LENGTH_LONG).show();
-                            } else if (getCurrentTime() < plan.getToTime().getTime()) {
+                            if (getCurrentTime() < from.getTimeInMillis()) {
+                                setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
+                                Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                            } else if (System.currentTimeMillis() < to.getTimeInMillis()) {
                                 //if (getNotificationClass(idPlan) != null){
-                                    setHabitNotification(getCurrentTime(), idPlan);
+                                    setHabitNotification(System.currentTimeMillis(), idPlan, to.getTimeInMillis());
                                 //}
                                 Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(getCurrentTime()) + " " + sdf.format(plan.getToTime().getTime()), Toast.LENGTH_LONG).show();
 
                             } else {
                                 Calendar calendar = Calendar.getInstance();
-                                calendar.setTime(plan.getFromTime());
+                                calendar.setTime(from.getTime());
                                 calendar.add(Calendar.DAY_OF_MONTH, 1);
-                                setHabitNotification(cal.getTimeInMillis(), idPlan);
+                                Calendar calendar1 = Calendar.getInstance();
+                                calendar1.setTime(to.getTime());
+                                calendar1.add(Calendar.DAY_OF_MONTH,1);
+                                setHabitNotification(calendar.getTimeInMillis(), idPlan, calendar1.getTimeInMillis());
 
-                                Toast.makeText(getActivity(), "Upozornenie od zajtra" + sdf.format(cal.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), "Upozornenie od zajtra" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_LONG).show();
 
                             }
 
 
                             setTimeButtons();
-                        }
+                        }*/
 
 
                     }
@@ -220,9 +313,7 @@ public class MyActivitiesTab2Fragment extends Fragment implements FragmentInterf
     }
 
     private long getCurrentTime(){
-        long time = System.currentTimeMillis();
         Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(time);
         cal.set(Calendar.SECOND,0);
         cal.set(Calendar.MILLISECOND,0);
         return cal.getTimeInMillis();
@@ -315,19 +406,19 @@ public class MyActivitiesTab2Fragment extends Fragment implements FragmentInterf
 
     }*/
 
-    private void setHabitNotification(long time, int type){
+    private void setHabitNotification(long fromTime, int type, long toTime){
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(getActivity(), EveningHabitNotificationReceiver.class);
         i.putExtra("REQUESTCODE",type);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), type*100, i, 0);
         //setExactPlanNotification(alarmManager, pendingIntent, 2,200);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time,300000 , pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, fromTime,planMainRepository.getByType(type).getRepetition() , pendingIntent);
 
         Intent cancelIntent = new Intent(getActivity(), CancelEveningHabitNotificationReceiver.class);
         cancelIntent.putExtra("CANCEL",type);
         //cancelIntent.putExtra("CANCELINTENT", pendingIntent);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getActivity(), type*100, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, planMainRepository.getByType(type).getToTime().getTime(), cancelPendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, toTime, cancelPendingIntent);
     }
 
     /*private Class<?> getNotificationClass(int idPlan){

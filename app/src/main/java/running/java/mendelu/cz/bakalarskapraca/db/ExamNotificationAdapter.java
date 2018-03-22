@@ -50,38 +50,61 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
 
 
     @Override
-    public void onBindViewHolder(ExamNotificationAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(final ExamNotificationAdapter.MyViewHolder holder, int position) {
 
         if (!cursor.moveToPosition(position)) {
             return;
         }
 
         String subjectName = cursor.getString(cursor.getColumnIndex(Subject.NAME));
-        long examDate = cursor.getLong(cursor.getColumnIndex(Exam.DATE));
+        final long examDate = cursor.getLong(cursor.getColumnIndex(Exam.DATE));
         long examTime = cursor.getLong(cursor.getColumnIndex(Exam.TIME));
+        final long idExam = cursor.getLong(cursor.getColumnIndex(Exam.ID));
 
         holder.subjectName.setText(subjectName);
         holder.examDate.setText(android.text.format.DateFormat.format("dd.MM.yyyy", new Date(examDate)) + ", " + (android.text.format.DateFormat.format("HH:mm", new Time(examTime))));
 
+        int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
+        int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
+        holder.examDays.setText(actualDays + "/" + wantedDays);
+
         holder.examCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ExamMainRepository examMainRepository = new ExamMainRepository(context);
+                ContentValues contentValues = new ContentValues();
 
                 if (isChecked){
                     /*ContentValues contentValues = new ContentValues();
                     contentValues.put("done",true);
                     holder.habitCheck.setEnabled(false);
                     planMainRepository.updateAssociation(id, contentValues);*/
+
                     count = count + 1;
+                    int studying = examMainRepository.getById(idExam).getStudying();
+                    contentValues.put("studying", studying + 1);
+                    examMainRepository.update2(idExam, contentValues);
+                    int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
+                    int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
+                    holder.examDays.setText(actualDays + "/" + wantedDays);
+
                     Toast.makeText(context, "checknute" + count, Toast.LENGTH_SHORT).show();
 
                 } else {
+                    int studying = examMainRepository.getById(idExam).getStudying();
+                    contentValues.put("studying", studying - 1);
+                    examMainRepository.update2(idExam, contentValues);
+                    int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
+                    int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
+                    holder.examDays.setText(actualDays + "/" + wantedDays);
                     count = count - 1;
                     Toast.makeText(context, "nechecknute" + count, Toast.LENGTH_SHORT).show();
 
                 }
             }
         });
+
+
 
     }
 
@@ -110,12 +133,14 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
         TextView subjectName;
         TextView examDate;
         CheckBox examCheck;
+        TextView examDays;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             subjectName = (TextView) itemView.findViewById(R.id.subjectExam);
             examDate = (TextView) itemView.findViewById(R.id.dateOfExam);
             examCheck = (CheckBox) itemView.findViewById(R.id.examCheckB);
+            examDays = (TextView) itemView.findViewById(R.id.examDaysPlanned);
 
 
         }

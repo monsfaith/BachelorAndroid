@@ -1,6 +1,7 @@
 package running.java.mendelu.cz.bakalarskapraca.notifications;
 
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -24,6 +26,7 @@ import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
 
 /**
  * Created by Monika on 17.03.2018.
@@ -60,9 +63,15 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         letsDoIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancelDailyNotifications();
-                setAllNotifications();
-                finish();
+                if (examNotificationAdapter.numberOfSelectedExams() > 0){
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.cancel(500);
+                    cancelDailyNotifications();
+                    setAllNotifications();
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Nutné zvoliť skúšku, na ktorú sa ideš pripravovať", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -164,5 +173,18 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         cal.set(Calendar.SECOND,0);
         cal.set(Calendar.MILLISECOND,0);
         return cal.getTimeInMillis();
+    }
+
+    //ak zrusim tu exam notifikaciu, musim ju znova nastavit
+    private void setExamNotificationTomorrow(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.MINUTE,00);
+        calendar.set(Calendar.HOUR_OF_DAY,8);
+        calendar.add(Calendar.DAY_OF_MONTH,1);
+        Intent i = new Intent(getApplicationContext(), ExamNotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
     }
 }

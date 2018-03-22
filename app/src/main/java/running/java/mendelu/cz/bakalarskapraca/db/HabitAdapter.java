@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,17 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
 
 
     }
+
+    private boolean sameDay(long habitDate){
+        Calendar calendarCurrent = Calendar.getInstance();
+        Calendar calendarMy = Calendar.getInstance();
+        calendarMy.setTimeInMillis(habitDate);
+        boolean sameDay = calendarCurrent.get(Calendar.YEAR) == calendarMy.get(Calendar.YEAR) &&
+                calendarCurrent.get(Calendar.DAY_OF_YEAR) == calendarMy.get(Calendar.DAY_OF_YEAR);
+        return sameDay;
+    }
+
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.row_daily_habit_plan, parent, false);
@@ -53,9 +65,13 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
         PlanHabitAssociation currentAssociation = habits.get(position);
         HabitMainRepository habitMainRepository = new HabitMainRepository(context);
 
-        if (currentAssociation.getDone() == true){
-            holder.habitCheck.setChecked(true);
-            holder.habitCheck.setEnabled(false);
+        if ((currentAssociation.getDone() == true) && (currentAssociation.getDate() != null)){
+            if (sameDay(currentAssociation.getDate().getTime())){
+                holder.habitCheck.setChecked(true);
+
+            } else {
+                holder.habitCheck.setEnabled(false);
+            }
         } else {
             holder.habitCheck.setChecked(false);
         }
@@ -74,6 +90,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
                 if (isChecked){
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("done",true);
+                    contentValues.put("date",System.currentTimeMillis());
                     holder.habitCheck.setEnabled(false);
                     planMainRepository.updateAssociation(id, contentValues);
                 }

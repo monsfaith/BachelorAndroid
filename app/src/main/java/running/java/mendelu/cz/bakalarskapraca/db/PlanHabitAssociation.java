@@ -20,7 +20,7 @@ public class PlanHabitAssociation {
     static final String ID = BaseColumns._ID;
     static final String DONE = "done";
     static final String DATE = "date";
-    static final String REMIND = "remind";
+    //static final String REMIND = "remind";
     static final String CANCEL = "cancel";
 
 
@@ -32,8 +32,8 @@ public class PlanHabitAssociation {
         this.setIdPlan(idPlan);
         this.setCancel(false);
         this.setDone(false);
-        this.setRemind(false);
-        this.setDate(new Date());
+        //this.setRemind(false);
+        this.setDate(null);
     }
 
     public PlanHabitAssociation(Cursor cursor){
@@ -61,10 +61,10 @@ public class PlanHabitAssociation {
 
     }
 
-    public void setRemind(boolean remind){
+    /*public void setRemind(boolean remind){
         int bool = (remind)? 1 : 0;
         contentValues.put(REMIND, bool);
-    }
+    }*/
 
     public void setCancel(boolean cancel){
         int bool = (cancel)? 1 : 0;
@@ -91,10 +91,10 @@ public class PlanHabitAssociation {
 
     }
 
-    public boolean getRemind(){
+    /*public boolean getRemind(){
         return (contentValues.getAsInteger(REMIND) == 1);
     }
-
+*/
     public boolean getCancel(){
         return (contentValues.getAsInteger(CANCEL) == 1);
     }
