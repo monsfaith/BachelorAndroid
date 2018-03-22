@@ -70,6 +70,12 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         //alarmManager.cancel(notTodayIntent);
 
         //long closestExamId = intent.getIntExtra("EXAMID",0);
+
+        NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_menu_share, "robit", doIntent);
+        NotificationCompat.Action actionNot = new NotificationCompat.Action(R.drawable.ic_menu_share, "dnes nie", notTodayIntent);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+
         String subjectString = "";
         int days = 0;
         Exam exam = examMainRepository.getClosestExam();
@@ -79,31 +85,27 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         }
         String contentTitle = "";
         String contentText = "";
-        if (exams == 1){
+        if (exams != 1){
             contentTitle = "Uzi si den volna.";
             contentText = "Neboli pridane ziadne skusky.";
         } else {
             contentTitle = "Treba sa ucit na predmet " + subjectString;
             contentText = "Na ucenie zostava " + days + " dni";
+            builder.addAction(action).addAction(actionNot);
         }
 
 
         //NotificationCompat.Action actionDelay = new NotificationCompat.Action(R.drawable.ic_menu_send, "odlozit", delayIntent);
-        NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_menu_share, "robit", doIntent);
-        NotificationCompat.Action actionNot = new NotificationCompat.Action(R.drawable.ic_menu_share, "dnes nie", notTodayIntent);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setContentIntent(pendingShowIntent)
-                .setSmallIcon(R.drawable.ic_menu_camera)
-                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                .setContentTitle(contentTitle)
-                .setLights(0xf9cc00, 300, 3000)
-                .addAction(action)
-                .addAction(actionNot)
-                .setPriority(Notification.PRIORITY_HIGH)
-                //.addAction(actionDelay)
-                .setContentText(contentText)
-                .setAutoCancel(false);
+        builder.setContentIntent(pendingShowIntent)
+        .setSmallIcon(R.drawable.ic_menu_camera)
+        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+        .setContentTitle(contentTitle)
+        .setLights(0xf9cc00, 300, 3000)
+        .setPriority(Notification.PRIORITY_HIGH)
+        //.addAction(actionDelay)
+        .setContentText(contentText)
+        .setAutoCancel(false);
 
         notificationManager.notify(500, builder.build());
     }

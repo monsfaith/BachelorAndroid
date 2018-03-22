@@ -16,6 +16,7 @@ import java.util.Calendar;
 import running.java.mendelu.cz.bakalarskapraca.R;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
 
@@ -83,27 +84,37 @@ public class ExamTomorrowNotificationActivity extends AppCompatActivity {
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
     }
 
-    private void setDailyHabitNotification(long time){
+    private void setDailyHabitNotification(long time, long toTime){
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(getApplicationContext(), EveningHabitNotificationReceiver.class);
         i.putExtra("REQUESTCODE",1);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, i, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, planMainRepository.getByType(1).getRepetition(), pendingIntent);
+
+        Intent cancelIntent = new Intent(getApplicationContext(), CancelEveningHabitNotificationReceiver.class);
+        cancelIntent.putExtra("CANCEL",1);
+        //cancelIntent.putExtra("CANCELINTENT", pendingIntent);
+        PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, toTime, cancelPendingIntent);
     }
 
     private void setTimeToNotification(){
+        Plan dailyPlan = planMainRepository.getByType(1);
         Calendar calendar = Calendar.getInstance();
-        Plan plan = planMainRepository.getByType(1);
-        if (getCurrentTime() < plan.getFromTime().getTime() || getCurrentTime() == plan.getFromTime().getTime()) {
-            setDailyHabitNotification(plan.getFromTime().getTime());
-        } else if (getCurrentTime() < plan.getToTime().getTime()) {
-            calendar.setTimeInMillis(getCurrentTime());
-            calendar.add(Calendar.MINUTE,1);
-            setDailyHabitNotification(calendar.getTimeInMillis());
+        calendar.set(Calendar.HOUR_OF_DAY,dailyPlan.getFromHour());
+        calendar.set(Calendar.MINUTE,dailyPlan.getFromMinute());
+
+        Calendar to = Calendar.getInstance();
+        to.set(Calendar.HOUR_OF_DAY,dailyPlan.getToHour());
+        to.set(Calendar.MINUTE,dailyPlan.getToMinute());
+        if (System.currentTimeMillis() < calendar.getTimeInMillis()) {
+            setDailyHabitNotification(calendar.getTimeInMillis(), to.getTimeInMillis());
+        } else if (System.currentTimeMillis() < to.getTimeInMillis()) {
+            setDailyHabitNotification(System.currentTimeMillis(), to.getTimeInMillis());
         } else {
-            calendar.setTime(plan.getFromTime());
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-            setDailyHabitNotification(calendar.getTimeInMillis());
+            to.add(Calendar.DAY_OF_MONTH, 1);
+            calendar.add(Calendar.DAY_OF_MONTH,1);
+            setDailyHabitNotification(calendar.getTimeInMillis(), to.getTimeInMillis());
         }
     }
 

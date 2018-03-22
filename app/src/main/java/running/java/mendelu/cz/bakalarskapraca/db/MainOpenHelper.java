@@ -15,7 +15,7 @@ import java.util.Date;
 public class MainOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "main.db";
-    private static final int DATABASE_VERSION = 40;
+    private static final int DATABASE_VERSION = 45;
 
     public MainOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -65,7 +65,7 @@ public class MainOpenHelper extends SQLiteOpenHelper {
                 Plan.TYPE + " INTEGER NOT NULL, " +
                 //Plan.NOTIFICATION + " INTEGER NOT NULL, " +
                 Plan.ENABLED + " INTEGER NOT NULL, " +
-                Plan.REPETITION_ID + " INTEGER NOT NULL, " + ")");
+                Plan.REPETITION_ID + " INTEGER NOT NULL " + ")");
                 //Plan.REMIND + " INTEGER " + ")");
         db.execSQL("CREATE TABLE " + PlanHabitAssociation.TABLE + " (" +
                 PlanHabitAssociation.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

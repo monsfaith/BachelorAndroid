@@ -99,15 +99,15 @@ public class Plan {
     }
 
     public void setFromHour(int fromHour){
-        this.values.put(TYPE,fromHour);
+        this.values.put(FROM_HOUR,fromHour);
     }
 
     public void setToMinute(int toMinute){
-        this.values.put(TYPE,toMinute);
+        this.values.put(TO_MINUTE,toMinute);
     }
 
     public void setFromMinute(int fromMinute){
-        this.values.put(TYPE,fromMinute);
+        this.values.put(FROM_MINUTE,fromMinute);
     }
 
 

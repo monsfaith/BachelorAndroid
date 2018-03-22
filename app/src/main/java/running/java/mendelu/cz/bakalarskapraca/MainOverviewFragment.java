@@ -102,7 +102,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
 
         if (planMainRepository.getAllPlans().size() != 4) {
             init();
-            //setDatabaseNotification();
+            setDatabaseNotification();
             //setDatabasePlanTimeDaily();
             setExamNotification();
         } else {
@@ -319,22 +319,22 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
 
 
         //calendar.add(Calendar.DAY_OF_MONTH,1);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 4);
         calendar.set(Calendar.MINUTE,0);
         calendar.set(Calendar.SECOND,15);
         long time = calendar.getTimeInMillis();
 
-        if (Calendar.getInstance().getTimeInMillis() > calendar.getTimeInMillis()){
+        if (System.currentTimeMillis() > calendar.getTimeInMillis()){
             calendar.add(Calendar.DAY_OF_MONTH,1);
             time = calendar.getTimeInMillis();
         }
 
-        if (planMainRepository.getLastPlanTime() > calendar.getTimeInMillis()){
+        /*if (planMainRepository.getLastPlanTime() > calendar.getTimeInMillis()){
             //Calendar cali = Calendar.getInstance();
             //cali.setTimeInMillis(planMainRepository.getLastPlanTime());
             time = planMainRepository.getLastPlanTime();
 
-        }
+        }*/
 
 
             //long time = planMainRepository.getLastTime();

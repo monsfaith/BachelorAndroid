@@ -30,10 +30,10 @@ public class PlanHabitAssociation {
         this.contentValues = new ContentValues();
         this.setIdHabit(idHabit);
         this.setIdPlan(idPlan);
-        this.setCancel(false);
+        //this.setCancel(false);
         this.setDone(false);
         //this.setRemind(false);
-        this.setDate(null);
+        this.setDate(new Date());
     }
 
     public PlanHabitAssociation(Cursor cursor){
@@ -53,10 +53,7 @@ public class PlanHabitAssociation {
     public void setDate(Date date){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.set(Calendar.HOUR_OF_DAY,0);
-        cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.SECOND,0);
-        cal.set(Calendar.MILLISECOND,0);
+        cal.add(Calendar.DAY_OF_MONTH,-1);
         contentValues.put(DATE,cal.getTimeInMillis());
 
     }
