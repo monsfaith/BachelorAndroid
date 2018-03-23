@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Time;
+import java.util.Calendar;
 import java.util.Date;
 
 import running.java.mendelu.cz.bakalarskapraca.OneExamDetailActivity;
@@ -33,6 +34,7 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
     private Context context;
     //spocitava pocet fajok pri skuske
     private int count;
+    private long studyDate = 0;
 
     public ExamNotificationAdapter(Context context, Cursor cursor){
         layoutInflater = LayoutInflater.from(context);
@@ -61,6 +63,11 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
         long examTime = cursor.getLong(cursor.getColumnIndex(Exam.TIME));
         final long idExam = cursor.getLong(cursor.getColumnIndex(Exam.ID));
 
+
+        if (cursor.getLong(cursor.getColumnIndex(Exam.STUDY_DATE)) != 0){
+            studyDate = cursor.getLong(cursor.getColumnIndex(Exam.STUDY_DATE));
+        }
+
         holder.subjectName.setText(subjectName);
         holder.examDate.setText(android.text.format.DateFormat.format("dd.MM.yyyy", new Date(examDate)) + ", " + (android.text.format.DateFormat.format("HH:mm", new Time(examTime))));
 
@@ -79,20 +86,25 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
                     contentValues.put("done",true);
                     holder.habitCheck.setEnabled(false);
                     planMainRepository.updateAssociation(id, contentValues);*/
+                    if ((sameDay(studyDate) == false)) {
+                        count = count + 1;
+                        int studying = examMainRepository.getById(idExam).getStudying();
+                        contentValues.put("studying", studying + 1);
+                        contentValues.put("study_date", System.currentTimeMillis());
+                        examMainRepository.update2(idExam, contentValues);
+                        int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
+                        int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
 
-                    count = count + 1;
-                    int studying = examMainRepository.getById(idExam).getStudying();
-                    contentValues.put("studying", studying + 1);
-                    examMainRepository.update2(idExam, contentValues);
-                    int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
-                    int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
-                    holder.examDays.setText(actualDays + "/" + wantedDays);
+                        holder.examDays.setText(actualDays + "/" + wantedDays);
 
-                    Toast.makeText(context, "checknute" + count, Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(context, "checknute" + count, Toast.LENGTH_SHORT).show();
+                    } else {
+                        count = count + 1;
+                    }
                 } else {
                     int studying = examMainRepository.getById(idExam).getStudying();
                     contentValues.put("studying", studying - 1);
+                    contentValues.put("study_date",0);
                     examMainRepository.update2(idExam, contentValues);
                     int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
                     int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
@@ -119,6 +131,16 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
 
     public Cursor getCursor(int position){
         return this.cursor;
+    }
+
+    //skontrolovat ci ide o rovnaky den alebo nie
+    private boolean sameDay(long time){
+        Calendar calendarCurrent = Calendar.getInstance();
+        Calendar calendarMy = Calendar.getInstance();
+        calendarMy.setTimeInMillis(time);
+        boolean sameDay = calendarCurrent.get(Calendar.YEAR) == calendarMy.get(Calendar.YEAR) &&
+                calendarCurrent.get(Calendar.DAY_OF_YEAR) == calendarMy.get(Calendar.DAY_OF_YEAR);
+        return sameDay;
     }
 
 

@@ -19,8 +19,7 @@
             <RelativeLayout
                 android:id="@+id/relativeLayoutActivitiesDaily"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/dailyTextViewActivities"
@@ -39,6 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:background="@color/grey_700"
                     android:layout_alignBottom="@id/dailyTextViewActivities"
                     android:layout_marginRight="10dp"
                     android:paddingRight="15dp" />
@@ -90,6 +90,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignBottom="@id/morningTextViewActivities"
                     android:layout_marginRight="10dp"
+                    android:background="@color/grey_700"
                     android:paddingRight="15dp"
                     />
 
@@ -140,6 +141,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/lunchTextViewActivities"
                 android:layout_alignParentRight="true"
+                android:background="@color/grey_700"
                 android:layout_marginRight="10dp"
                 android:paddingRight="15dp"
                 />
@@ -191,6 +193,7 @@
                 android:layout_alignBottom="@id/eveningTextViewActivities"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
+                android:background="@color/grey_700"
                 android:paddingRight="15dp"
                 />
 

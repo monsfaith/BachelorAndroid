@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.conn.scheme.HostNameResolver;
+
 import java.util.Calendar;
 
 import running.java.mendelu.cz.bakalarskapraca.R;
@@ -64,10 +66,11 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (examNotificationAdapter.numberOfSelectedExams() > 0){
-                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.cancel(500);
+                    //NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    //notificationManager.cancel(500);
                     cancelDailyNotifications();
                     setAllNotifications();
+                    setExamNotificationTomorrow();
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Nutné zvoliť skúšku, na ktorú sa ideš pripravovať", Toast.LENGTH_SHORT).show();
@@ -78,7 +81,7 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
     }
 
     //private nastavenie notifikacii
-    private void setHabitNotification(long time, int idPlan){
+    private void setHabitNotification(long time, int idPlan, long toTime){
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(getApplicationContext(), EveningHabitNotificationReceiver.class);
         i.putExtra("REQUESTCODE",idPlan);
@@ -88,52 +91,39 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         Intent cancelIntent = new Intent(getApplicationContext(), CancelEveningHabitNotificationReceiver.class);
         cancelIntent.putExtra("CANCEL",idPlan);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), idPlan*100, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, planMainRepository.getByType(idPlan).getToTime().getTime(), cancelPendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, toTime, cancelPendingIntent);
     }
 
     //nastavenie jednotlivych notifikacii k delenemu planu
     private void setAllNotifications() {
         Calendar calendar = Calendar.getInstance();
-        Plan morningPlan = planMainRepository.getByType(2);
-        if (getCurrentTime() < morningPlan.getFromTime().getTime() || getCurrentTime() == morningPlan.getFromTime().getTime()) {
-            setHabitNotification(morningPlan.getFromTime().getTime(), 2);
-        } else if (getCurrentTime() < morningPlan.getToTime().getTime()) {
-                calendar.setTimeInMillis(getCurrentTime());
-                calendar.add(Calendar.MINUTE, 1);
-                setHabitNotification(calendar.getTimeInMillis(), 2);
-            } else {
-                calendar.setTime(morningPlan.getFromTime());
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                setHabitNotification(calendar.getTimeInMillis(), 2);
-            }
-
-            Plan lunchPlan = planMainRepository.getByType(3);
-            if (getCurrentTime() < lunchPlan.getFromTime().getTime() || getCurrentTime() == lunchPlan.getFromTime().getTime()) {
-                setHabitNotification(lunchPlan.getFromTime().getTime(), 3);
-            } else if (getCurrentTime() < lunchPlan.getToTime().getTime()) {
-                calendar.setTimeInMillis(getCurrentTime());
-                calendar.add(Calendar.MINUTE, 1);
-                setHabitNotification(getCurrentTime(), 3);
-            } else {
-                calendar.setTime(lunchPlan.getFromTime());
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                setHabitNotification(calendar.getTimeInMillis(), 3);
-            }
-
-
-            Plan eveningPlan = planMainRepository.getByType(4);
-            if (getCurrentTime() < eveningPlan.getFromTime().getTime() || getCurrentTime() == eveningPlan.getFromTime().getTime()) {
-                setHabitNotification(eveningPlan.getFromTime().getTime(), 4);
-            } else if (getCurrentTime() < eveningPlan.getToTime().getTime()) {
-                calendar.setTimeInMillis(getCurrentTime());
-                calendar.add(Calendar.MINUTE, 1);
-                setHabitNotification(calendar.getTimeInMillis(), 4);
-            } else {
-                calendar.setTime(eveningPlan.getFromTime());
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                setHabitNotification(calendar.getTimeInMillis(), 4);
-            }
+        Calendar from = Calendar.getInstance();
+        Calendar to = Calendar.getInstance();
+        setNotification(2);
+        setNotification(3);
+        setNotification(4);
         }
+
+    private void setNotification(int idPlan){
+        Calendar calendar = Calendar.getInstance();
+        Calendar from = Calendar.getInstance();
+        Calendar to = Calendar.getInstance();
+        Plan plan = planMainRepository.getByType(idPlan);
+        from.set(Calendar.HOUR_OF_DAY, plan.getFromHour());
+        from.set(Calendar.MINUTE, plan.getFromMinute());
+        to.set(Calendar.HOUR_OF_DAY,plan.getToHour());
+        to.set(Calendar.MINUTE,plan.getToMinute());
+        if (System.currentTimeMillis() < from.getTimeInMillis()) {
+            setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
+        } else if (System.currentTimeMillis() < to.getTimeInMillis()) {
+            calendar.add(Calendar.MINUTE, 1);
+            setHabitNotification(calendar.getTimeInMillis(), idPlan, to.getTimeInMillis());
+        } else {
+            from.add(Calendar.DAY_OF_MONTH,1);
+            to.add(Calendar.DAY_OF_MONTH,1);
+            setHabitNotification(from.getTimeInMillis(), 2, to.getTimeInMillis());
+        }
+    }
 
     private long getCurrentTime(){
         long time = System.currentTimeMillis();
@@ -163,7 +153,7 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
     }
 
     private Cursor getExamResults(){
-        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ?",new String[]{String.valueOf(getCurrentDate())});
+        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ?",new String[]{String.valueOf(System.currentTimeMillis())});
     }
 
     private long getCurrentDate(){
@@ -185,6 +175,6 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), ExamNotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 }

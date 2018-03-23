@@ -66,20 +66,12 @@
                 android:text="TextView" />
 
             <TextView
-                android:id="@+id/examSatisfaction"
+                android:id="@+id/examDateResult"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/examTry"
-                android:text="@string/spokojnost" />
+                android:text="@string/dateResult" />
 
-            <RatingBar
-                android:id="@+id/examRatingBar"
-                android:layout_width="match_parent"
-                android:layout_below="@id/examTry"
-                android:layout_toEndOf="@id/examSatisfaction"
-                android:paddingLeft="10dp"
-                android:numStars="5"
-                android:layout_height="wrap_content" />
 
 
         </RelativeLayout>

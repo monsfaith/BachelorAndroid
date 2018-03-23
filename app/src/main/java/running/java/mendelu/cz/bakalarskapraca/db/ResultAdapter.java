@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
 
@@ -71,9 +72,13 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.MyViewHold
 
         String subjectName = cursor.getString(cursor.getColumnIndex(Subject.NAME));
         int examTry = cursor.getInt(cursor.getColumnIndex(Exam.TRYON));
+        long examDate = cursor.getLong(cursor.getColumnIndex(Exam.DATE));
 
         holder.examName.setText(subjectName);
         holder.examTry.setText(Integer.toString(examTry));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        holder.examDate.setText(sdf.format(examDate));
 
 
     }
@@ -103,7 +108,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.MyViewHold
         TextView examType;
         TextView examGrade;
         TextView examTry;
-        RatingBar examSatisfaction;
+        TextView examDate;
         ImageView examImage;
 
         public MyViewHolder(View itemView) {
@@ -112,7 +117,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.MyViewHold
             examType = (TextView) itemView.findViewById(R.id.examType);
             examGrade = (TextView) itemView.findViewById(R.id.concreteGrade);
             examTry = (TextView) itemView.findViewById(R.id.concreteTry);
-            examSatisfaction = (RatingBar) itemView.findViewById(R.id.examRatingBar);
+            examDate = (TextView) itemView.findViewById(R.id.examDateResult);
             examImage = (ImageView) itemView.findViewById(R.id.subjectColoricon);
 
 

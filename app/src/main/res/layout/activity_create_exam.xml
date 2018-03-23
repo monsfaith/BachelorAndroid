@@ -14,8 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_weight="1"
-        android:paddingTop="35dp"
-        app:srcCompat="?android:attr/listChoiceIndicatorSingle" />
+        android:paddingTop="5dp"
+        app:srcCompat="@drawable/book" />
 
     <TextView
         android:id="@+id/pickSubject"
@@ -23,8 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/newExamIcon"
         android:paddingStart="20dp"
-        android:paddingTop="25dp"
-        android:text="TextView" />
+        android:paddingTop="5dp"
+        android:text="Predmet"
+        android:textAppearance="@android:style/TextAppearance.Material.SearchResult.Subtitle" />
 
     <EditText
         android:id="@+id/chosenSubject"
@@ -33,11 +34,10 @@
         android:layout_below="@id/pickSubject"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@color/cardview_light_background"
-        android:hint="Vyber predmet"
         android:focusable="false"
         android:inputType="textPersonName"
-        android:onClick="choseSubject" />
+        android:onClick="choseSubject"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <View
         android:id="@+id/strut"
@@ -54,7 +54,8 @@
         android:layout_below="@id/chosenSubject"
         android:paddingStart="20dp"
         android:paddingTop="15dp"
-        android:text="TextView" />
+        android:text="Dátum"
+        android:textAppearance="@android:style/TextAppearance.Material.SearchResult.Subtitle" />
 
     <EditText
         android:id="@+id/chosenDate"
@@ -65,11 +66,10 @@
         android:layout_below="@id/examDate"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="10dp"
-        android:inputType="date"
         android:focusable="false"
-        android:background="@color/cardview_light_background"
-        android:hint="Vyber dátum"
-        android:onClick="choseDate" />
+        android:inputType="date"
+        android:onClick="choseDate"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1" />
 
     <TextView
         android:id="@+id/examTime"
@@ -81,7 +81,8 @@
         android:layout_below="@id/chosenSubject"
         android:layout_marginLeft="10dp"
         android:paddingTop="15dp"
-        android:text="TextView" />
+        android:text="Čas"
+        android:textAppearance="@android:style/TextAppearance.Material.SearchResult.Subtitle" />
 
 
     <EditText
@@ -92,13 +93,12 @@
         android:layout_alignParentRight="true"
         android:layout_alignRight="@id/examTime"
         android:layout_below="@id/examTime"
-        android:inputType="time"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="20dp"
-        android:background="@color/cardview_light_background"
-        android:hint="Vyber čas"
         android:focusable="false"
-        android:onClick="choseTime" />
+        android:inputType="time"
+        android:onClick="choseTime"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1" />
 
     <TextView
         android:id="@+id/examDifficulty"
@@ -109,7 +109,8 @@
         android:layout_below="@id/chosenDate"
         android:paddingStart="20dp"
         android:paddingTop="15dp"
-        android:text="TextView" />
+        android:text="Náročnosť"
+        android:textAppearance="@android:style/TextAppearance.Material.SearchResult.Subtitle" />
 
     <android.support.v7.widget.AppCompatSeekBar
         android:id="@+id/difficultySeekBar"
@@ -141,11 +142,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/difficultySeekBar"
-        android:paddingTop="15dp"
+        android:layout_centerHorizontal="true"
 
         android:gravity="center_horizontal"
-        android:layout_centerHorizontal="true"
-        android:text="TextView" />
+        android:paddingTop="15dp"
+        android:text="Dni na učenie"
+        android:textAppearance="@android:style/TextAppearance.Material.SearchResult.Subtitle" />
     <!--
 
     android:layout_alignParentLeft="true"
@@ -167,13 +169,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/examDays"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="10dp"
-        android:background="@color/cardview_light_background"
-        android:inputType="number"
         android:gravity="center_horizontal"
-        android:layout_centerHorizontal="true"
-        android:hint="Počet dní učenia"/>
+        android:inputType="number"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1" />
         <!--android:layout_alignParentLeft="true"
         android:layout_alignRight="@id/strut"
         -->
@@ -188,7 +189,8 @@
         android:layout_below="@id/chosenDays"
         android:paddingStart="20dp"
         android:paddingTop="15dp"
-        android:text="Učebňa" />
+        android:text="Učebňa"
+        android:textAppearance="@android:style/TextAppearance.Material.SearchResult.Subtitle" />
 
 
     <EditText
@@ -200,7 +202,7 @@
         android:layout_below="@id/examClassroom"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="10dp"
-        android:background="@color/cardview_light_background" />
+        android:textAppearance="@android:style/TextAppearance.Material.Body1" />
 
     <TextView
         android:id="@+id/examNote"
@@ -212,7 +214,8 @@
         android:layout_below="@id/chosenDays"
         android:layout_marginLeft="10dp"
         android:paddingTop="15dp"
-        android:text="Poznámka" />
+        android:text="Poznámka"
+        android:textAppearance="@android:style/TextAppearance.Material.SearchResult.Subtitle" />
 
 
     <EditText
@@ -225,20 +228,9 @@
         android:layout_below="@id/examNote"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="20dp"
-        android:background="@color/cardview_light_background"
         android:ems="10"
-        android:inputType="textMultiLine" />
-
-    <Button
-        android:id="@+id/addExamButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/noteInput"
-        android:layout_marginTop="15dp"
-        android:layout_centerHorizontal="true"
-        android:background="@color/cardview_light_background"
-        android:text="Pridať skúšku"
-        android:onClick="addExam" />
+        android:inputType="textMultiLine"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1" />
 
 
 </RelativeLayout>

@@ -179,13 +179,13 @@ public class MyActivitiesTab2Fragment extends Fragment implements FragmentInterf
                         if (Build.VERSION.SDK_INT >= 23) {
                             cal.set(Calendar.HOUR_OF_DAY, timePickerTo.getHour());
                             cal.set(Calendar.MINUTE, timePickerTo.getMinute());
-                            cv.put("to_hour",timePickerFrom.getHour());
-                            cv.put("to_minute",timePickerFrom.getMinute());
+                            cv.put("to_hour",timePickerTo.getHour());
+                            cv.put("to_minute",timePickerTo.getMinute());
                         } else {
                             cal.set(Calendar.HOUR_OF_DAY, timePickerTo.getCurrentHour());
                             cal.set(Calendar.MINUTE, timePickerTo.getCurrentMinute());
-                            cv.put("to_hour",timePickerFrom.getCurrentHour());
-                            cv.put("to_minute",timePickerFrom.getCurrentMinute());
+                            cv.put("to_hour",timePickerTo.getCurrentHour());
+                            cv.put("to_minute",timePickerTo.getCurrentMinute());
                         }
                         long toTime = cal.getTimeInMillis();
                         cv.put("to_time", toTime);
@@ -263,7 +263,7 @@ public class MyActivitiesTab2Fragment extends Fragment implements FragmentInterf
                                     calendar1.add(Calendar.DAY_OF_MONTH,1);
                                     setHabitNotification(calendar.getTimeInMillis(), idPlan, calendar1.getTimeInMillis());
 
-                                    Toast.makeText(getActivity(), "Upozornenie od zajtra" + sdf.format(cal.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), "Upozornenie od zajtra" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_LONG).show();
 
                                 }
 

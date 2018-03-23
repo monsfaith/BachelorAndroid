@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -71,8 +72,8 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
 
         //long closestExamId = intent.getIntExtra("EXAMID",0);
 
-        NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_menu_share, "robit", doIntent);
-        NotificationCompat.Action actionNot = new NotificationCompat.Action(R.drawable.ic_menu_share, "dnes nie", notTodayIntent);
+        NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_menu_share, "Začať", doIntent);
+        NotificationCompat.Action actionNot = new NotificationCompat.Action(R.drawable.ic_menu_share, "Odložiť na zajtra", notTodayIntent);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
@@ -86,11 +87,11 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         String contentTitle = "";
         String contentText = "";
         if (exams != 1){
-            contentTitle = "Uzi si den volna.";
-            contentText = "Neboli pridane ziadne skusky.";
+            contentTitle = "Uži si deň voľna";
+            contentText = "Nečakajú ťa žiadne skúšky.";
         } else {
-            contentTitle = "Treba sa ucit na predmet " + subjectString;
-            contentText = "Na ucenie zostava " + days + " dni";
+            contentTitle = "V blízkej dobe ťa čakajú skušky ";
+            contentText = "Začni svoj učebný plán a priprav sa na skúšky efektívne a bez stresov. ";
             builder.addAction(action).addAction(actionNot);
         }
 
@@ -98,14 +99,15 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         //NotificationCompat.Action actionDelay = new NotificationCompat.Action(R.drawable.ic_menu_send, "odlozit", delayIntent);
 
         builder.setContentIntent(pendingShowIntent)
-        .setSmallIcon(R.drawable.ic_menu_camera)
+        .setSmallIcon(R.drawable.ic_class_black_24dp)
+                .setColor(ContextCompat.getColor(context, R.color.lime_700))
         .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
         .setContentTitle(contentTitle)
         .setLights(0xf9cc00, 300, 3000)
         .setPriority(Notification.PRIORITY_HIGH)
         //.addAction(actionDelay)
         .setContentText(contentText)
-        .setAutoCancel(false);
+        .setAutoCancel(true);
 
         notificationManager.notify(500, builder.build());
     }

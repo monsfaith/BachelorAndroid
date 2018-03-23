@@ -3,6 +3,7 @@ package running.java.mendelu.cz.bakalarskapraca.notifications.receivers;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
@@ -28,6 +29,9 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
 
         //planMainRepository = new PlanMainRepository(context);
         //long idUpdate = planMainRepository.updateAssociation();
+        cancelDividedNotification(2, context);
+        cancelDividedNotification(3, context);
+        cancelDividedNotification(4, context);
         setDailyPlan(context);
         setExamNotificationTomorrow(context);
         Toast.makeText(context, "shit dabase", Toast.LENGTH_LONG).show();
@@ -36,6 +40,9 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
     }
 
     private void setDailyPlan(Context context){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("enabled",true);
+        planMainRepository.update2(1,contentValues);
         Plan dailyPlan = planMainRepository.getByType(1);
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY,dailyPlan.getFromHour());
@@ -78,5 +85,15 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+    }
+
+    //odstranenie notifikacii pre jednotlive plany
+    private void cancelDividedNotification(int type, Context context){
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent cancelIntent = new Intent(context, CancelEveningHabitNotificationReceiver.class);
+        cancelIntent.putExtra("CANCEL",type);
+        PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(context, type*100, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), cancelPendingIntent);
+
     }
 }

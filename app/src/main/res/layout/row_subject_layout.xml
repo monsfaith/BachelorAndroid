@@ -16,9 +16,9 @@
         android:id="@+id/nameOfSubject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
         android:layout_toRightOf="@id/colorOfSubject"
+        android:paddingLeft="10dp"
         android:text="TextView"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+        android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
 </RelativeLayout>

@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
         <activity android:name=".MainViewActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/NoActionBar">
 
             <intent-filter>
 
@@ -33,27 +33,25 @@
             android:name=".TasksDetailActivity"
             android:theme="@style/AppTheme"
             />
-        <activity android:name=".MyPlanActivity2" />
-        <activity android:name=".MyDailyPlanActivity" />
-        <activity android:name=".MyMorningPlanActivity" />
-        <activity android:name=".MyLunchPlanActivity" />
-        <activity android:name=".MyEveningPlanActivity" />
         <activity
             android:name=".MyPlanTabsActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:theme="@style/AppTheme"
             android:label="@string/title_activity_my_plan_tabs" />
         <activity
-            android:name=".CreateExamActivity" />
+            android:name=".CreateExamActivity"
+            android:theme="@style/AppTheme"
+            />
         <activity
             android:name=".CreateSubjectActivity" />
         <activity
             android:name=".NavigationMainActivity"
             android:label="@string/title_activity_navigation_main"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/NoActionBar" />
         <activity android:name=".OneExamDetailActivity" />
         <activity android:name=".CreateHabitActivity">
         </activity>
         <activity android:name=".notifications.HabitNotificationActivity"
+            android:theme="@style/NoActionBar"
             android:excludeFromRecents="true">
         </activity>
         <activity android:name=".notifications.ExamNotificationStartActivity">

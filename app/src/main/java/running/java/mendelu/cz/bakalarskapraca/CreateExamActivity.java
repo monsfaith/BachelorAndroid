@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TimePicker;
@@ -51,7 +52,7 @@ public class CreateExamActivity extends AppCompatActivity {
     private ListView listViewSubjects;
     private SubjectMainRepository subjectMainRepository;
     private SubjectAdapter subjectAdapter;
-    private Button createNewSubjectButt;
+    private ImageButton createNewSubjectButt;
     //private Button chosenSubject;
     private EditText chosenSubject;
     private EditText chosenDate;
@@ -83,7 +84,6 @@ public class CreateExamActivity extends AppCompatActivity {
         chosenSubject = (EditText) findViewById(R.id.chosenSubject);
         chosenDate = (EditText) findViewById(R.id.chosenDate);
         chosenTime = (EditText) findViewById(R.id.chosenTime);
-        addExamButton = (Button) findViewById(R.id.addExamButton);
         chosenDays = (EditText) findViewById(R.id.chosenDays);
         seekbarDifficulty = (SeekBar) findViewById(R.id.difficultySeekBar);
         classroomInput = (EditText) findViewById(R.id.classroomInput);
@@ -153,6 +153,8 @@ public class CreateExamActivity extends AppCompatActivity {
             chosenSubject.setText(subjectMainRepository.getById(intentExam.getSubjectId()).getName());
             milliseconds = intentExam.getDate().getTime();
             timeMilliseconds = intentExam.getTime().getTime();
+            days = intentExam.getDays();
+            finalSubject = intentExam.getSubjectId();
             chosenDate.setText(android.text.format.DateFormat.format("dd.MM.yyyy", intentExam.getDate()).toString());
             chosenTime.setText(android.text.format.DateFormat.format("HH:mm", intentExam.getTime()).toString());
             //chosenDifficulty.setText(String.valueOf(intentExam.getDifficulty()));
@@ -212,11 +214,11 @@ public class CreateExamActivity extends AppCompatActivity {
         View mView = getLayoutInflater().inflate(R.layout.dialog_add_subject, null);
 
         listViewSubjects = (ListView) view.findViewById(R.id.listViewSub);
-        createNewSubjectButt = (Button) view.findViewById(R.id.createNewSubjectButton);
+        createNewSubjectButt = (ImageButton) view.findViewById(R.id.createNewSubjectButton);
         subjectAdapter = new SubjectAdapter(this);
 
 
-        myBuilder.setTitle("Vybrat predmet");
+        myBuilder.setTitle("Vybrať predmet");
         myBuilder.setAdapter(subjectAdapter, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 Long id = subjectAdapter.getItemId(item);
@@ -323,38 +325,6 @@ public class CreateExamActivity extends AppCompatActivity {
     }
 
 
-    public void addExam(View view) {
-        if (!chosenDate.getText().toString().isEmpty() && !chosenTime.getText().toString().isEmpty() && !chosenSubject.getText().toString().isEmpty()) {
-            if (chosenDays.getText().toString() != "") //&& chosenDifficulty.getText().toString() != "")
-            // {
-            //int difficulty = Integer.valueOf(chosenDays.getText().toString());
-            {
-                days = Integer.valueOf(chosenDays.getText().toString());
-                String chosenDatefromTF = chosenDate.getText().toString();
-                String classroom = classroomInput.getText().toString();
-                String note = noteInput.getText().toString();
-                DateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
-
-                SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-                formatter.setLenient(false);
-
-                Exam exam = new Exam(new Date(milliseconds), new Time(timeMilliseconds), days, 4, classroom, finalSubject, note);
-                exam.setRealization(true);
-                Long lastid = examMainRepository.insert(exam);
-                Toast.makeText(CreateExamActivity.this,
-                        "vydarilo sa " + finalSubject + "predmet" + lastid + subjectMainRepository.getById(finalSubject).getName(),
-                        Toast.LENGTH_SHORT).show();
-
-            } else {
-                Toast.makeText(CreateExamActivity.this,
-                        "nevydalo", Toast.LENGTH_SHORT).show();
-            }
-
-            finish();
-        }
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -384,7 +354,7 @@ public class CreateExamActivity extends AppCompatActivity {
 
                 Exam exam = new Exam(new Date(milliseconds), new Time(timeMilliseconds), days, 4, classroom, finalSubject, note);
                 Long lastid = examMainRepository.insert(exam);
-                if (examMainRepository.findNextExams().size() > 0){
+                if (examMainRepository.findNextExams().size() > 0 && planMainRepository.getByType(1).getEnabled() == true){
                         Calendar calendar = Calendar.getInstance();
                         //ContentValues contentValues = new ContentValues();
                             calendar.setTimeInMillis(System.currentTimeMillis());
@@ -400,7 +370,7 @@ public class CreateExamActivity extends AppCompatActivity {
                         }
 
                 Toast.makeText(CreateExamActivity.this,
-                        "vydarilo sa " + finalSubject + "predmet" + lastid + subjectMainRepository.getById(finalSubject).getName(),
+                        "vydarilo sa " + finalSubject + "predmet" + lastid + subjectMainRepository.getById(finalSubject).getName() + " mainrep" + planMainRepository.getByType(1).getEnabled(),
                         Toast.LENGTH_SHORT).show();
 
             } else {
@@ -418,11 +388,12 @@ public class CreateExamActivity extends AppCompatActivity {
 
     public void updateExam(MenuItem item) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("DATE",milliseconds);
-        contentValues.put("TIME",timeMilliseconds);
-        contentValues.put("DAYS",days);
-        contentValues.put("CLASSROOM",classroomInput.getText().toString());
-        contentValues.put("NOTE",noteInput.getText().toString());
+        contentValues.put("date",milliseconds);
+        contentValues.put("time",timeMilliseconds);
+        contentValues.put("subject_id",finalSubject);
+        contentValues.put("days",Integer.valueOf(chosenDays.getText().toString()));
+        contentValues.put("classroom",classroomInput.getText().toString());
+        contentValues.put("note",noteInput.getText().toString());
         examMainRepository.update2(intentExam.getId(),contentValues);
         finish();
     }

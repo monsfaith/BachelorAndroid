@@ -14,6 +14,15 @@ import android.view.View;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 
 import running.java.mendelu.cz.bakalarskapraca.db.ExamAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
@@ -29,6 +38,9 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
     private ExamMainRepository examMainRepository;
     private ExamAdapter examAdapter;
     private ListView listView;
+    ArrayList<Quote> quotes = new ArrayList<>();
+    private String quote;
+
 
     //https://www.raywenderlich.com/127544/android-gridview-getting-started
 
@@ -57,11 +69,13 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        quote = "";
+        getJsonQuotes();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view,quote, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -76,6 +90,32 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         navigationView.setNavigationItemSelectedListener(this);
 
         navigationView.setCheckedItem(R.id.nav_camera);
+    }
+
+    public void getJsonQuotes(){
+        String json;
+        try {
+            InputStream inputStream = getAssets().open("quotesjson.json");
+            int size = inputStream.available();
+            byte[] buffer = new byte[size];
+            inputStream.read(buffer);
+            inputStream.close();
+
+            json = new String(buffer, "UTF-8");
+            JSONArray jsonArray = new JSONArray(json);
+
+            for (int i=0; i<jsonArray.length();i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                quotes.add(new Quote(jsonObject.getString("quote"), jsonObject.getString("author")));
+                //Toast.makeText(getApplicationContext(), quotes.size() + " size of quotes", Toast.LENGTH_SHORT).show();
+                quote = jsonObject.getString("quote") + " - " + jsonObject.getString("author");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 

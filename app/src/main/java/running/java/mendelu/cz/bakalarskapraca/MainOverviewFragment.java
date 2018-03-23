@@ -382,15 +382,25 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
     //urcenie View na zaklade prebiehajuceho planu
     private List<PlanHabitAssociation> setPlan() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        Calendar from = Calendar.getInstance();
+        Calendar to = Calendar.getInstance();
 
         if (dailyPlan.getEnabled() == false) {
             if ((setPlanDateToCalendar(morningPlan.getType()) > morningPlan.getFromTime().getTime() || setPlanDateToCalendar(morningPlan.getType()) == morningPlan.getFromTime().getTime()) && (setPlanDateToCalendar(morningPlan.getType()) < morningPlan.getToTime().getTime())){
+                from.set(Calendar.HOUR_OF_DAY,morningPlan.getFromHour());
+                from.set(Calendar.MINUTE,morningPlan.getFromMinute());
+                to.set(Calendar.HOUR_OF_DAY,morningPlan.getToHour());
+                to.set(Calendar.MINUTE,morningPlan.getToMinute());
                 Toast.makeText(getActivity(), "morning " + actualPlan + " aktu", Toast.LENGTH_LONG).show();
                 actualPlan = 2;
                 actualPlanTextView.setText(R.string.ranny);
                 return habitMainRepository.getMorningPlanHabits();
 
             } else if ((setPlanDateToCalendar(lunchPlan.getType()) > lunchPlan.getFromTime().getTime() || setPlanDateToCalendar(lunchPlan.getType()) == lunchPlan.getFromTime().getTime()) && (setPlanDateToCalendar(lunchPlan.getType()) < lunchPlan.getToTime().getTime())){
+                from.set(Calendar.HOUR_OF_DAY,lunchPlan.getFromHour());
+                from.set(Calendar.MINUTE,lunchPlan.getFromMinute());
+                to.set(Calendar.HOUR_OF_DAY,lunchPlan.getToHour());
+                to.set(Calendar.MINUTE,lunchPlan.getToMinute());
                 Toast.makeText(getActivity(), "lunch " + actualPlan + " aktu", Toast.LENGTH_LONG).show();
                 actualPlan = 3;
                 actualPlanTextView.setText(R.string.obedny);
@@ -406,9 +416,12 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
 
 
             } else if ((setPlanDateToCalendar(eveningPlan.getType()) > eveningPlan.getFromTime().getTime() || setPlanDateToCalendar(eveningPlan.getType()) == eveningPlan.getFromTime().getTime()) && (setPlanDateToCalendar(eveningPlan.getType()) < eveningPlan.getToTime().getTime() || setPlanDateToCalendar(eveningPlan.getType()) == eveningPlan.getToTime().getTime())){
+                from.set(Calendar.HOUR_OF_DAY,eveningPlan.getFromHour());
+                from.set(Calendar.MINUTE,eveningPlan.getFromMinute());
+                to.set(Calendar.HOUR_OF_DAY,eveningPlan.getToHour());
+                to.set(Calendar.MINUTE,eveningPlan.getToMinute());
 
-
-                Toast.makeText(getActivity(), "evening " + actualPlan + " aktu " + sdf.format(setPlanDateToCalendar(eveningPlan.getType())) + " " + sdf.format(eveningPlan.getFromTime().getTime()), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "evening " + actualPlan + " aktu " + sdf.format(setPlanDateToCalendar(eveningPlan.getType())) + " " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
                 actualPlan = 4;
                 actualPlanTextView.setText(R.string.vecerny);
                 return habitMainRepository.getEveningPlanHabits();
@@ -419,7 +432,11 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
                 return null;
             }
         } else if ((setPlanDateToCalendar(dailyPlan.getType()) > dailyPlan.getFromTime().getTime() || setPlanDateToCalendar(dailyPlan.getType()) == dailyPlan.getFromTime().getTime()) && (setPlanDateToCalendar(dailyPlan.getType()) < dailyPlan.getToTime().getTime() || setPlanDateToCalendar(dailyPlan.getType()) == dailyPlan.getToTime().getTime())){
-                Toast.makeText(getActivity(), "daily " + actualPlan + " aktu" + sdf.format(getCurrentTime()) + " " + sdf.format(planMainRepository.getByType(1).getToTime().getTime()), Toast.LENGTH_LONG).show();
+            from.set(Calendar.HOUR_OF_DAY,dailyPlan.getFromHour());
+            from.set(Calendar.MINUTE,dailyPlan.getFromMinute());
+            to.set(Calendar.HOUR_OF_DAY,dailyPlan.getToHour());
+            to.set(Calendar.MINUTE,dailyPlan.getToMinute());
+                Toast.makeText(getActivity(), "daily " + actualPlan + " aktu" + sdf.format(getCurrentTime()) + " " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
                 actualPlan = 1;
                 actualPlanTextView.setText(R.string.celodenny);
                 return habitMainRepository.getDailyPlanHabits();

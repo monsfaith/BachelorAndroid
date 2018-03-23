@@ -53,4 +53,7 @@
     <string name="infoAboutDailyPlanVisible">Nahradiť celodenný plán jednotlivými plánmi.</string>
     <string name="zrusit">Zrušiť</string>
     <string name="ano">Áno</string>
+    <string name="whatHabit">Z uvedených svojich rituálov si zvoľ ten, ktorý ti v danom momente vyhovuje. Nezabudni, že svoj cieľ organizovať čas efektívne možno dosiahnut malými krokmi.</string>
+    <string name="habitActivity">Každodenné rituály sú hnacím motorom, ktorý ťa poháňa vpred. Je dôležité sústrediť sa na spôsob a systém dosiahnutia, nie na samotné ciele. To znamená, že ak chceš byť jedného dňa autorom vlastnej knihy, musíš sa rozhodnúť venovať svoj čas počas dňa písaniu. Jediné, čo musíš, je naštartovať svoje dni s pravidelnými rituálmi a ver, že ciele budú na dosah.</string>
+    <string name="dateResult">Dátum</string>
 </resources>

@@ -70,7 +70,7 @@ public class ResultsFragment extends Fragment {
     //INNER JOIN subject ON exam.subject_id = subject.id
 
     private Cursor getJoinResults(){
-        return database.rawQuery("SELECT * FROM exam join subject on exam.subject_id = subject._id where exam.realization = 1",null);
+        return database.rawQuery("SELECT * FROM exam join subject on exam.subject_id = subject._id where exam.date < ?",new String[]{String.valueOf(System.currentTimeMillis())});
 
         //new String[]{String.valueOf(parameter?)}
 

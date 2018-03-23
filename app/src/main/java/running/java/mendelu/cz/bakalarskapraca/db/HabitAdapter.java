@@ -64,13 +64,20 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
 
         PlanHabitAssociation currentAssociation = habits.get(position);
         HabitMainRepository habitMainRepository = new HabitMainRepository(context);
+        PlanMainRepository planMainRepository = new PlanMainRepository(context);
 
         if ((currentAssociation.getDone() == true) && (currentAssociation.getDate() != null)){
             if (sameDay(currentAssociation.getDate().getTime())){
                 holder.habitCheck.setChecked(true);
+                holder.habitCheck.setEnabled(false);
 
             } else {
-                holder.habitCheck.setEnabled(false);
+                holder.habitCheck.setEnabled(true);
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("done",false);
+                planMainRepository.updateAssociation(currentAssociation.getId(), contentValues);
+
+
             }
         } else {
             holder.habitCheck.setChecked(false);

@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -130,19 +131,15 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         infoAboutDailyPlan = (TextView) view.findViewById(R.id.infoAboutDailyPlan);
 
 
-        setAdapterDaily();
-        setAdapterEvening();
-        setAdapterLunch();
-        setAdapterMorning();
+        setAdapters();
 
         dailyPlanCardView = (CardView) view.findViewById(R.id.card_view_daily_plan);
         morningPlanCardView = (CardView) view.findViewById(R.id.card_view_morning_plan);
         lunchPlanCardView = (CardView) view.findViewById(R.id.card_view_lunch_plan);
         eveningPlanCardView = (CardView) view.findViewById(R.id.card_view_evening_plan);
         createTextViews();
-        tx.setVisibility(View.GONE);
+        //tx.setVisibility(View.GONE);
 
-        Toast.makeText(getActivity(), getDailyHabits().size() + "", Toast.LENGTH_LONG).show();
         setHabitsSize();
         checkPlans();
 
@@ -151,12 +148,17 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         setListeners(settingsButtonEvening, 4);
         setListeners(settingsButtonMorning, 2);
 
+
+        updateProgressBars();
+
         switchDaily.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
                     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
                     View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_start_exam_plan, null);
+                    Button doIt = (Button) view.findViewById(R.id.letsDoIt);
+                    doIt.setVisibility(View.GONE);
                     RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.availableExamsRecyclerVie);
                     final ExamNotificationAdapter examNotificationAdapter = new ExamNotificationAdapter(getActivity(), getExamResults());
                     recyclerView.setAdapter(examNotificationAdapter);
@@ -185,6 +187,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
                                 setNotificationTime(3);
                                 setNotificationTime(4);
                                 setVisible(1);
+                                setExamNotification();
                             } else {
                                 switchDaily.setChecked(true);
                                 Toast.makeText(getActivity(), "zostava to ako " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
@@ -394,9 +397,9 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         to.set(Calendar.HOUR_OF_DAY,plan.getToHour());
         to.set(Calendar.MINUTE,plan.getToMinute());
 
-        if (System.currentTimeMillis() < plan.getFromTime().getTime() || getCurrentTime() == plan.getFromTime().getTime()) {
+        if (System.currentTimeMillis() < from.getTimeInMillis()) {
             setDividedNotifications(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
-        } else if (getCurrentTime() < plan.getToTime().getTime()) {
+        } else if (getCurrentTime() < to.getTimeInMillis()) {
             setDividedNotifications(System.currentTimeMillis(), idPlan, to.getTimeInMillis());
         } else {
             from.add(Calendar.DAY_OF_MONTH,1);
@@ -600,6 +603,14 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
 
     }
 
+    private void setAdapters(){
+        setAdapterEvening();
+        setAdapterLunch();
+        setAdapterMorning();
+        setAdapterDaily();
+    }
+
+
     private void createTextViews(){
 
         tx = new TextView(getActivity());
@@ -620,7 +631,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         txLunch.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
         txEvening = new TextView(getActivity());
-        txEvening.setText("Nie je momentálne zvolený žiadny plán. " + habitMainRepository.getEveningHabits().size());
+        txEvening.setText("Nie je momentálne zvolený žiadny plán. ");
         txEvening.setGravity(50);
         txEvening.setPadding(50, 50, 0, 50);
         txEvening.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
@@ -755,12 +766,14 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
     private Cursor getExamResults(){
         MainOpenHelper mainOpenHelper = new MainOpenHelper(getActivity());
         SQLiteDatabase database = mainOpenHelper.getWritableDatabase();
-        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ?",new String[]{String.valueOf(getCurrentDate())});
+        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? order by e.date",new String[]{String.valueOf(getCurrentDate())});
     }
 
     public void onResume(){
         super.onResume();
         checkPlans();
+        updateProgressBars();
+        setAdapters();
     }
 
     private void setExamNotification(){
@@ -773,7 +786,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         calendar.set(Calendar.MINUTE,00);
         calendar.set(Calendar.HOUR_OF_DAY,8);
 
-        if (getCurrentTime() > calendar.getTimeInMillis()){
+        if (System.currentTimeMillis() > calendar.getTimeInMillis()){
             calendar.add(Calendar.DAY_OF_MONTH,1);
         }
 
@@ -805,6 +818,20 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         cal.set(Calendar.SECOND,0);
         cal.set(Calendar.MILLISECOND,0);
         return cal.getTimeInMillis();
+    }
+
+    private void updateProgressBars(){
+        progressDailyBar.setProgress(habitMainRepository.getDoneDailyPlanHabits());
+        progressDailyBar.setMax(habitMainRepository.getDailyPlanHabits().size());
+
+        progressMorningBar.setProgress(habitMainRepository.getDoneMorningPlanHabits());
+        progressMorningBar.setMax(habitMainRepository.getMorningPlanHabits().size());
+
+        progressLunchBar.setProgress(habitMainRepository.getDoneLunchPlanHabits());
+        progressLunchBar.setMax(habitMainRepository.getLunchPlanHabits().size());
+
+        progressEveningBar.setProgress(habitMainRepository.getDoneEveningPlanHabits());
+        progressEveningBar.setMax(habitMainRepository.getEveningPlanHabits().size());
     }
 
 }

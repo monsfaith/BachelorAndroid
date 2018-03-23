@@ -1,13 +1,21 @@
 package running.java.mendelu.cz.bakalarskapraca.notifications;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
+import running.java.mendelu.cz.bakalarskapraca.MyActivitiesTab2Fragment;
+import running.java.mendelu.cz.bakalarskapraca.MyPlanTabsActivity;
 import running.java.mendelu.cz.bakalarskapraca.R;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitMainRepository;
@@ -24,6 +32,9 @@ public class HabitNotificationActivity extends AppCompatActivity{
     private PlanMainRepository planMainRepository;
     private RecyclerView actualRecyclerView;
     private HabitAdapter habitAdapter;
+    private TextView actualPlanText;
+    private FloatingActionButton fabAccept;
+    private TextView infoAbout;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -33,12 +44,22 @@ public class HabitNotificationActivity extends AppCompatActivity{
         habitMainRepository = new HabitMainRepository(getApplicationContext());
         planMainRepository = new PlanMainRepository(getApplicationContext());
         actualRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewActualHabits);
+        actualPlanText = (TextView) findViewById(R.id.actualPlanText);
+        fabAccept = (FloatingActionButton) findViewById(R.id.fabOk);
+        infoAbout = (TextView) findViewById(R.id.infoAboutWhatToDo);
 
         if (getIntent().getExtras() != null){
             int id = getIntent().getIntExtra("ID",0);
             Log.i("ID od lets do it","Prislo idcko taketo" + id);
             setAdapter(id);
         }
+
+        /*fabAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });*/
 
     }
 
@@ -47,24 +68,62 @@ public class HabitNotificationActivity extends AppCompatActivity{
         switch (idPlan){
             case 1:
                 habits = habitMainRepository.getDailyPlanHabits();
+                actualPlanText.setText(R.string.celodenny);
+                if (habits.size() == 0){
+                    noRituals();
+                }
                 break;
             case 2:
                 habits =  habitMainRepository.getMorningPlanHabits();
+                actualPlanText.setText(R.string.ranny);
+                if (habits.size() == 0){
+                    noRituals();
+                }
                 break;
             case 3:
                 habits = habitMainRepository.getLunchPlanHabits();
+                actualPlanText.setText(R.string.obedny);
+                if (habits.size() == 0){
+                    noRituals();
+                }
                 break;
             case 4:
                 habits = habitMainRepository.getEveningPlanHabits();
+                actualPlanText.setText(R.string.vecerny);
+                if (habits.size() == 0){
+                    noRituals();
+                }
         }
         return habits;
 
     }
 
+    private void noRituals(){
+        infoAbout.setText("Nie sú vybraté žiadne rituály. ");
+        fabAccept.setBackgroundResource(R.drawable.ic_add_circle_black_24dp);
+        fabAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), MyPlanTabsActivity.class);
+                startActivity(i);
+            }
+        });
+    }
 
 
-    private void setAdapter(int idPlan){
+
+    private void setAdapter(final int idPlan){
         habitAdapter = new HabitAdapter(getApplicationContext(), getHabits(idPlan));
+            fabAccept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getHabits(idPlan).size() != 0){
+                        finish();
+                    } else {
+                        noRituals();
+                    }
+                }
+            });
         actualRecyclerView.setAdapter(habitAdapter);
         actualRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     }

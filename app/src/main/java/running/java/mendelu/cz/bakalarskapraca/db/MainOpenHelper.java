@@ -15,7 +15,7 @@ import java.util.Date;
 public class MainOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "main.db";
-    private static final int DATABASE_VERSION = 45;
+    private static final int DATABASE_VERSION = 46;
 
     public MainOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -34,7 +34,7 @@ public class MainOpenHelper extends SQLiteOpenHelper {
                 Exam.DAYS + " INTEGER NOT NULL, " +
                 Exam.SUBJECT_ID + " INTEGER NOT NULL, " +
                 Exam.GRADE + " TEXT, " +
-                Exam.RATING + " INTEGER, " +
+                Exam.STUDY_DATE + " INTEGER, " +
                 Exam.NOTE + " TEXT, " +
                 Exam.REALIZATION + " INTEGER NOT NULL " + ")");
         db.execSQL("CREATE TABLE " + Subject.TABLE_SUBJECTS + " (" +

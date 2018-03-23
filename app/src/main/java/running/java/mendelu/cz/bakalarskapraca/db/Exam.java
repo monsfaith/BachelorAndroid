@@ -27,10 +27,12 @@ public class Exam {
     static final String DAYS = "days";
     static final String REALIZATION = "realization";
     static final String GRADE = "grade";
-    static final String RATING = "rating";
+    //static final String RATING = "rating";
     static final String NOTE = "note";
     static final String SUBJECT_ID = "subject_id";
     static final String STUDYING = "studying";
+    static final String STUDY_DATE =  "study_date";
+
     //znamka a hodnotenie
 
     protected ContentValues values; //package protected jsme si to udelali
@@ -48,9 +50,10 @@ public class Exam {
         this.setClassroom(classroom);
         this.setSubjectId(subjectId);
         this.setGrade("achjoj");
-        this.setRating(0);
+        //this.setRating(0);
         this.setNote(note);
         this.setStudying(0);
+        this.setStudyDate(0);
 
     }
 
@@ -68,18 +71,6 @@ public class Exam {
         return values.getAsLong(SUBJECT_ID);
     }
 
-    public void setDate(Date date)
-
-    {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.HOUR_OF_DAY,0);
-        cal.set(Calendar.SECOND,0);
-        cal.set(Calendar.MILLISECOND,0);
-
-        values.put(DATE, cal.getTimeInMillis());
-    }
 
     public void setTime(Time time)
     {
@@ -137,13 +128,6 @@ public class Exam {
         values.put(GRADE,grade);
     }
 
-    public void setRating(int rating){
-        values.put(RATING,rating);
-    }
-
-    public int getRating(){
-        return values.getAsInteger(RATING);
-    }
 
     public String getGrade(){
         return values.getAsString(GRADE);
@@ -215,5 +199,14 @@ public class Exam {
     public void decreaseStudying(){
         int i = values.getAsInteger(STUDYING);
         values.put(STUDYING,i--);
+    }
+
+    public long getStudyDate(){
+        long millisecond = values.getAsLong(STUDY_DATE);
+        return values.get(STUDY_DATE)!=null ? (millisecond) : 0;
+    }
+
+    public void setStudyDate(long milliseconds){
+        values.put(STUDY_DATE,milliseconds);
     }
 }

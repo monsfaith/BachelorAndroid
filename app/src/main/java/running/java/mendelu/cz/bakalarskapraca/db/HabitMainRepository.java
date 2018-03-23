@@ -51,38 +51,6 @@ public class HabitMainRepository {
     }
 
 
-    public List<Habit> getDailyHabits(){
-        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
-
-        try {
-            List<Habit> result = new LinkedList<>();
-            Cursor c = db.query(Habit.TABLE_HABITS,
-                    null,
-                    Habit.ASSOCIATON_TABLE_ID + " = " + 1,
-                    null,
-                    null,
-                    null,
-                    null);
-
-            try {
-
-                while (c.moveToNext()) {
-                    result.add(new Habit(c));
-
-                }
-                c.close();
-                return result;
-
-            } finally {
-                db.close();
-            }
-
-        } finally {
-            db.close();
-        }
-
-    }
-
     public List<PlanHabitAssociation> getDailyPlanHabits(){
         SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
 
@@ -100,6 +68,39 @@ public class HabitMainRepository {
 
                 while (c.moveToNext()) {
                     result.add(new PlanHabitAssociation(c));
+
+                }
+                c.close();
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+    }
+
+    public int getDoneDailyPlanHabits(){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+
+
+        try {
+            int result = 0;
+
+            //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
+
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 1 AND plan_habit.done = 1", null);
+
+            // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
+
+
+            try {
+
+                while (c.moveToNext()) {
+                    result = result + 1;
 
                 }
                 c.close();
@@ -179,77 +180,6 @@ public class HabitMainRepository {
 
     }
 
-    public List<Habit> getMorningHabits(){
-        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
-
-        try {
-            List<Habit> result = new LinkedList<>();
-            Cursor c = db.query(Habit.TABLE_HABITS,
-                    null,
-                    Habit.ASSOCIATON_TABLE_ID + " =" + 2,
-                    null,
-                    null,
-                    null,
-                    null);
-
-            try {
-
-                while (c.moveToNext()) {
-                    result.add(new Habit(c));
-
-                }
-                c.close();
-                return result;
-
-            } finally {
-                db.close();
-            }
-
-        } finally {
-            db.close();
-        }
-
-    }
-
-    public List<Habit> getMorningHabits2(){
-        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
-
-        try {
-            List<Habit> result = new LinkedList<>();
-
-            Cursor c = db.rawQuery("SELECT habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2", null);
-
-            // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
-
-
-            try {
-
-                while (c.moveToNext()) {
-                    result.add(new Habit(c));
-
-                }
-                c.close();
-                return result;
-
-            } finally {
-                db.close();
-            }
-
-        } finally {
-            db.close();
-        }
-
-    }
-
-    private long getCurrentDate(){
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY,0);
-        cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.SECOND,0);
-        cal.set(Calendar.MILLISECOND,0);
-        return cal.getTimeInMillis();
-    }
-
 
     public List<PlanHabitAssociation> getMorningPlanHabits(){
         SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
@@ -284,45 +214,16 @@ public class HabitMainRepository {
 
     }
 
-    public List<Habit> getLunchHabits(){
+    public int getDoneMorningPlanHabits(){
         SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
 
-        try {
-            List<Habit> result = new LinkedList<>();
-            Cursor c = db.query(Habit.TABLE_HABITS,
-                    null,
-                    Habit.ASSOCIATON_TABLE_ID + " =" + 3,
-                    null,
-                    null,
-                    null,
-                    null);
-
-            try {
-
-                while (c.moveToNext()) {
-                    result.add(new Habit(c));
-
-                }
-                c.close();
-                return result;
-
-            } finally {
-                db.close();
-            }
-
-        } finally {
-            db.close();
-        }
-
-    }
-
-    public List<Habit> getLunchHabits2(){
-        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
 
         try {
-            List<Habit> result = new LinkedList<>();
+            int result = 0;
 
-            Cursor c = db.rawQuery("SELECT habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 3", null);
+            //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
+
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2 AND plan_habit.done = 1", null);
 
             // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
 
@@ -330,7 +231,8 @@ public class HabitMainRepository {
             try {
 
                 while (c.moveToNext()) {
-                    result.add(new Habit(c));
+                    result = result + 1;
+
                 }
                 c.close();
                 return result;
@@ -344,6 +246,7 @@ public class HabitMainRepository {
         }
 
     }
+
 
     public List<PlanHabitAssociation> getLunchPlanHabits(){
         SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
@@ -377,49 +280,24 @@ public class HabitMainRepository {
 
     }
 
-    public List<Habit> getEveningHabits(){
+    public int getDoneLunchPlanHabits(){
         SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
 
+
         try {
-            List<Habit> result = new LinkedList<>();
-            Cursor c = db.query(Habit.TABLE_HABITS,
-                    null,
-                    Habit.ASSOCIATON_TABLE_ID + " =" + 4,
-                    null,
-                    null,
-                    null,
-                    null);
+            int result = 0;
+
+            //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
+
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 3 AND plan_habit.done = 1 ", null);
+
+            // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
+
 
             try {
 
                 while (c.moveToNext()) {
-                    result.add(new Habit(c));
-
-                }
-                c.close();
-                return result;
-
-            } finally {
-                db.close();
-            }
-
-        } finally {
-            db.close();
-        }
-
-    }
-
-    public List<Habit> getEveningHabits2(){
-        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
-
-        try {
-            List<Habit> result = new LinkedList<>();
-            Cursor c = db.rawQuery("SELECT habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 4", null);
-
-            try {
-
-                while (c.moveToNext()) {
-                    result.add(new Habit(c));
+                    result = result + 1;
 
                 }
                 c.close();
@@ -450,6 +328,39 @@ public class HabitMainRepository {
 
                 while (c.moveToNext()) {
                     result.add(new PlanHabitAssociation(c));
+
+                }
+                c.close();
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+    }
+
+    public int getDoneEveningPlanHabits(){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+
+
+        try {
+            int result = 0;
+
+            //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
+
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 4 AND plan_habit.done = 1", null);
+
+            // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
+
+
+            try {
+
+                while (c.moveToNext()) {
+                    result = result + 1;
 
                 }
                 c.close();
