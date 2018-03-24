@@ -206,7 +206,7 @@ public class MyActivitiesTab2Fragment extends Fragment implements FragmentInterf
                                         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
                                         to.add(Calendar.DAY_OF_MONTH,1);
 
-                                    if (getCurrentTime() < from.getTimeInMillis()) {
+                                    if (System.currentTimeMillis() < from.getTimeInMillis()) {
                                             setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
                                             Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
                                         } else if (System.currentTimeMillis() < to.getTimeInMillis()) {
@@ -247,12 +247,12 @@ public class MyActivitiesTab2Fragment extends Fragment implements FragmentInterf
                                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
                                 if (System.currentTimeMillis() < from.getTimeInMillis()) {
                                     setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
-                                    Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(plan.getFromTime()), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
                                 } else if (System.currentTimeMillis() < to.getTimeInMillis()) {
                                     //if (getNotificationClass(idPlan) != null){
                                     setHabitNotification(System.currentTimeMillis(), idPlan, to.getTimeInMillis());
                                     //}
-                                    Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(getCurrentTime()) + " " + sdf.format(to.getTimeInMillis()) + " " + sdf.format(System.currentTimeMillis()), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()) + " " + sdf.format(to.getTimeInMillis()) + " " , Toast.LENGTH_LONG).show();
 
                                 } else {
                                     Calendar calendar = Calendar.getInstance();
@@ -410,7 +410,7 @@ public class MyActivitiesTab2Fragment extends Fragment implements FragmentInterf
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(getActivity(), EveningHabitNotificationReceiver.class);
         i.putExtra("REQUESTCODE",type);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), type*100, i, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), type*100, i, PendingIntent.FLAG_UPDATE_CURRENT);
         //setExactPlanNotification(alarmManager, pendingIntent, 2,200);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, fromTime,planMainRepository.getByType(type).getRepetition() , pendingIntent);
 

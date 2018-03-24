@@ -24,14 +24,17 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent shownIntent = new Intent(context, HabitNotificationActivity.class);
         int id = 0;
+        int cancelCode = 0;
+        boolean cancel = false;
         if (intent.getExtras() != null) {
             id = intent.getIntExtra("REQUESTCODE", 0);
             shownIntent.putExtra("ID", id);
+
         }
         //shownIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         int requestCode = id * 100;
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, shownIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, shownIntent, 0);
         String contentTitle = "";
         String contentText = "";
         PlanMainRepository planMainRepository = new PlanMainRepository(context);
@@ -49,6 +52,7 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
             builder.setSmallIcon(R.drawable.ic_brightness_5_black_24dp);
             contentTitle = "Ranný plán";
             contentText = "Naštartuj sa do nového dňa! ";
+
         }
 
         if (requestCode == 300) {

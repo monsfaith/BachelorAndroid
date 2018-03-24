@@ -46,7 +46,7 @@ public class Plan {
         this.setToTime(toTime);
         this.setType(type);
         //this.setDate(date);
-        this.setRepetitionId(1500000);
+        this.setRepetitionId(300000);
         //this.setNotification(false);
         this.setEnabled(enabled);
         this.setFromHour(fromHour);

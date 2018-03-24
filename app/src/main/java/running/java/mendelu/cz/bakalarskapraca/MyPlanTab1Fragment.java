@@ -31,6 +31,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -396,14 +397,18 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         Calendar to = Calendar.getInstance();
         to.set(Calendar.HOUR_OF_DAY,plan.getToHour());
         to.set(Calendar.MINUTE,plan.getToMinute());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
         if (System.currentTimeMillis() < from.getTimeInMillis()) {
             setDividedNotifications(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
-        } else if (getCurrentTime() < to.getTimeInMillis()) {
+            Toast.makeText(getActivity(), "Plan nastaveny do " + sdf.format(to.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+        } else if (System.currentTimeMillis() < to.getTimeInMillis()) {
             setDividedNotifications(System.currentTimeMillis(), idPlan, to.getTimeInMillis());
+            Toast.makeText(getActivity(), "Plan nastaveny do " + sdf.format(to.getTimeInMillis()), Toast.LENGTH_SHORT).show();
         } else {
             from.add(Calendar.DAY_OF_MONTH,1);
             to.add(Calendar.DAY_OF_MONTH,1);
+            Toast.makeText(getActivity(), "Plan nastaveny do " + sdf.format(to.getTimeInMillis()), Toast.LENGTH_SHORT).show();
             setDividedNotifications(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
         }
     }
@@ -424,9 +429,9 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(getActivity(), EveningHabitNotificationReceiver.class);
         i.putExtra("REQUESTCODE",type);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), type*100, i, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), type*100, i, PendingIntent.FLAG_UPDATE_CURRENT);
         //setExactPlanNotification(alarmManager, pendingIntent, 2,200);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, fromTime, planMainRepository.getByType(type).getRepetition(), pendingIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, fromTime, planMainRepository.getByType(type).getRepetition(), pendingIntent);
 
         Intent cancelIntent = new Intent(getActivity(), CancelEveningHabitNotificationReceiver.class);
         cancelIntent.putExtra("CANCEL",type);

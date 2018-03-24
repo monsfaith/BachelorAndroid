@@ -99,6 +99,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         examMainRepository = new ExamMainRepository(getActivity());
         actualPlanTextView = (TextView) view.findViewById(R.id.actualPlanTextView);
 
+        planMainRepository.deleteAllPlans();
 
         if (planMainRepository.getAllPlans().size() != 4) {
             init();
@@ -265,7 +266,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
 
             //calendar.add(Calendar.MINUTE, 1);
 
-
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         //nova cast, podla mna
             calendar.set(Calendar.MINUTE,00);
             calendar.set(Calendar.HOUR_OF_DAY,8);
@@ -273,7 +274,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
                 calendar.add(Calendar.DAY_OF_MONTH,1);
             }
 
-
+            Toast.makeText(getActivity(), "Exam Notification nastavena od " + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
             Intent i = new Intent(getActivity(), ExamNotificationReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -541,9 +542,9 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,8);
         long morningFromTime = dailyCalendar.getTimeInMillis();
-        dailyCalendar.set(Calendar.HOUR_OF_DAY,12);
+        dailyCalendar.set(Calendar.HOUR_OF_DAY,13);
         long morningToTime = dailyCalendar.getTimeInMillis();
-        morningPlan = new Plan(morningFromTime, morningToTime, 2, true, 8, 12, 0, 0 );
+        morningPlan = new Plan(morningFromTime, morningToTime, 2, true, 8, 19, 0, 15 );
         planMainRepository.insert(morningPlan);
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,12);

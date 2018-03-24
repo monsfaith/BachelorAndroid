@@ -121,6 +121,7 @@ public class HabitNotificationActivity extends AppCompatActivity{
                         finish();
                     } else {
                         noRituals();
+                        finish();
                     }
                 }
             });
