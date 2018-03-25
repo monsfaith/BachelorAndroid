@@ -8,6 +8,7 @@
         android:id="@+id/habitInfoName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="15dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:textAppearance="@android:style/TextAppearance.Material.Headline" />
@@ -18,5 +19,5 @@
         android:layout_height="wrap_content"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:textAppearance="@android:style/TextAppearance.Material.Body1" />
+        android:textAppearance="@android:style/TextAppearance.Material.Caption" />
 </LinearLayout>

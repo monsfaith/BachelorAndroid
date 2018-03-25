@@ -423,7 +423,7 @@ public class MyActivitiesTab2Fragment extends Fragment implements FragmentInterf
 
     /*private Class<?> getNotificationClass(int idPlan){
         switch (idPlan){
-            case 2: return MorningHabitNotificationReceiver.class;
+            case 2: return DailyHabitNotificationReceiver.class;
             case 3: return LunchHabitNotificationReceiver.class;
             case 4:return EveningHabitNotificationReceiver.class;
             default: return null;

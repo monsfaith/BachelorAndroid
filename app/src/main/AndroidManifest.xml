@@ -42,13 +42,17 @@
             android:theme="@style/AppTheme"
             />
         <activity
-            android:name=".CreateSubjectActivity" />
+            android:name=".CreateSubjectActivity"
+            android:theme="@style/AppTheme"
+            />
+
         <activity
             android:name=".NavigationMainActivity"
             android:label="@string/title_activity_navigation_main"
             android:theme="@style/NoActionBar" />
         <activity android:name=".OneExamDetailActivity" />
-        <activity android:name=".CreateHabitActivity">
+        <activity android:name=".CreateHabitActivity"
+            android:theme="@style/AppTheme">
         </activity>
         <activity android:name=".notifications.HabitNotificationActivity"
             android:theme="@style/NoActionBar"
@@ -68,7 +72,7 @@
             android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:excludeFromRecents="true">
         </activity>
-        <receiver android:name=".notifications.receivers.MorningHabitNotificationReceiver"
+        <receiver android:name=".notifications.receivers.DailyHabitNotificationReceiver"
             android:enabled="true"
             android:exported="true"
             />

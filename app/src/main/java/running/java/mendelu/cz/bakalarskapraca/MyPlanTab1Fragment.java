@@ -711,6 +711,10 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
             eveningHabits = getEveningHabits().size();
         }
 
+        setAdapters();
+        updateProgressBars();
+        checkPlans();
+
     }
 
     private void setVisible(int visibility){

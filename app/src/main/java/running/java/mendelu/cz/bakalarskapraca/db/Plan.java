@@ -40,13 +40,13 @@ public class Plan {
 
     }
 
-    public Plan(long fromTime, long toTime, int type, boolean enabled, int fromHour, int toHour, int fromMinute, int toMinute){
+    public Plan(long fromTime, long toTime, int type, boolean enabled, int fromHour, int toHour, int fromMinute, int toMinute, long repetition){
         this.values = new ContentValues();
         this.setFromTime(fromTime);
         this.setToTime(toTime);
         this.setType(type);
         //this.setDate(date);
-        this.setRepetitionId(300000);
+        this.setRepetitionId(repetition);
         //this.setNotification(false);
         this.setEnabled(enabled);
         this.setFromHour(fromHour);

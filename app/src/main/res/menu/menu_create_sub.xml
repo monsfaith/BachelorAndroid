@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title="@string/pridatExam"
+        android:title="@string/pridatSub"
         android:icon="@drawable/ic_add_black_24dp"
-        android:onClick="createExam"
+        android:onClick="createSubject"
         app:showAsAction="always" />
 
 </menu>

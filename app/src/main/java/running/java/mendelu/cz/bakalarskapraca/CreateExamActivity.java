@@ -75,6 +75,7 @@ public class CreateExamActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private int days;
     private PlanMainRepository planMainRepository;
+    private int barDays;
 
 
     @Override
@@ -96,17 +97,20 @@ public class CreateExamActivity extends AppCompatActivity {
 
         seekbarDifficulty.setEnabled(false);
         chosenDays.setEnabled(false);
-        chosenDate.addTextChangedListener(new TextWatcher() {
+        chosenTime.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                seekbarDifficulty.setEnabled(true);
-                chosenDays.setEnabled(true);
-                seekbarDifficulty.setMax(7);
-                //seekbarDifficulty.setProgress(1);
+                if (chosenDate.getText().toString().trim().length() != 0) {
+                    seekbarDifficulty.setEnabled(true);
+                    chosenDays.setEnabled(true);
+                    seekbarDifficulty.setMax(7);
+                    progressSeekbar = 1;
+                    //seekbarDifficulty.setProgress(1);
+                }
             }
 
             @Override
@@ -115,6 +119,30 @@ public class CreateExamActivity extends AppCompatActivity {
             }
         });
 
+        chosenDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if ((setMaxSeekBar() / 7) * progressSeekbar < 1) {
+                    seekbarDifficulty.setMax(setMaxSeekBar());
+                    barDays = progressSeekbar;
+                } else {
+                    barDays = (setMaxSeekBar() / 7) * progressSeekbar;
+                }
+                chosenDays.setText("" + barDays);
+            }
+        });
+
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         seekbarDifficulty.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -122,15 +150,15 @@ public class CreateExamActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 progressSeekbar = progress;
-                int days;
+                //int days;
 
                 if ((setMaxSeekBar() / 7) * progress < 1) {
                     seekbarDifficulty.setMax(setMaxSeekBar());
-                    days = progress;
+                    barDays = progress;
                 } else {
-                    days = (setMaxSeekBar() / 7) * progress;
+                    barDays = (setMaxSeekBar() / 7) * progress;
                 }
-                chosenDays.setText("" + days);
+                chosenDays.setText("" + barDays);
             }
 
             @Override
@@ -178,16 +206,22 @@ public class CreateExamActivity extends AppCompatActivity {
             Calendar c = Calendar.getInstance();
             String todayString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
 
-            String myStringDate = chosenDate.getText().toString();
+            Calendar date = Calendar.getInstance();
+            Calendar time = Calendar.getInstance();
+            date.setTimeInMillis(milliseconds);
+            time.setTimeInMillis(timeMilliseconds);
+            date.set(Calendar.HOUR_OF_DAY,time.get(Calendar.HOUR_OF_DAY));
+            date.set(Calendar.MINUTE,time.get(Calendar.MINUTE));
 
+            String myStringDate = chosenDate.getText().toString();
             Date myDate = new Date(sdf.parse(myStringDate).getTime());
             Date today = new Date(sdf.parse(todayString).getTime());
 
-            long diff = Math.abs(today.getTime() - myDate.getTime());
+            //otocila som to,
+            long diff = Math.abs(date.getTimeInMillis() - today.getTime());
             long dateDiff = diff / (24 * 60 * 60 * 1000);
 
             String str = String.valueOf(dateDiff);
-
             return Integer.valueOf(str);
 
         } catch (Exception exception) {
@@ -384,6 +418,42 @@ public class CreateExamActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    public void onResume(){
+        super.onResume();
+        setMaxSeekBar();
+        seekBarUpdate();
+    }
+
+    private void seekBarUpdate(){
+        seekbarDifficulty.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                progressSeekbar = progress;
+                int days;
+
+                if ((setMaxSeekBar() / 7) * progress < 1) {
+                    seekbarDifficulty.setMax(setMaxSeekBar());
+                    days = progress;
+                } else {
+                    days = (setMaxSeekBar() / 7) * progress;
+                }
+                chosenDays.setText("" + days);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     public void updateExam(MenuItem item) {

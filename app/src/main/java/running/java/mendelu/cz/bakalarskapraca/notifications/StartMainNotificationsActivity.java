@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,9 +35,11 @@ import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotif
  * Created by Monika on 17.03.2018.
  */
 
+
 public class StartMainNotificationsActivity extends AppCompatActivity {
 
-    private Button letsDoIt;
+    private FloatingActionButton letsDoIt;
+    private FloatingActionButton cancel;
     private TextView info;
     private PlanMainRepository planMainRepository;
     private ExamNotificationAdapter examNotificationAdapter;
@@ -55,7 +58,8 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
 
         examNotificationAdapter = new ExamNotificationAdapter(getApplicationContext(), getExamResults());
 
-        letsDoIt = (Button) findViewById(R.id.letsDoIt);
+        letsDoIt = (FloatingActionButton) findViewById(R.id.letsDoIt);
+        cancel = (FloatingActionButton) findViewById(R.id.letsCancelit);
         info = (TextView) findViewById(R.id.infoAboutStartingPlans);
         planMainRepository = new PlanMainRepository(getApplicationContext());
         recyclerView = (RecyclerView) findViewById(R.id.availableExamsRecyclerVie);
@@ -76,6 +80,13 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Nutné zvoliť skúšku, na ktorú sa ideš pripravovať", Toast.LENGTH_SHORT).show();
                 }
 
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

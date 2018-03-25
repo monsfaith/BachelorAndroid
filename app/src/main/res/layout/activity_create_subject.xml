@@ -11,41 +11,48 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:paddingTop="5dp"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="10dp"
+        android:text="@string/subjectTitle"
+        android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
     <EditText
         android:id="@+id/subjectNameInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="10dp"
         android:inputType="textPersonName"
-        android:text="Name" />
+        />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="@string/skratka"
+        android:paddingTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="10dp"
+        android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
     <EditText
         android:id="@+id/subjectShortcutInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:paddingLeft="10dp"
+        android:paddingBottom="15dp"
+        android:layout_gravity="center_horizontal"
         android:inputType="textPersonName"
-        android:text="Name" />
+        />
 
-    <TextView
-        android:id="@+id/textView3"
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/book"
+        />
 
-
-    <Button
-        android:id="@+id/createSubBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="newSubjectCreation"
-        android:text="Button" />
 </LinearLayout>

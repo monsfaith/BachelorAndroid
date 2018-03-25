@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="match_parent">
 
@@ -8,19 +9,45 @@
         android:id="@+id/infoAboutStartingPlans"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Info about starting plans" />
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/chooseExam"
+        android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/availableExamsRecyclerVie"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
 
-    <Button
-        android:id="@+id/letsDoIt"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Let's do it"
-        android:textAppearance="@android:style/TextAppearance.Material.Menu" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/letsCancelit"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+
+            android:layout_toLeftOf="@id/letsDoIt"
+            android:paddingTop="5dp"
+            android:textAppearance="@android:style/TextAppearance.Material.Menu"
+            app:rippleColor="@color/green_100"
+            app:srcCompat="@drawable/ic_close_black_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/letsDoIt"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingTop="5dp"
+            android:textAppearance="@android:style/TextAppearance.Material.Menu"
+            app:srcCompat="@drawable/ic_check_black_24dp" />
+    </RelativeLayout>
 </LinearLayout>

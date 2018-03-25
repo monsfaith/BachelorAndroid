@@ -16,7 +16,7 @@ import running.java.mendelu.cz.bakalarskapraca.notifications.HabitNotificationAc
  * Created by Monika on 12.03.2018.
  */
 
-public class MorningHabitNotificationReceiver extends BroadcastReceiver {
+public class DailyHabitNotificationReceiver extends BroadcastReceiver {
 
 
     @Override

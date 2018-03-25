@@ -6,11 +6,9 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -40,6 +38,7 @@ import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DailyHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DatabaseRecordReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DatabaseTimeChangeReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
@@ -99,11 +98,10 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         examMainRepository = new ExamMainRepository(getActivity());
         actualPlanTextView = (TextView) view.findViewById(R.id.actualPlanTextView);
 
-        planMainRepository.deleteAllPlans();
+        //planMainRepository.deleteAllPlans();
 
         if (planMainRepository.getAllPlans().size() != 4) {
             init();
-            setDatabaseNotification();
             //setDatabasePlanTimeDaily();
             setExamNotification();
         } else {
@@ -137,6 +135,8 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         //setDatabasePlanTimeDaily();
         //setExamNotification();
 
+        //setEveryDayPlanNotification();
+        setDatabaseNotification();
         loadListView();
 
         butt.setOnClickListener(new View.OnClickListener() {
@@ -253,6 +253,20 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         alarmManager.set(AlarmManager.RTC_WAKEUP, timeTo, cancelPendingIntent);
     }
 
+    //notifikacia, ktora nastavi kazdy den denny plan
+    private void setEveryDayPlanNotification(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY,7);
+        cal.set(Calendar.MINUTE,55);
+        if (System.currentTimeMillis() > cal.getTimeInMillis()){
+            cal.add(Calendar.DAY_OF_MONTH,1);
+        }
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(getActivity(), DailyHabitNotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 10, i, 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
 
     //zakomentovane veci, musim si to objasnit
     private void setExamNotification(){
@@ -285,31 +299,9 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             //contentValues.put("enabled",true);
             //planMainRepository.update2(1, contentValues);
             //setHabitNotification(calendar.getTimeInMillis(),1);
-
         setDailyPlan();
 
-        //setHabitNotification(planMainRepository.getByType(1).getFromTime().getTime(), 1);
         }
-
-
-
-
-
-        /*Intent delayIntent = new Intent();
-        delayIntent.setAction("odlozit");
-        PendingIntent pendingIntentDelay = PendingIntent.getBroadcast(getActivity(), 500, delayIntent, PendingIntent.FLAG_UPDATE_CURRENT);*/
-
-
-
-        //Maybe intent
-        /*Intent maybeReceive = new Intent();
-        maybeReceive.setAction(MAYBE_ACTION);
-        PendingIntent pendingIntentMaybe = PendingIntent.getBroadcast(this, 12345, maybeReceive, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.addAction(R.drawable.calendar_question, "Partly", pendingIntentMaybe);*/
-
-        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
-
-
 
     private void setDatabaseNotification(){
         Intent i = new Intent(getContext(), DatabaseRecordReceiver.class);
@@ -317,7 +309,6 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
         Calendar calendar = Calendar.getInstance();
-
 
         //calendar.add(Calendar.DAY_OF_MONTH,1);
         calendar.set(Calendar.HOUR_OF_DAY, 4);
@@ -330,32 +321,12 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             time = calendar.getTimeInMillis();
         }
 
-        /*if (planMainRepository.getLastPlanTime() > calendar.getTimeInMillis()){
-            //Calendar cali = Calendar.getInstance();
-            //cali.setTimeInMillis(planMainRepository.getLastPlanTime());
-            time = planMainRepository.getLastPlanTime();
-
-        }*/
-
-
-            //long time = planMainRepository.getLastTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        Toast.makeText(getActivity(), "Database Record update o" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pendingIntent);
 
     }
 
-    //ulozit kazdy den novy datum k casom planom v databazi
-    private void setDatabasePlanTimeDaily(){
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY,0);
-        calendar.set(Calendar.MINUTE,0);
-        calendar.set(Calendar.SECOND,30);
-        long time = calendar.getTimeInMillis();
-        Intent i = new Intent(getContext(), DatabaseTimeChangeReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 800, i, 0);
-        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pendingIntent);
-
-    }
 
 
     public void loadListView(){
@@ -485,8 +456,13 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         super.onResume();
         loadListView();
         setPlan();
+        dailyPlan = planMainRepository.getByType(1);
+        morningPlan = planMainRepository.getByType(2);
+        lunchPlan = planMainRepository.getByType(3);
+        eveningPlan = planMainRepository.getByType(4);
+        }
 
-    }
+
 
     private long getCurrentDate(){
         Calendar cal = Calendar.getInstance();
@@ -537,28 +513,28 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         dailyCalendar.set(Calendar.HOUR_OF_DAY, 20);
         long dailyToTime = dailyCalendar.getTimeInMillis();
 
-        dailyPlan = new Plan(dailyFromTime, dailyToTime, 1, true, 8, 20, 0, 0);
+        dailyPlan = new Plan(dailyFromTime, dailyToTime, 1, true, 8, 20, 0, 0, 3600000 );
         planMainRepository.insert(dailyPlan);
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,8);
         long morningFromTime = dailyCalendar.getTimeInMillis();
         dailyCalendar.set(Calendar.HOUR_OF_DAY,13);
         long morningToTime = dailyCalendar.getTimeInMillis();
-        morningPlan = new Plan(morningFromTime, morningToTime, 2, true, 8, 19, 0, 15 );
+        morningPlan = new Plan(morningFromTime, morningToTime, 2, true, 8, 12, 0, 15, 1500000 );
         planMainRepository.insert(morningPlan);
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,12);
         long lunchFromTime = dailyCalendar.getTimeInMillis();
         dailyCalendar.set(Calendar.HOUR_OF_DAY,17);
         long lunchToTime = dailyCalendar.getTimeInMillis();
-        lunchPlan = new Plan(lunchFromTime, lunchToTime, 3, true, 12, 17, 0, 0);
+        lunchPlan = new Plan(lunchFromTime, lunchToTime, 3, true, 12, 17, 0, 0,1500000);
         planMainRepository.insert(lunchPlan);
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,17);
         long eveningFromTime = dailyCalendar.getTimeInMillis();
         dailyCalendar.set(Calendar.HOUR_OF_DAY,22);
         long eveningToTime = dailyCalendar.getTimeInMillis();
-        eveningPlan = new Plan(eveningFromTime, eveningToTime,4, true, 17, 22, 0, 0);
+        eveningPlan = new Plan(eveningFromTime, eveningToTime,4, true, 17, 22, 0, 0, 1500000);
         planMainRepository.insert(eveningPlan);
     }
 
@@ -597,6 +573,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             setHabitNotification(System.currentTimeMillis(), 1,calendarTo.getTimeInMillis());
         } else {
             calendarFrom.add(Calendar.DAY_OF_MONTH,1);
+            calendarTo.add(Calendar.DAY_OF_MONTH,1);
             setHabitNotification(calendarFrom.getTimeInMillis(),1, calendarTo.getTimeInMillis());
         }
     }
