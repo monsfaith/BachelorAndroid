@@ -73,11 +73,14 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
             contentText = "Buď bližšie k svojím cieľom!";
         }
 
+
         builder.setContentTitle(contentTitle + requestCode);
         builder.setContentText(contentText);
 
         if (isBadDaily(requestCode, planMainRepository.getByType(1).getEnabled()) == false) {
-            notificationManager.notify(requestCode, builder.build());
+            if (id != 0) {
+                notificationManager.notify(requestCode, builder.build());
+            }
         }
     }
 

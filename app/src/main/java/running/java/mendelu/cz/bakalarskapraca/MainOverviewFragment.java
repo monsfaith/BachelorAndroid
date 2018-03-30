@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
     private Button butt;
     private Button buttShow;
     private FloatingActionButton floatingButton;
+    private ProgressBar progressBarReview;
 
     private ExamMainRepository examMainRepository;
     private ExamAdapter examAdapter;
@@ -97,13 +99,16 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         habitMainRepository = new HabitMainRepository(getActivity());
         examMainRepository = new ExamMainRepository(getActivity());
         actualPlanTextView = (TextView) view.findViewById(R.id.actualPlanTextView);
+        progressBarReview = (ProgressBar) view.findViewById(R.id.progressBarReview);
 
         //planMainRepository.deleteAllPlans();
 
         if (planMainRepository.getAllPlans().size() != 4) {
             init();
             //setDatabasePlanTimeDaily();
-            setExamNotification();
+
+            //DAVAM len docasne prec
+            //setExamNotification();
         } else {
             dailyPlan = planMainRepository.getByType(1);
             morningPlan = planMainRepository.getByType(2);
@@ -136,6 +141,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         //setExamNotification();
 
         //setEveryDayPlanNotification();
+        setExamNotification();
         setDatabaseNotification();
         loadListView();
 
@@ -272,7 +278,6 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
     private void setExamNotification(){
         Calendar calendar = Calendar.getInstance();
         ContentValues contentValues = new ContentValues();
-        Toast.makeText(getActivity(), examMainRepository.findNextExams().size() + " size of exams", Toast.LENGTH_SHORT).show();
         //if (examMainRepository.findNextExams().size() != 0){
             calendar.setTimeInMillis(System.currentTimeMillis());
             /*contentValues.put("enabled",false);
@@ -364,6 +369,8 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
                 to.set(Calendar.HOUR_OF_DAY,morningPlan.getToHour());
                 to.set(Calendar.MINUTE,morningPlan.getToMinute());
                 Toast.makeText(getActivity(), "morning " + actualPlan + " aktu", Toast.LENGTH_LONG).show();
+                progressBarReview.setMax(habitMainRepository.getMorningPlanHabits().size());
+                progressBarReview.setProgress(habitMainRepository.getDoneMorningPlanHabits());
                 actualPlan = 2;
                 actualPlanTextView.setText(R.string.ranny);
                 return habitMainRepository.getMorningPlanHabits();
@@ -376,6 +383,8 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
                 Toast.makeText(getActivity(), "lunch " + actualPlan + " aktu", Toast.LENGTH_LONG).show();
                 actualPlan = 3;
                 actualPlanTextView.setText(R.string.obedny);
+                progressBarReview.setMax(habitMainRepository.getLunchPlanHabits().size());
+                progressBarReview.setProgress(habitMainRepository.getDoneLunchPlanHabits());
                 return habitMainRepository.getLunchPlanHabits();
 
            /* } else if ((time > eveningPlan.getFromTime().getTime() || time == eveningPlan.getFromTime().getTime()) && (time < eveningPlan.getToTime().getTime() || time == eveningPlan.getToTime().getTime())) {
@@ -396,6 +405,8 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
                 Toast.makeText(getActivity(), "evening " + actualPlan + " aktu " + sdf.format(setPlanDateToCalendar(eveningPlan.getType())) + " " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
                 actualPlan = 4;
                 actualPlanTextView.setText(R.string.vecerny);
+                progressBarReview.setMax(habitMainRepository.getEveningPlanHabits().size());
+                progressBarReview.setProgress(habitMainRepository.getDoneEveningPlanHabits());
                 return habitMainRepository.getEveningPlanHabits();
             } else {
                 actualPlan = 0;
@@ -411,6 +422,8 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
                 Toast.makeText(getActivity(), "daily " + actualPlan + " aktu" + sdf.format(getCurrentTime()) + " " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
                 actualPlan = 1;
                 actualPlanTextView.setText(R.string.celodenny);
+            progressBarReview.setMax(habitMainRepository.getDailyPlanHabits().size());
+            progressBarReview.setProgress(habitMainRepository.getDoneDailyPlanHabits());
                 return habitMainRepository.getDailyPlanHabits();
             } else {
                 actualPlan = 0;

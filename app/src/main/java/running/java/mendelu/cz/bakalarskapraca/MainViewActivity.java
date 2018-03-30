@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 import running.java.mendelu.cz.bakalarskapraca.db.ExamAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
@@ -40,6 +41,7 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
     private ListView listView;
     ArrayList<Quote> quotes = new ArrayList<>();
     private String quote;
+    private FloatingActionButton fab;
 
 
     //https://www.raywenderlich.com/127544/android-gridview-getting-started
@@ -71,14 +73,10 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
 
         quote = "";
         getJsonQuotes();
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view,quote, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
+        setQuoteVisible();
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -108,7 +106,6 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 quotes.add(new Quote(jsonObject.getString("quote"), jsonObject.getString("author")));
                 //Toast.makeText(getApplicationContext(), quotes.size() + " size of quotes", Toast.LENGTH_SHORT).show();
-                quote = jsonObject.getString("quote") + " - " + jsonObject.getString("author");
             }
 
         } catch (IOException e) {
@@ -132,6 +129,28 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         loadListView();
 
     }*/
+
+    private void setQuoteVisible(){
+        if (quotes.size() > 40){
+            fab.setVisibility(View.VISIBLE);
+            Random rand = new Random();
+            int n = rand.nextInt(quotes.size()) + 1;
+            quote = quotes.get(n).getText() + " - " + quotes.get(n).getAuthor();
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view,quote, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+        }
+
+    }
+
+    public void onResume(){
+        super.onResume();
+        setQuoteVisible();
+    }
 
     @Override
     public void onBackPressed() {

@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +31,8 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -158,43 +161,53 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
                 if (!isChecked) {
                     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
                     View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_start_exam_plan, null);
-                    Button doIt = (Button) view.findViewById(R.id.letsDoIt);
+                    FloatingActionButton doIt = (FloatingActionButton) view.findViewById(R.id.letsDoIt);
+                    FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.letsCancelit);
+                    TextView infoAboutPlan = (TextView) view.findViewById(R.id.infoAboutStartingPlans);
+
+                    fab.setVisibility(View.GONE);
                     doIt.setVisibility(View.GONE);
                     RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.availableExamsRecyclerVie);
                     final ExamNotificationAdapter examNotificationAdapter = new ExamNotificationAdapter(getActivity(), getExamResults());
                     recyclerView.setAdapter(examNotificationAdapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    dialogBuilder.setPositiveButton("Potvrdiť", new DialogInterface.OnClickListener() {
+                    if (examMainRepository.findNextExams().size() < 1) {
+                        infoAboutPlan.setText("V najbližšej dobe ťa nečakajú žiadne skúšky.");
+                        dialogBuilder.setPositiveButton("Ok", null);
+                        switchDaily.setChecked(true);
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (examNotificationAdapter.numberOfSelectedExams() > 0) {
-                                switchDaily.setChecked(false);
-                                progressDailyBar.setVisibility(View.GONE);
-                                dailyPlanCardView.setVisibility(View.GONE);
-                                settingsButtonDaily.setVisibility(View.GONE);
-                                tx.setVisibility(View.GONE);
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put("enabled", false);
-                                planMainRepository.update2(1, contentValues);
+                    } else {
+                        dialogBuilder.setPositiveButton("Potvrdiť", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (examNotificationAdapter.numberOfSelectedExams() > 0) {
+                                    switchDaily.setChecked(false);
+                                    progressDailyBar.setVisibility(View.GONE);
+                                    dailyPlanCardView.setVisibility(View.GONE);
+                                    settingsButtonDaily.setVisibility(View.GONE);
+                                    tx.setVisibility(View.GONE);
+                                    ContentValues contentValues = new ContentValues();
+                                    contentValues.put("enabled", false);
+                                    planMainRepository.update2(1, contentValues);
 
 
-                                //zrusenie denneho planu
-                                //cancelDividedNotification(1);
-                                //NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-                                //notificationManager.cancel(100);
-                                cancelDividedNotification(1);
-                                setNotificationTime(2);
-                                setNotificationTime(3);
-                                setNotificationTime(4);
-                                setVisible(1);
-                                setExamNotification();
-                            } else {
-                                switchDaily.setChecked(true);
-                                Toast.makeText(getActivity(), "zostava to ako " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
+                                    //zrusenie denneho planu
+                                    //cancelDividedNotification(1);
+                                    //NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+                                    //notificationManager.cancel(100);
+                                    cancelDividedNotification(1);
+                                    setNotificationTime(2);
+                                    setNotificationTime(3);
+                                    setNotificationTime(4);
+                                    setVisible(1);
+                                    setExamNotification();
+                                } else {
+                                    switchDaily.setChecked(true);
+                                    Toast.makeText(getActivity(), "zostava to ako " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
 
                     dialogBuilder.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
                         @Override
@@ -209,6 +222,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
 
                         }
                     });
+                }
                     dialogBuilder.setView(view);
                     AlertDialog dialog = dialogBuilder.create();
                     dialog.show();
@@ -775,7 +789,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
     private Cursor getExamResults(){
         MainOpenHelper mainOpenHelper = new MainOpenHelper(getActivity());
         SQLiteDatabase database = mainOpenHelper.getWritableDatabase();
-        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? order by e.date",new String[]{String.valueOf(getCurrentDate())});
+        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? order by e.date",new String[]{String.valueOf(System.currentTimeMillis())});
     }
 
     public void onResume(){

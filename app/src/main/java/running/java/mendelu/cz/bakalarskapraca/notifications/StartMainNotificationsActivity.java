@@ -66,12 +66,15 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         recyclerView.setAdapter(examNotificationAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
+
+
         letsDoIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (examNotificationAdapter.numberOfSelectedExams() > 0){
                     //NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     //notificationManager.cancel(500);
+                    cancel.setVisibility(View.GONE);
                     cancelDailyNotifications();
                     setAllNotifications();
                     setExamNotificationTomorrow();
@@ -86,6 +89,9 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (examNotificationAdapter.numberOfSelectedExams() > 0){
+                    examNotificationAdapter.setZero(true);
+                }
                 finish();
             }
         });
@@ -164,7 +170,7 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
     }
 
     private Cursor getExamResults(){
-        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ?",new String[]{String.valueOf(System.currentTimeMillis())});
+        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? order by e.date",new String[]{String.valueOf(System.currentTimeMillis())});
     }
 
     private long getCurrentDate(){

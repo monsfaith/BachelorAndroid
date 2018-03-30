@@ -35,6 +35,7 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
     //spocitava pocet fajok pri skuske
     private int count;
     private long studyDate = 0;
+    private boolean zero = false;
 
     public ExamNotificationAdapter(Context context, Cursor cursor){
         layoutInflater = LayoutInflater.from(context);
@@ -89,9 +90,11 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
                     if ((sameDay(studyDate) == false)) {
                         count = count + 1;
                         int studying = examMainRepository.getById(idExam).getStudying();
-                        contentValues.put("studying", studying + 1);
-                        contentValues.put("study_date", System.currentTimeMillis());
-                        examMainRepository.update2(idExam, contentValues);
+                        if (zero == false) {
+                            contentValues.put("studying", studying + 1);
+                            contentValues.put("study_date", System.currentTimeMillis());
+                            examMainRepository.update2(idExam, contentValues);
+                        }
                         int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
                         int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
 
@@ -103,13 +106,17 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
                     }
                 } else {
                     int studying = examMainRepository.getById(idExam).getStudying();
-                    contentValues.put("studying", studying - 1);
+                    if (studying > 0) {
+                        contentValues.put("studying", studying - 1);
+                    }
                     contentValues.put("study_date",0);
                     examMainRepository.update2(idExam, contentValues);
                     int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
                     int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
                     holder.examDays.setText(actualDays + "/" + wantedDays);
-                    count = count - 1;
+                    if (count > 0) {
+                        count = count - 1;
+                    }
                     Toast.makeText(context, "nechecknute" + count, Toast.LENGTH_SHORT).show();
 
                 }
@@ -123,6 +130,10 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
     public boolean isSelected(){
         return (count>0);
 
+    }
+
+    public void setZero(boolean gotZero){
+        this.zero = gotZero;
     }
 
     public int numberOfSelectedExams(){

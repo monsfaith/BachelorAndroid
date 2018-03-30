@@ -92,7 +92,7 @@ public class HabitMainRepository {
 
             //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
 
-            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 1 AND plan_habit.done = 1", null);
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 1 AND plan_habit.done = 1 AND plan_habit.date BETWEEN " + todayBeginning() + " AND " + todayEnd(), null);
 
             // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
 
@@ -223,7 +223,7 @@ public class HabitMainRepository {
 
             //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
 
-            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2 AND plan_habit.done = 1", null);
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2 AND plan_habit.done = 1 AND plan_habit.date BETWEEN " + todayBeginning() + " AND " + todayEnd(), null);
 
             // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
 
@@ -289,7 +289,7 @@ public class HabitMainRepository {
 
             //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
 
-            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 3 AND plan_habit.done = 1 ", null);
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 3 AND plan_habit.done = 1 AND plan_habit.date BETWEEN " + todayBeginning() + " AND " + todayEnd(), null);
 
             // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
 
@@ -352,7 +352,7 @@ public class HabitMainRepository {
 
             //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 2 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
 
-            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 4 AND plan_habit.done = 1", null);
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 4 AND plan_habit.done = 1 AND plan_habit.date BETWEEN " + todayBeginning() + " AND " + todayEnd(), null);
 
             // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
 
@@ -487,5 +487,21 @@ public class HabitMainRepository {
         }
 
 
+    }
+
+    private long todayBeginning(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 00);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,20);
+        return calendar.getTimeInMillis();
+    }
+
+    private long todayEnd(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE,59);
+        calendar.set(Calendar.SECOND,55);
+        return calendar.getTimeInMillis();
     }
 }

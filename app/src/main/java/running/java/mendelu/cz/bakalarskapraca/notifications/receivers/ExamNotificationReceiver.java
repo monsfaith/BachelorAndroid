@@ -35,9 +35,10 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         int exams = 0;
-        if (intent.getExtras() != null){
+        //skusam dat prec
+        /*if (intent.getExtras() != null){
             exams = intent.getIntExtra("NOEXAMS",0);
-        }
+        }*/
 
         Intent shownIntent = new Intent(context, StartMainNotificationsActivity.class);
 
@@ -86,7 +87,9 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         }
         String contentTitle = "";
         String contentText = "";
-        if (exams != 1){
+
+        exams = examMainRepository.findNextExams().size();
+        if (exams == 0){
             contentTitle = "Uži si deň voľna";
             contentText = "Nečakajú ťa žiadne skúšky.";
         } else {
