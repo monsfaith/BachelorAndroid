@@ -37,8 +37,6 @@ import running.java.mendelu.cz.bakalarskapraca.db.HabitToChooseAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelLunchHabitNotificationReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelMorningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
 
 /**
@@ -421,23 +419,7 @@ public class MyActivitiesTab2Fragment extends Fragment implements FragmentInterf
         alarmManager.set(AlarmManager.RTC_WAKEUP, toTime, cancelPendingIntent);
     }
 
-    /*private Class<?> getNotificationClass(int idPlan){
-        switch (idPlan){
-            case 2: return DailyHabitNotificationReceiver.class;
-            case 3: return LunchHabitNotificationReceiver.class;
-            case 4:return EveningHabitNotificationReceiver.class;
-            default: return null;
-        }
-    }*/
 
-    private Class<?> getCancelNotificationClass(int idPlan){
-        switch (idPlan){
-            case 2: return CancelMorningHabitNotificationReceiver.class;
-            case 3: return CancelLunchHabitNotificationReceiver.class;
-            case 4: return CancelEveningHabitNotificationReceiver.class;
-            default: return null;
-        }
-    }
 
 
 

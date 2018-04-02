@@ -76,19 +76,21 @@
             android:enabled="true"
             android:exported="true"
             />
-        <receiver android:name=".notifications.receivers.ExamNotificationReceiver"></receiver>
-        <receiver android:name=".notifications.receivers.DatabaseRecordReceiver"></receiver>
-        <receiver android:name=".notifications.receivers.LunchHabitNotificationReceiver">
+        <receiver android:name=".notifications.receivers.ExamNotificationReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
+        <receiver android:name=".notifications.receivers.DatabaseRecordReceiver"></receiver>
         <receiver android:name=".notifications.receivers.EveningHabitNotificationReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".notifications.receivers.CancelMorningHabitNotificationReceiver"></receiver>
-        <receiver android:name=".notifications.receivers.CancelLunchHabitNotificationReceiver"></receiver>
-        <receiver android:name=".notifications.receivers.CancelEveningHabitNotificationReceiver"></receiver>
-        <receiver android:name=".notifications.receivers.DatabaseTimeChangeReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.CancelEveningHabitNotificationReceiver">
+        </receiver>
+        <receiver android:name=".notifications.receivers.DatabaseTimeChangeReceiver">
+        </receiver>
     </application>
 
 </manifest>

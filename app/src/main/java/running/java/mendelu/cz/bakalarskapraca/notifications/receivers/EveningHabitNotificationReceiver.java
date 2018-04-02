@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
 
 import running.java.mendelu.cz.bakalarskapraca.R;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
@@ -79,6 +80,7 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
 
         if (isBadDaily(requestCode, planMainRepository.getByType(1).getEnabled()) == false) {
             if (id != 0) {
+                Toast.makeText(context,"Meni sa to",Toast.LENGTH_SHORT).show();
                 notificationManager.notify(requestCode, builder.build());
             }
         }

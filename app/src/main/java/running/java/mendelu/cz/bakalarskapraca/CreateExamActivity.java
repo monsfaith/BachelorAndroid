@@ -33,6 +33,7 @@ import android.widget.Toast;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -119,7 +120,7 @@ public class CreateExamActivity extends AppCompatActivity {
             }
         });
 
-        chosenDate.addTextChangedListener(new TextWatcher() {
+        /*chosenDate.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -140,6 +141,43 @@ public class CreateExamActivity extends AppCompatActivity {
                 }
                 chosenDays.setText("" + barDays);
             }
+        });*/
+
+        chosenDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (days != 0){
+                    if ((setMaxSeekBar() / 7) < 1) {
+                        chosenDays.setText(progressSeekbar + "s");
+                        seekBarUpdate();
+
+                    } else {
+                        chosenDays.setText(seekbarDifficulty.getProgress() * setMaxSeekBar() / 7 + " d");
+                        seekBarUpdate();
+
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (days != 0){
+                    if ((setMaxSeekBar() / 7) < 1) {
+                        chosenDays.setText(progressSeekbar + "");
+                        seekBarUpdate();
+
+                    } else {
+                        chosenDays.setText(seekbarDifficulty.getProgress() * setMaxSeekBar() / 7 + "");
+                        seekBarUpdate();
+                    }
+                }
+
+            }
         });
 
 
@@ -152,11 +190,14 @@ public class CreateExamActivity extends AppCompatActivity {
                 progressSeekbar = progress;
                 //int days;
 
-                if ((setMaxSeekBar() / 7) * progress < 1) {
+                if ((setMaxSeekBar() / 7) < 1) {
                     seekbarDifficulty.setMax(setMaxSeekBar());
                     barDays = progress;
+                    days = barDays;
                 } else {
-                    barDays = (setMaxSeekBar() / 7) * progress;
+                    seekbarDifficulty.setMax(7);
+                    barDays = (progress*setMaxSeekBar()/7);
+                    days = barDays;
                 }
                 chosenDays.setText("" + barDays);
             }
@@ -192,6 +233,12 @@ public class CreateExamActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    long roundMethod(double d)
+    {
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        return Long.valueOf(twoDForm.format(d));
     }
 
     private boolean isUpdateMode() {
@@ -424,6 +471,7 @@ public class CreateExamActivity extends AppCompatActivity {
         super.onResume();
         setMaxSeekBar();
         seekBarUpdate();
+
     }
 
     private void seekBarUpdate(){
@@ -432,15 +480,19 @@ public class CreateExamActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 progressSeekbar = progress;
-                int days;
 
-                if ((setMaxSeekBar() / 7) * progress < 1) {
+                if ((setMaxSeekBar() / 7) < 1) {
                     seekbarDifficulty.setMax(setMaxSeekBar());
-                    days = progress;
+                    barDays = progress;
+                    days = barDays;
                 } else {
-                    days = (setMaxSeekBar() / 7) * progress;
+                    //barDays = (setMaxSeekBar() / 7) * progress;
+                    //seekbarDifficulty.setMax(setMaxSeekBar()/2);
+                    seekbarDifficulty.setMax(7);
+                    barDays = (progress*setMaxSeekBar()/7);
+                    days = barDays;
                 }
-                chosenDays.setText("" + days);
+                chosenDays.setText("" + barDays);
             }
 
             @Override

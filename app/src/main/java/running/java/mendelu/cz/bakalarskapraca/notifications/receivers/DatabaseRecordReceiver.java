@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.provider.Settings;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -34,6 +36,9 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
         cancelDividedNotification(4, context);
         setDailyPlan(context);
         setExamNotificationTomorrow(context);
+        MediaPlayer mediaPlayer;
+        mediaPlayer = MediaPlayer.create(context, Settings.System.DEFAULT_NOTIFICATION_URI);
+        mediaPlayer.start();
         Toast.makeText(context, "shit dabase", Toast.LENGTH_LONG).show();
 
 
@@ -42,6 +47,7 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
     private void setDailyPlan(Context context){
         ContentValues contentValues = new ContentValues();
         contentValues.put("enabled",true);
+        planMainRepository = new PlanMainRepository(context);
         planMainRepository.update2(1,contentValues);
         Plan dailyPlan = planMainRepository.getByType(1);
         Calendar calendar = Calendar.getInstance();
@@ -72,7 +78,7 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
 
         Intent cancelIntent = new Intent(context, CancelEveningHabitNotificationReceiver.class);
         cancelIntent.putExtra("CANCEL",1);
-        PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(context, 100, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(context, 100, cancelIntent, 0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, toTime, cancelPendingIntent);
     }
 

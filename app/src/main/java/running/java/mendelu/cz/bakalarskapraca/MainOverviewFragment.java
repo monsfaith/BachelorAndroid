@@ -232,19 +232,6 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
     }
 
 
-    /*
-    private void setLunchHabitNotification(long time){
-        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(getActivity(), LunchHabitNotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 300, i, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, planMainRepository.getByType(3).getRepetition(), pendingIntent);
-        Intent cancelIntent = new Intent(getActivity(), CancelMorningHabitNotificationReceiver.class);
-        PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getActivity(), 300, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, planMainRepository.getByType(3).getToTime().getTime(), cancelPendingIntent);
-    }
-
-
-*/
     //nastavenie notifikacie na upozornovanie aktivit
     private void setHabitNotification(long timeFrom, int idPlan, long timeTo){
         AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
