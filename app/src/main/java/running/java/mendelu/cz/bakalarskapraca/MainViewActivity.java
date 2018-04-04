@@ -60,13 +60,6 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         ft.replace(R.id.mainFrameLayout,new MainOverviewFragment());
         ft.commit();
 
-        //
-        /*GridView gridView = (GridView) findViewById(R.id.gridView1);
-        PlanActAdapter planActivityAdapter = new PlanActAdapter(this, integers);
-        gridView.setAdapter(planActivityAdapter);*/
-        //
-
-        //loadListView();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -26,79 +26,6 @@ import static running.java.mendelu.cz.bakalarskapraca.R.*;
 
 public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
 
-    /*public ExamAdapter(Context context) {
-
-        super(context, openCursor(context), true);
-    }
-
-    public ExamAdapter(Context context, Date date){
-        super(context,openCursorDate(context,date),true);
-    }
-
-    private static Cursor openCursor(Context context){
-        MainOpenHelper mainOpenHelper = new MainOpenHelper(context);
-        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
-
-        return db.query(Exam.TABLE,
-                null,
-                null,
-                null,
-                null,
-                null,
-                Exam.CLASSROOM
-        );
-        //neuzavira spojeni do databaze ani kurzor, o to sa postara ListView
-    }
-
-    private static Cursor openCursorDate(Context context, Date date){
-        MainOpenHelper mainOpenHelper = new MainOpenHelper(context);
-        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
-
-        return db.query(Exam.TABLE,
-                null,null,
-                null,
-                null,
-                null,
-                Exam.DIFFICULTY
-                );
-    }
-
-
-
-    @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-        View view = inflater.inflate(layout.row_daily_exam_layout, null, true);
-
-        ViewHolder viewHolder = new ViewHolder();
-        viewHolder.examDetail = (TextView) view.findViewById(id.examDetails); // do holderu si ulozim ukazatel na element login
-        viewHolder.examTitle = (TextView) view.findViewById(id.examTitle);
-        viewHolder.examIcon = (ImageView) view.findViewById(id.iconExam);
-
-
-
-        view.setTag(viewHolder); //tam si ten uakzatel ulozim do znacky
-        return view;
-    }
-
-    @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-
-        Exam exam = new Exam(cursor);
-        ViewHolder viewHolder  = (ViewHolder) view.getTag(); //tu to vytiahnu z toho radku
-
-        viewHolder.examTitle.setText(String.valueOf(exam.getClassroom()));
-        viewHolder.examDetail.setText(android.text.format.DateFormat.format("dd.MM.yyyy", exam.getDate()) + "" + exam.getClassroom() + exam.getDate());
-
-    }
-
-    private static class ViewHolder {
-
-        public TextView examTitle;
-        public TextView examDetail;
-        public ImageView examIcon;
-    }*/
-
     private LayoutInflater layoutInflater;
     private Cursor cursor;
     private Context context;
@@ -138,12 +65,13 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
         String subjectName = cursor.getString(cursor.getColumnIndex(Subject.NAME));
         String examClassroom = cursor.getString(cursor.getColumnIndex(Exam.CLASSROOM));
         long examDate = cursor.getLong(cursor.getColumnIndex(Exam.DATE));
+        long studyDate = cursor.getLong(cursor.getColumnIndex(Exam.STUDY_DATE));
         long examTime = cursor.getLong(cursor.getColumnIndex(Exam.TIME));
         String examNote = cursor.getString(cursor.getColumnIndex(Exam.NOTE));
 
         holder.subjectName.setText(subjectName);
         holder.examDate.setText(android.text.format.DateFormat.format("dd.MM.yyyy HH:mm", new Date(examDate)) + ", " + (android.text.format.DateFormat.format("HH:mm", new Time(examTime))));
-        holder.examDetails.setText((examClassroom +  ", " + examNote));
+        holder.examDetails.setText((examClassroom +  ", " + examNote + ", " + studyDate));
 
         holder.examEdit.setOnClickListener(new View.OnClickListener() {
             long examId = cursor.getLong(cursor.getColumnIndex(Exam.ID));

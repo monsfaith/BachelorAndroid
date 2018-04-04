@@ -224,7 +224,7 @@ public class CreateExamActivity extends AppCompatActivity {
             timeMilliseconds = intentExam.getTime().getTime();
             days = intentExam.getDays();
             finalSubject = intentExam.getSubjectId();
-            chosenDate.setText(android.text.format.DateFormat.format("dd.MM.yyyy", intentExam.getDate()).toString());
+            chosenDate.setText(android.text.format.DateFormat.format("dd/MM/yyyy", intentExam.getDate()).toString());
             chosenTime.setText(android.text.format.DateFormat.format("HH:mm", intentExam.getTime()).toString());
             //chosenDifficulty.setText(String.valueOf(intentExam.getDifficulty()));
             chosenDays.setText(String.valueOf(intentExam.getDays()));

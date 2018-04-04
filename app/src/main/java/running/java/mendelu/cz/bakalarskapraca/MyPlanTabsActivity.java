@@ -41,7 +41,7 @@ public class MyPlanTabsActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        /*viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 FragmentInterface fragmentInt = (FragmentInterface) tabsPageAdapter.instantiateItem(viewPager, position);
@@ -59,7 +59,7 @@ public class MyPlanTabsActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
 
             }
-        });
+        });*/
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

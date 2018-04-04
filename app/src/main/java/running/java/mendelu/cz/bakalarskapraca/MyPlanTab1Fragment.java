@@ -17,6 +17,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,7 +55,10 @@ import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotif
  * Created by Monika on 12.02.2018.
  */
 
-public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
+public class MyPlanTab1Fragment extends Fragment {
+        //implements FragmentInterface {
+
+    private static final String TAG = "MyPlanTab";
 
     private HabitAdapter dailyHabitAdapter;
     private HabitAdapter morningHabitAdapter;
@@ -595,13 +599,23 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
 
 
     private void setAdapterEvening(){
-        eveningHabitAdapter = new HabitAdapter(getActivity(), getEveningHabits());
+        eveningHabitAdapter = new HabitAdapter(getActivity(), getEveningHabits(), new HabitAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(PlanHabitAssociation planHabit) {
+                updateProgressBars();
+            }
+        });
         eveningRecyclerView.setAdapter(eveningHabitAdapter);
         eveningRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     private void setAdapterDaily(){
-        dailyHabitAdapter = new HabitAdapter(getActivity(),getDailyHabits());
+        dailyHabitAdapter = new HabitAdapter(getActivity(), getDailyHabits(), new HabitAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(PlanHabitAssociation planHabit) {
+                updateProgressBars();
+            }
+        });
         dailyRecyclerView.setAdapter(dailyHabitAdapter);
         dailyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -609,14 +623,24 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
     }
 
     private void setAdapterMorning(){
-        morningHabitAdapter = new HabitAdapter(getActivity(), getMorningHabits());
+        morningHabitAdapter = new HabitAdapter(getActivity(), getMorningHabits(), new HabitAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(PlanHabitAssociation planHabit) {
+                updateProgressBars();
+            }
+        });
         morningRecyclerView.setAdapter(morningHabitAdapter);
         morningRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }
 
     private void setAdapterLunch(){
-        lunchHabitAdapter = new HabitAdapter(getActivity(),getLunchHabits());
+        lunchHabitAdapter = new HabitAdapter(getActivity(), getLunchHabits(), new HabitAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(PlanHabitAssociation planHabit) {
+                updateProgressBars();
+            }
+        });
         lunchRecyclerView.setAdapter(lunchHabitAdapter);
         lunchRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -698,7 +722,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
 
 
 
-    @Override
+    /*@Override
     public void fragmentSwitchToVisible() {
 
         if (getDailyHabits().size() == 0 || getMorningHabits().size() == 0 || getLunchHabits().size() == 0 || getEveningHabits().size() == 0) {
@@ -729,7 +753,7 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
         updateProgressBars();
         checkPlans();
 
-    }
+    }*/
 
     private void setVisible(int visibility){
         switch (visibility){
@@ -794,6 +818,11 @@ public class MyPlanTab1Fragment extends Fragment implements FragmentInterface {
 
     public void onResume(){
         super.onResume();
+        Log.i(TAG,"onResume");
+        eveningHabitAdapter.notifyDataSetChanged();
+        morningHabitAdapter.notifyDataSetChanged();
+        lunchHabitAdapter.notifyDataSetChanged();
+        dailyHabitAdapter.notifyDataSetChanged();
         checkPlans();
         updateProgressBars();
         setAdapters();

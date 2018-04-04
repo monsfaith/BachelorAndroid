@@ -56,13 +56,17 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         mainOpenHelper = new MainOpenHelper(getApplicationContext());
         database = mainOpenHelper.getWritableDatabase();
 
-        examNotificationAdapter = new ExamNotificationAdapter(getApplicationContext(), getExamResults());
+
 
         letsDoIt = (FloatingActionButton) findViewById(R.id.letsDoIt);
+        letsDoIt.setVisibility(View.GONE);
+
         cancel = (FloatingActionButton) findViewById(R.id.letsCancelit);
         info = (TextView) findViewById(R.id.infoAboutStartingPlans);
         planMainRepository = new PlanMainRepository(getApplicationContext());
-        recyclerView = (RecyclerView) findViewById(R.id.availableExamsRecyclerVie);
+
+        examNotificationAdapter = new ExamNotificationAdapter(getApplicationContext(), getExamResults());
+                recyclerView = (RecyclerView) findViewById(R.id.availableExamsRecyclerVie);
         recyclerView.setAdapter(examNotificationAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
@@ -72,17 +76,15 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (examNotificationAdapter.numberOfSelectedExams() > 0){
-                    //NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    //notificationManager.cancel(500);
-                    cancel.setVisibility(View.GONE);
-                    cancelDailyNotifications();
-                    setAllNotifications();
-                    setExamNotificationTomorrow();
-                    finish();
+                //NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                //notificationManager.cancel(500);
+                cancelDailyNotifications();
+                setAllNotifications();
+                setExamNotificationTomorrow();
+                finish();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Nutné zvoliť skúšku, na ktorú sa ideš pripravovať", Toast.LENGTH_SHORT).show();
-                }
-
+                //  Toast.makeText(getApplicationContext(), "Nutné zvoliť skúšku, na ktorú sa ideš pripravovať", Toast.LENGTH_SHORT).show();
+            }
             }
         });
 

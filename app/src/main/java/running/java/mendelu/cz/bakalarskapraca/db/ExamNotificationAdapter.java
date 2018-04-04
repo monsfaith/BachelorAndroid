@@ -29,12 +29,12 @@ import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotif
 
 public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificationAdapter.MyViewHolder> {
 
+
     private LayoutInflater layoutInflater;
     private Cursor cursor;
     private Context context;
     //spocitava pocet fajok pri skuske
     private int count;
-    private long studyDate = 0;
     private boolean zero = false;
 
     public ExamNotificationAdapter(Context context, Cursor cursor){
@@ -42,7 +42,9 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
         this.cursor = cursor;
         this.context = context;
         this.count = 0;
+
     }
+
 
     @Override
     public ExamNotificationAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -59,15 +61,16 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
             return;
         }
 
+
+
+
         String subjectName = cursor.getString(cursor.getColumnIndex(Subject.NAME));
-        final long examDate = cursor.getLong(cursor.getColumnIndex(Exam.DATE));
+        long examDate = cursor.getLong(cursor.getColumnIndex(Exam.DATE));
         long examTime = cursor.getLong(cursor.getColumnIndex(Exam.TIME));
-        final long idExam = cursor.getLong(cursor.getColumnIndex(Exam.ID));
+       // final long idExam = cursor.getLong(cursor.getColumnIndex(Exam.ID));
 
 
-        if (cursor.getLong(cursor.getColumnIndex(Exam.STUDY_DATE)) != 0){
-            studyDate = cursor.getLong(cursor.getColumnIndex(Exam.STUDY_DATE));
-        }
+
 
         holder.subjectName.setText(subjectName);
         holder.examDate.setText(android.text.format.DateFormat.format("dd.MM.yyyy", new Date(examDate)) + ", " + (android.text.format.DateFormat.format("HH:mm", new Time(examTime))));
@@ -77,6 +80,12 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
         holder.examDays.setText(actualDays + "/" + wantedDays);
 
         holder.examCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            long idEx = cursor.getLong(cursor.getColumnIndex(Exam.ID));
+            long studyDate = cursor.getLong(cursor.getColumnIndex(Exam.STUDY_DATE));
+            int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
+            int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
+
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 ExamMainRepository examMainRepository = new ExamMainRepository(context);
@@ -89,14 +98,13 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
                     planMainRepository.updateAssociation(id, contentValues);*/
                     if ((sameDay(studyDate) == false)) {
                         count = count + 1;
-                        int studying = examMainRepository.getById(idExam).getStudying();
+                        int studying = examMainRepository.getById(idEx).getStudying();
                         if (zero == false) {
                             contentValues.put("studying", studying + 1);
                             contentValues.put("study_date", System.currentTimeMillis());
-                            examMainRepository.update2(idExam, contentValues);
+                            examMainRepository.update2(idEx, contentValues);
                         }
-                        int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
-                        int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
+
 
                         holder.examDays.setText(actualDays + "/" + wantedDays);
 
@@ -105,14 +113,12 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
                         count = count + 1;
                     }
                 } else {
-                    int studying = examMainRepository.getById(idExam).getStudying();
+                    int studying = examMainRepository.getById(idEx).getStudying();
                     if (studying > 0) {
                         contentValues.put("studying", studying - 1);
                     }
                     contentValues.put("study_date",0);
-                    examMainRepository.update2(idExam, contentValues);
-                    int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
-                    int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
+                    examMainRepository.update2(idEx, contentValues);
                     holder.examDays.setText(actualDays + "/" + wantedDays);
                     if (count > 0) {
                         count = count - 1;
@@ -177,6 +183,7 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
 
 
         }
+
 
     }
 }

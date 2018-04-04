@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -29,9 +30,14 @@ import running.java.mendelu.cz.bakalarskapraca.R;
 
 public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder> {
 
+    public interface OnItemClickListener {
+        void onItemClick(PlanHabitAssociation planHabit);
+    }
+
     private LayoutInflater layoutInflater;
     private List<PlanHabitAssociation> habits = Collections.emptyList();
     private Context context;
+    private OnItemClickListener listener;
 
 
     public HabitAdapter(Context context, List<PlanHabitAssociation> habits){
@@ -41,6 +47,17 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
 
 
     }
+
+    public HabitAdapter(Context context, List<PlanHabitAssociation> habits, OnItemClickListener listener){
+        layoutInflater = LayoutInflater.from(context);
+        this.habits = habits;
+        this.context = context;
+        this.listener = listener;
+
+
+    }
+
+
 
     private boolean sameDay(long habitDate){
         Calendar calendarCurrent = Calendar.getInstance();
@@ -63,8 +80,12 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         PlanHabitAssociation currentAssociation = habits.get(position);
-        HabitMainRepository habitMainRepository = new HabitMainRepository(context);
+        final HabitMainRepository habitMainRepository = new HabitMainRepository(context);
         PlanMainRepository planMainRepository = new PlanMainRepository(context);
+
+        if (listener != null){
+            holder.bind(habits.get(position), listener);
+        }
 
         if ((currentAssociation.getDone() == true) && (currentAssociation.getDate() != null)){
             if (sameDay(currentAssociation.getDate().getTime())){
@@ -100,6 +121,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
                     contentValues.put("date",System.currentTimeMillis());
                     holder.habitCheck.setEnabled(false);
                     planMainRepository.updateAssociation(id, contentValues);
+
                 }
             }
         });
@@ -129,6 +151,14 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
             habitImage = (ImageView) itemView.findViewById(R.id.habitImage);
 
 
+        }
+
+        public void bind(final PlanHabitAssociation planHabitAssociation, final OnItemClickListener listener) {
+            habitCheck.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(planHabitAssociation);
+                }
+            });
         }
     }
 
