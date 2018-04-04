@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BakalarskaPraca</string>
+    <string name="app_name">Exam Helper</string>
     <string name="title_activity_main_view">MainViewActivity</string>
 
     <string name="title_section1">Section 1</string>

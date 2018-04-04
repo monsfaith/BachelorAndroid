@@ -17,6 +17,7 @@ import running.java.mendelu.cz.bakalarskapraca.R;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelExamReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
 
@@ -57,6 +58,7 @@ public class ExamTomorrowNotificationActivity extends AppCompatActivity {
                 contentValues.put("enabled", true);
                 planMainRepository.update2(1,contentValues);
                 setTimeToNotification();
+                cancelExam();
                 setExamNotificationTomorrow();
                 finish();
             }
@@ -81,7 +83,7 @@ public class ExamTomorrowNotificationActivity extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), ExamNotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     private void setDailyHabitNotification(long time, long toTime){
@@ -118,13 +120,12 @@ public class ExamTomorrowNotificationActivity extends AppCompatActivity {
         }
     }
 
-    private long getCurrentTime(){
-        long time = System.currentTimeMillis();
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(time);
-        cal.set(Calendar.SECOND,0);
-        cal.set(Calendar.MILLISECOND,0);
-        return cal.getTimeInMillis();
+
+    private void cancelExam(){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent cancelIntent = new Intent(getApplicationContext(), CancelExamReceiver.class);
+        PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 500, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), cancelPendingIntent);
     }
 
 }

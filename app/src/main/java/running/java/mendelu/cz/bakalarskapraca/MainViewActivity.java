@@ -80,7 +80,7 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        navigationView.setCheckedItem(R.id.nav_camera);
+        navigationView.setCheckedItem(R.id.nav_home);
     }
 
     public void getJsonQuotes(){
@@ -155,14 +155,14 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navigation_main, menu);
         return true;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -175,7 +175,7 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -183,7 +183,7 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_home) {
             /*if (getApplicationContext() != MainViewActivity.this){
                 Intent i = new Intent(this, MainViewActivity.class);
                 startActivity(i);
@@ -193,17 +193,13 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
             ft.replace(R.id.mainFrameLayout,new MainOverviewFragment());
             ft.commit();
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_exams) {
             android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.mainFrameLayout,new ResultsFragment());
             ft.commit();
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_info) {
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_icons) {
 
         }
 

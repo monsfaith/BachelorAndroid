@@ -22,4 +22,9 @@
         <item name="background">@color/lime_500</item>
     </style>
 
+    <style name="AlertDialog.AppCompat.Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/lime_500</item>
+
+    </style>
+
 </resources>

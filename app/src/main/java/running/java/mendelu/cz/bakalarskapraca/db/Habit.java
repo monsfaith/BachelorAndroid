@@ -21,17 +21,18 @@ public class Habit {
     static final String NAME = "name";
     static final String DESCRIPTION = "description";
     static final String REPETITION_ID = "repetition_id";
-    static final String REMIND = "remind"; //neurobit to, ale odlozit, boolean
-    static final String CANCEL = "cancel"; //dnes uz nepripominat
+    //static final String REMIND = "remind"; //neurobit to, ale odlozit, boolean
+    //static final String CANCEL = "cancel"; //dnes uz nepripominat
     static final String DONE = "done";
-    static final String DATE = "date";
-    static final String TIME = "time";
+    //static final String DATE = "date";
+    //static final String TIME = "time";
     static final String ICON = "icon";
+    static final String PLAN = "plan";
     static final String ASSOCIATON_TABLE_ID = "associaton_table_id";
 
     protected ContentValues values;
 
-    public Habit(Date date, Time time, String name, String description, int repetitionId, boolean remind, boolean cancel, boolean done, int associatonTableId){
+    /*public Habit(Date date, Time time, String name, String description, int repetitionId, boolean remind, boolean cancel, boolean done, int associatonTableId, String icon, int plan){
         this.values = new ContentValues();
         this.setDate(date);
         this.setTime(time);
@@ -42,9 +43,11 @@ public class Habit {
         this.setCancel(cancel);
         this.setDone(done);
         this.setAssociationTableId(associatonTableId);
-    }
+        this.setIcon(icon);
+        this.setPlan(plan);
+    }*/
 
-    public Habit(String name, String description){
+    /*public Habit(String name, String description){
         this.values = new ContentValues();
         this.setName(name);
         this.setDescription(description);
@@ -53,7 +56,7 @@ public class Habit {
         this.setCancel(false);
         this.setDone(true);
         this.setAssociationTableId(5);
-    }
+    }*/
 
     public Habit(Cursor cursor){
         values = new ContentValues();
@@ -61,25 +64,43 @@ public class Habit {
 
     }
 
-    public Habit(String name, String description, boolean done){
+    public Habit(String name, String description, String icon, int plan){
         this.values = new ContentValues();
         this.setName(name);
         this.setDescription(description);
-        this.setDone(done);
-        this.setRemind(true);
-        this.setCancel(false);
+        this.setDone(false);
+        //this.setRemind(true);
+        //this.setCancel(false);
         this.setAssociationTableId(0);
         this.setRepetitionId(2);
+        this.setIcon(icon);
+        this.setPlan(plan);
+    }
+
+    public void setIcon(String icon) {
+        values.put(ICON,icon);
+    }
+
+    public String getIcon(){
+        return values.getAsString(ICON);
+    }
+
+    public void setPlan(int plan){
+        values.put(PLAN,plan);
+    }
+
+    public int getPlan(){
+        return values.getAsInteger(PLAN);
     }
 
 
-    public void setDate(Date date) {
+    /*public void setDate(Date date) {
         values.put(DATE, date.getTime());
     }
 
     public void setTime(Time time){
         values.put(TIME,time.getTime());
-    }
+    }*/
 
     public void setName(String name){
         values.put(NAME,name);
@@ -93,7 +114,7 @@ public class Habit {
         values.put(REPETITION_ID,repetitionId);
     }
 
-    public void setRemind(boolean remind){
+    /*public void setRemind(boolean remind){
         int bool = (remind)? 1 : 0;
         values.put(REMIND, bool);
     }
@@ -101,7 +122,7 @@ public class Habit {
     public void setCancel(boolean cancel){
         int bool = (cancel)? 1 : 0;
         values.put(CANCEL,bool);
-    }
+    }*/
 
     public void setDone(boolean done){
         int bool = (done)? 1 : 0;
@@ -113,7 +134,7 @@ public class Habit {
         values.put(ASSOCIATON_TABLE_ID,association);
     }
 
-    public Date getDate(){
+    /*public Date getDate(){
         long millisecond = values.getAsLong(DATE);
         return values.get(DATE)!=null ? new Date(millisecond) : null;
 
@@ -123,7 +144,7 @@ public class Habit {
         long millisecond = values.getAsLong(TIME);
         return values.get(TIME)!=null ? new Time(millisecond) : null;
 
-    }
+    }*/
 
     public String getName(){
         return values.getAsString(NAME);
@@ -137,13 +158,13 @@ public class Habit {
         return values.getAsInteger(REPETITION_ID);
     }
 
-    public boolean getRemind(){
+    /*public boolean getRemind(){
         return (values.getAsInteger(REMIND) == 1);
     }
 
     public boolean getCancel(){
         return (values.getAsInteger(CANCEL) == 1);
-    }
+    }*/
 
     public boolean getDone(){
         return (values.getAsInteger(DONE) == 1);

@@ -420,6 +420,7 @@ public class CreateExamActivity extends AppCompatActivity {
     public void createExam(MenuItem item) {
 
         if (!chosenDate.getText().toString().isEmpty() && !chosenTime.getText().toString().isEmpty() && !chosenSubject.getText().toString().isEmpty()) {
+
             if (chosenDays.getText().toString() != "") //&& chosenDifficulty.getText().toString() != "")
             // {
             //int difficulty = Integer.valueOf(chosenDays.getText().toString());
@@ -460,8 +461,10 @@ public class CreateExamActivity extends AppCompatActivity {
             }
 
             finish();
-        } else if (!chosenDate.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Nutné vyplniť povinné polia", Toast.LENGTH_SHORT).show();
+        } else if ((chosenDate.getText().toString().trim().length() == 0) || (chosenSubject.getText().toString().trim().length() == 0) || (chosenTime.getText().toString().trim().length() == 0)){
+            chosenDate.setError("Vyplň dátum");
+            chosenSubject.setError("Zadaj predmet");
+            chosenTime.setError("Vyplň čas");
 
         }
 

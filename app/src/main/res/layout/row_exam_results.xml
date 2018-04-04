@@ -10,7 +10,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/subjectColoricon"
@@ -20,58 +20,42 @@
 
             <TextView
                 android:id="@+id/examName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/subjectColoricon"
                 android:text="TextView" />
 
+
             <TextView
-                android:id="@+id/examType"
-                android:layout_below="@id/examName"
-                android:layout_width="wrap_content"
+                android:id="@+id/examDateResult"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/subjectColoricon"
-                android:text="TextView" />
+                android:layout_below="@id/examName"
+                android:text="@string/dateResult" />
 
             <TextView
                 android:id="@+id/examGrade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/examType"
+                android:layout_below="@id/examDateResult"
                 android:text="@string/znamka" />
 
             <TextView
                 android:id="@+id/concreteGrade"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/examType"
                 android:layout_toRightOf="@id/examGrade"
+                android:layout_below="@id/examDateResult"
                 android:paddingLeft="10dp"
                 android:text="TextView" />
-
-            <TextView
-                android:id="@+id/examTry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/examGrade"
-                android:text="@string/pokus" />
 
             <TextView
                 android:id="@+id/concreteTry"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/examGrade"
-                android:layout_toRightOf="@id/examTry"
                 android:paddingLeft="10dp"
                 android:text="TextView" />
-
-            <TextView
-                android:id="@+id/examDateResult"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/examTry"
-                android:text="@string/dateResult" />
-
 
 
         </RelativeLayout>

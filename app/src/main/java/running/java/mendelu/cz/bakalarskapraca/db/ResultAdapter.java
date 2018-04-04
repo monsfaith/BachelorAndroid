@@ -105,7 +105,6 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.MyViewHold
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView examName;
-        TextView examType;
         TextView examGrade;
         TextView examTry;
         TextView examDate;
@@ -114,7 +113,6 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.MyViewHold
         public MyViewHolder(View itemView) {
             super(itemView);
             examName = (TextView) itemView.findViewById(R.id.examName);
-            examType = (TextView) itemView.findViewById(R.id.examType);
             examGrade = (TextView) itemView.findViewById(R.id.concreteGrade);
             examTry = (TextView) itemView.findViewById(R.id.concreteTry);
             examDate = (TextView) itemView.findViewById(R.id.examDateResult);

@@ -774,7 +774,6 @@ public class MyPlanTab1Fragment extends Fragment {
                 eveningTextView.setVisibility(View.GONE);
                 lunchTextView.setVisibility(View.GONE);
 
-
                 txEvening.setVisibility(View.GONE);
                 txMorning.setVisibility(View.GONE);
                 txLunch.setVisibility(View.GONE);
@@ -855,7 +854,6 @@ public class MyPlanTab1Fragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.interval_settings) {
             return true;
         }

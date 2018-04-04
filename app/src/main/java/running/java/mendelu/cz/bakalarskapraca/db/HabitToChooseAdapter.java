@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -60,6 +62,7 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
 
         holder.habitName.setText(currentHabit.getName());
         final Long id = currentHabit.getId();
+        holder.habitImage.setImageDrawable(getResources(currentHabit.getIcon()));
 
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +78,7 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
                 TextView habitInfoDescription = (TextView) view.findViewById(R.id.habitInfoDescription);
 
                 habitInfoName.setText(habitMainRepository.getById(id).getName());
-                habitInfoDescription.setText(habitMainRepository.getById(id).getDescription() + " " + habitMainRepository.getById(id).getDone());
+                habitInfoDescription.setText(habitMainRepository.getById(id).getDescription());
 
                 if (habitMainRepository.isInPlan(id, idOfPlan)){
                     myBuilder.setPositiveButton("Odobrať", new DialogInterface.OnClickListener() {
@@ -96,7 +99,7 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
                         public void onClick(DialogInterface dialogInterface, int i) {
                                 PlanHabitAssociation pha = new PlanHabitAssociation(id, idOfPlan);
                                 planMainRepository.insertAssociaton(pha);
-                                Toast.makeText(context, "PRidame do planu " + idOfPlan, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Pridané do plánu " + idOfPlan, Toast.LENGTH_SHORT).show();
                         }
 
                     });
@@ -115,6 +118,13 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
     @Override
     public int getItemCount() {
         return habits.size();
+    }
+
+    private Drawable getResources(String name){
+        Resources resources = context.getResources();
+        final int resourceId = resources.getIdentifier(name, "drawable",
+                context.getPackageName());
+        return resources.getDrawable(resourceId, null);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

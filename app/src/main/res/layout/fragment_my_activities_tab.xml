@@ -30,17 +30,18 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
                     android:text="@string/celodenny"
-                    android:textAppearance="@android:style/TextAppearance.Material.Title" />
+                    android:textAppearance="@android:style/TextAppearance.Material.Headline" />
 
                 <Button
                     android:id="@+id/timeButtonDaily"
                     style="@android:style/Widget.Material.Button.Borderless.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_above="@+id/cardViewDailyActivities"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="18dp"
                     android:background="@color/grey_700"
-                    android:layout_alignBottom="@id/dailyTextViewActivities"
-                    android:layout_marginRight="10dp"
+                    android:textAlignment="center"
                     android:paddingRight="15dp" />
 
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -80,7 +81,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="10dp"
                     android:text="@string/ranny"
-                    android:textAppearance="@android:style/TextAppearance.Material.Title" />
+                    android:textAppearance="@android:style/TextAppearance.Material.Headline" />
 
                 <Button
                     android:id="@+id/timeButtonMorning"
@@ -132,7 +133,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/obedny"
-                android:textAppearance="@android:style/TextAppearance.Material.Title" />
+                android:textAppearance="@android:style/TextAppearance.Material.Headline" />
 
             <Button
                 android:id="@+id/timeButtonLunch"
@@ -183,7 +184,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/vecerny"
-                android:textAppearance="@android:style/TextAppearance.Material.Title" />
+                android:textAppearance="@android:style/TextAppearance.Material.Headline" />
 
             <Button
                 android:id="@+id/timeButtonEvening"

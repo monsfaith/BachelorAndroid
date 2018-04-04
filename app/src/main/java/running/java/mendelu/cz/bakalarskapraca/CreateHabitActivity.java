@@ -45,13 +45,14 @@ public class CreateHabitActivity extends AppCompatActivity {
     public void createHabit(MenuItem item) {
 
         if (addHabitName.getText().toString().trim().length() != 0){
-            Habit habit = new Habit(addHabitName.getText().toString(), addHabitDescription.getText().toString(), false);
+            Habit habit = new Habit(addHabitName.getText().toString(), addHabitDescription.getText().toString(), "care128",1);
             Long id = habitMainRepository.insert(habit);
-            Toast.makeText(this, "Nutné vyplniť názov, co je s tym" + id + habitMainRepository.getById(id).getDone(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Aktivita vytvorená" + id + habitMainRepository.getById(id).getDone(), Toast.LENGTH_SHORT).show();
             finish();
 
         } else {
-            Toast.makeText(this, "Nutné vyplniť názov", Toast.LENGTH_LONG).show();
+            addHabitName.setError("Vyplň názov");
+            Toast.makeText(this, "Aktivita nebola úspešne vytvorená", Toast.LENGTH_SHORT).show();
         }
 
 

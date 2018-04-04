@@ -17,7 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
         <activity android:name=".MainViewActivity"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/NoActionBar"
+            android:screenOrientation="portrait"
+            >
 
             <intent-filter>
 
@@ -28,30 +30,36 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main_view" />
+            android:label="@string/title_activity_main_view"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".TasksDetailActivity"
             android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".MyPlanTabsActivity"
             android:theme="@style/AppTheme"
-            android:label="@string/title_activity_my_plan_tabs" />
+            android:screenOrientation="portrait"
+            android:label="Plán" />
         <activity
             android:name=".CreateExamActivity"
             android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".CreateSubjectActivity"
             android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
             />
 
-        <activity
-            android:name=".NavigationMainActivity"
-            android:label="@string/title_activity_navigation_main"
-            android:theme="@style/NoActionBar" />
-        <activity android:name=".OneExamDetailActivity" />
+        <activity android:name=".OneExamDetailActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            />
         <activity android:name=".CreateHabitActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
         </activity>
         <activity android:name=".notifications.HabitNotificationActivity"
@@ -59,6 +67,7 @@
             android:excludeFromRecents="true">
         </activity>
         <activity android:name=".notifications.ExamNotificationStartActivity">
+
         </activity>
         <activity android:name=".notifications.ExamPostponeNotificationActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog"
@@ -90,6 +99,8 @@
         <receiver android:name=".notifications.receivers.CancelEveningHabitNotificationReceiver">
         </receiver>
         <receiver android:name=".notifications.receivers.DatabaseTimeChangeReceiver">
+        </receiver>
+        <receiver android:name=".notifications.receivers.CancelExamReceiver">
         </receiver>
     </application>
 

@@ -25,6 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,6 +34,7 @@ import java.util.List;
 
 import running.java.mendelu.cz.bakalarskapraca.db.ExamAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.db.Habit;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.IconHabitAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.MainOpenHelper;
@@ -73,6 +76,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
     private Plan lunchPlan;
     private Plan eveningPlan;
     private TextView actualPlanTextView;
+    private TextView textDate;
 
 
     public MainOverviewFragment() {
@@ -100,11 +104,16 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         examMainRepository = new ExamMainRepository(getActivity());
         actualPlanTextView = (TextView) view.findViewById(R.id.actualPlanTextView);
         progressBarReview = (ProgressBar) view.findViewById(R.id.progressBarReview);
+        textDate = (TextView) view.findViewById(R.id.textDateToday);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        textDate.setText(sdf.format(System.currentTimeMillis()));
 
         //planMainRepository.deleteAllPlans();
 
         if (planMainRepository.getAllPlans().size() != 4) {
             init();
+            createMorningHabits();
             //setDatabasePlanTimeDaily();
 
             //DAVAM len docasne prec
@@ -130,17 +139,6 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             editor.commit();
         }*/
 
-
-
-
-        //setDatabaseNotification();
-        //setDatabasePlanTimeDaily();
-
-        //setDatabaseNotification();
-        //setDatabasePlanTimeDaily();
-        //setExamNotification();
-
-        //setEveryDayPlanNotification();
         setExamNotification();
         setDatabaseNotification();
         loadListView();
@@ -169,65 +167,6 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             }
         });
 
-        /*if (morningPlan.getNotification() == false) {
-            int id = morningPlan.getType();
-            Calendar calendar = Calendar.getInstance();
-            if (getCurrentTime() < morningPlan.getFromTime().getTime() || getCurrentTime() == morningPlan.getFromTime().getTime()) {
-                setEveningHabitNotification(morningPlan.getFromTime().getTime(), id);
-                updateSetNotification(2);
-            } else if (getCurrentTime() < morningPlan.getToTime().getTime()) {
-                calendar.setTimeInMillis(getCurrentTime());
-                calendar.add(Calendar.MINUTE,1);
-                setEveningHabitNotification(calendar.getTimeInMillis(), id);
-                updateSetNotification(2);
-            } else {
-                calendar.setTime(morningPlan.getFromTime());
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                setEveningHabitNotification(calendar.getTimeInMillis(), id);
-                updateSetNotification(2);
-            }
-        }
-
-        if (lunchPlan.getNotification() == false) {
-            int id = lunchPlan.getType();
-            Calendar calendar = Calendar.getInstance();
-            if (getCurrentTime() < lunchPlan.getFromTime().getTime() || getCurrentTime() == lunchPlan.getFromTime().getTime()) {
-                setEveningHabitNotification(lunchPlan.getFromTime().getTime(), id);
-                updateSetNotification(3);
-            } else if (getCurrentTime() < lunchPlan.getToTime().getTime()) {
-                calendar.setTimeInMillis(getCurrentTime());
-                calendar.add(Calendar.MINUTE,1);
-                setEveningHabitNotification(getCurrentTime(), id);
-                updateSetNotification(3);
-            } else {
-                calendar.setTime(lunchPlan.getFromTime());
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                setEveningHabitNotification(calendar.getTimeInMillis(), id);
-                updateSetNotification(3);
-            }
-        }
-
-        if (eveningPlan.getNotification() == false) {
-            int id = eveningPlan.getType();
-            Calendar calendar = Calendar.getInstance();
-            if (getCurrentTime() < eveningPlan.getFromTime().getTime() || getCurrentTime() == eveningPlan.getFromTime().getTime()) {
-                setEveningHabitNotification(eveningPlan.getFromTime().getTime(), id);
-                updateSetNotification(4);
-            } else if (getCurrentTime() < eveningPlan.getToTime().getTime()) {
-                calendar.setTimeInMillis(getCurrentTime());
-                calendar.add(Calendar.MINUTE,1);
-                setEveningHabitNotification(calendar.getTimeInMillis(), id);
-                updateSetNotification(4);
-            } else {
-                calendar.setTime(eveningPlan.getFromTime());
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                setEveningHabitNotification(calendar.getTimeInMillis(), id);
-                updateSetNotification(4);
-            }
-        }*/
-
-
-
         return view;
     }
 
@@ -245,21 +184,6 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getActivity(), idPlan*100, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, timeTo, cancelPendingIntent);
     }
-
-    //notifikacia, ktora nastavi kazdy den denny plan
-    private void setEveryDayPlanNotification(){
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY,7);
-        cal.set(Calendar.MINUTE,55);
-        if (System.currentTimeMillis() > cal.getTimeInMillis()){
-            cal.add(Calendar.DAY_OF_MONTH,1);
-        }
-        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(getActivity(), DailyHabitNotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 10, i, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-    }
-
 
     //zakomentovane veci, musim si to objasnit
     private void setExamNotification(){
@@ -285,12 +209,6 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        //} else {
-            //calendar.set(Calendar.MINUTE,00);
-            //calendar.set(Calendar.HOUR_OF_DAY,8);
-            //contentValues.put("enabled",true);
-            //planMainRepository.update2(1, contentValues);
-            //setHabitNotification(calendar.getTimeInMillis(),1);
         setDailyPlan();
 
         }
@@ -355,7 +273,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
                 from.set(Calendar.MINUTE,morningPlan.getFromMinute());
                 to.set(Calendar.HOUR_OF_DAY,morningPlan.getToHour());
                 to.set(Calendar.MINUTE,morningPlan.getToMinute());
-                Toast.makeText(getActivity(), "morning " + actualPlan + " aktu", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "morning " + actualPlan + " aktu", Toast.LENGTH_LONG).show();
                 progressBarReview.setMax(habitMainRepository.getMorningPlanHabits().size());
                 progressBarReview.setProgress(habitMainRepository.getDoneMorningPlanHabits());
                 actualPlan = 2;
@@ -367,21 +285,12 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
                 from.set(Calendar.MINUTE,lunchPlan.getFromMinute());
                 to.set(Calendar.HOUR_OF_DAY,lunchPlan.getToHour());
                 to.set(Calendar.MINUTE,lunchPlan.getToMinute());
-                Toast.makeText(getActivity(), "lunch " + actualPlan + " aktu", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "lunch " + actualPlan + " aktu", Toast.LENGTH_LONG).show();
                 actualPlan = 3;
                 actualPlanTextView.setText(R.string.obedny);
                 progressBarReview.setMax(habitMainRepository.getLunchPlanHabits().size());
                 progressBarReview.setProgress(habitMainRepository.getDoneLunchPlanHabits());
                 return habitMainRepository.getLunchPlanHabits();
-
-           /* } else if ((time > eveningPlan.getFromTime().getTime() || time == eveningPlan.getFromTime().getTime()) && (time < eveningPlan.getToTime().getTime() || time == eveningPlan.getToTime().getTime())) {
-                Toast.makeText(getActivity(), "evening " + actualPlan + " aktu", Toast.LENGTH_LONG).show();
-                actualPlan = 4;
-                actualPlanTextView.setText(R.string.vecerny);
-                return habitMainRepository.getEveningPlanHabits();*/
-
-            /*/*else if ((getOnlyTime(calendar.getTime()) > getOnlyTime(eveningPlan.getFromTime()) || getOnlyTime(calendar.getTime()) == getOnlyTime(eveningPlan.getFromTime())) && (getOnlyTime(calendar.getTime()) < getOnlyTime(eveningPlan.getToTime()))){*/
-
 
             } else if ((setPlanDateToCalendar(eveningPlan.getType()) > eveningPlan.getFromTime().getTime() || setPlanDateToCalendar(eveningPlan.getType()) == eveningPlan.getFromTime().getTime()) && (setPlanDateToCalendar(eveningPlan.getType()) < eveningPlan.getToTime().getTime() || setPlanDateToCalendar(eveningPlan.getType()) == eveningPlan.getToTime().getTime())){
                 from.set(Calendar.HOUR_OF_DAY,eveningPlan.getFromHour());
@@ -389,7 +298,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
                 to.set(Calendar.HOUR_OF_DAY,eveningPlan.getToHour());
                 to.set(Calendar.MINUTE,eveningPlan.getToMinute());
 
-                Toast.makeText(getActivity(), "evening " + actualPlan + " aktu " + sdf.format(setPlanDateToCalendar(eveningPlan.getType())) + " " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "evening " + actualPlan + " aktu " + sdf.format(setPlanDateToCalendar(eveningPlan.getType())) + " " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
                 actualPlan = 4;
                 actualPlanTextView.setText(R.string.vecerny);
                 progressBarReview.setMax(habitMainRepository.getEveningPlanHabits().size());
@@ -398,7 +307,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             } else {
                 actualPlan = 0;
                 actualPlanTextView.setText("Je to false, ale nic");
-                Toast.makeText(getActivity(), "nic" + sdf.format(setPlanDateToCalendar(dailyPlan.getType())) + "", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "nic" + sdf.format(setPlanDateToCalendar(dailyPlan.getType())) + "", Toast.LENGTH_LONG).show();
                 return null;
             }
         } else if ((setPlanDateToCalendar(dailyPlan.getType()) > dailyPlan.getFromTime().getTime() || setPlanDateToCalendar(dailyPlan.getType()) == dailyPlan.getFromTime().getTime()) && (setPlanDateToCalendar(dailyPlan.getType()) < dailyPlan.getToTime().getTime() || setPlanDateToCalendar(dailyPlan.getType()) == dailyPlan.getToTime().getTime())){
@@ -406,7 +315,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             from.set(Calendar.MINUTE,dailyPlan.getFromMinute());
             to.set(Calendar.HOUR_OF_DAY,dailyPlan.getToHour());
             to.set(Calendar.MINUTE,dailyPlan.getToMinute());
-                Toast.makeText(getActivity(), "daily " + actualPlan + " aktu" + sdf.format(getCurrentTime()) + " " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "daily " + actualPlan + " aktu" + sdf.format(getCurrentTime()) + " " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
                 actualPlan = 1;
                 actualPlanTextView.setText(R.string.celodenny);
             progressBarReview.setMax(habitMainRepository.getDailyPlanHabits().size());
@@ -414,8 +323,8 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
                 return habitMainRepository.getDailyPlanHabits();
             } else {
                 actualPlan = 0;
-                actualPlanTextView.setText("Je to true, ale nic" + sdf.format(getCurrentTime()) + " " + sdf.format(planMainRepository.getByType(1).getToTime().getTime()));
-                Toast.makeText(getActivity(), "nic " + sdf.format(setPlanDateToCalendar(dailyPlan.getType())) + sdf.format(dailyPlan.getFromTime().getTime()) + " " + sdf.format(dailyPlan.getToTime().getTime()), Toast.LENGTH_LONG).show();
+                actualPlanTextView.setText("Je to true, ale nic" + sdf.format(System.currentTimeMillis()) + " " + sdf.format(planMainRepository.getByType(1).getToTime().getTime()));
+                //Toast.makeText(getActivity(), "nic " + sdf.format(setPlanDateToCalendar(dailyPlan.getType())) + sdf.format(dailyPlan.getFromTime().getTime()) + " " + sdf.format(dailyPlan.getToTime().getTime()), Toast.LENGTH_LONG).show();
                 return null;
             }
     }
@@ -463,32 +372,6 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         }
 
 
-
-    private long getCurrentDate(){
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY,0);
-        cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.SECOND,0);
-        cal.set(Calendar.MILLISECOND,0);
-        return cal.getTimeInMillis();
-    }
-
-    private long getCurrentTime(){
-        long time = System.currentTimeMillis();
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(time);
-        cal.set(Calendar.SECOND,0);
-        cal.set(Calendar.MILLISECOND,0);
-        return cal.getTimeInMillis();
-    }
-
-    private long getTodayBeginning(){
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.HOUR_OF_DAY,0);
-        return cal.getTimeInMillis();
-    }
-
     private long getTodayEnd(){
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.MINUTE,59);
@@ -498,7 +381,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
 
 
     private Cursor getExamResults(){
-        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? AND e.date < ?",new String[]{String.valueOf(getCurrentTime()), String.valueOf(getTodayEnd())});
+        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? AND e.date < ?",new String[]{String.valueOf(System.currentTimeMillis()), String.valueOf(getTodayEnd())});
     }
 
 
@@ -518,7 +401,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,8);
         long morningFromTime = dailyCalendar.getTimeInMillis();
-        dailyCalendar.set(Calendar.HOUR_OF_DAY,13);
+        dailyCalendar.set(Calendar.HOUR_OF_DAY,12);
         long morningToTime = dailyCalendar.getTimeInMillis();
         morningPlan = new Plan(morningFromTime, morningToTime, 2, true, 8, 12, 0, 15, 1500000 );
         planMainRepository.insert(morningPlan);
@@ -538,26 +421,6 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         planMainRepository.insert(eveningPlan);
     }
 
-    private void updateSetNotification(long idPlan){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("NOTIFICATION",true);
-        planMainRepository.update2(idPlan,contentValues);
-    }
-
-
-    /*private void setDailyPlan2(){
-        Plan dailyPlan = planMainRepository.getByType(1);
-        if (getCurrentTime() < dailyPlan.getFromTime().getTime() || getCurrentTime() == dailyPlan.getFromTime().getTime()) {
-            setHabitNotification(dailyPlan.getFromTime().getTime(), 1);
-        } else if (getCurrentTime() < dailyPlan.getToTime().getTime() || getCurrentTime() == dailyPlan.getToTime().getTime()) {
-            setHabitNotification(getCurrentTime(), 1);
-        } else {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(dailyPlan.getFromTime());
-            cal.add(Calendar.DAY_OF_MONTH, 1);
-            setHabitNotification(cal.getTimeInMillis(), 1);
-        }
-    }*/
 
     private void setDailyPlan(){
         Plan dailyPlan = planMainRepository.getByType(1);
@@ -576,6 +439,30 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             calendarTo.add(Calendar.DAY_OF_MONTH,1);
             setHabitNotification(calendarFrom.getTimeInMillis(),1, calendarTo.getTimeInMillis());
         }
+    }
+
+    private void createMorningHabits(){
+        Habit believe = new Habit("Veriť si", "Je dôležité, aby si sa hneď zrána uistil, že zvládneš povinnosti, ktoré ťa cez deň čakajú. Povedz si, že to zvládneš. ", "believe", 2);
+        habitMainRepository.insert(believe);
+        Habit affection = new Habit("Prejaviť náklonnosť", "Ak s niekým bývaš, je dôležité prejaviť svoje city hneď z rána. Napríklad túlenie uvoľňuje veľa serotonínu, ktorý ťa dostatočne nabudí do nového dňa. ","love",2 );
+        habitMainRepository.insert(affection);
+        Habit tidyUp = new Habit("Upratať stôl", "Pokiaľ si si nestihol upratať svoj stôl alebo pracovné prostredie včera večer, urob tak teraz. Je lepšie tomu obetovať čas ráno než v priebehu dňa, nakoľko tvoj rozhodovací proces je už neskôr viac vyťažený.", "cleandesk",2);
+        habitMainRepository.insert(tidyUp);
+        Habit morningGratefulness = new Habit("Byť vďačný", "Keď naplníš svoju myseľ vďačnosťou a pozitívnosťou, chemické látky v mozgu ti umožnia, aby sa z týchto pocitov stal tvoj návyk. Vyhraď si čas na definovanie vecí, za ktoré si vďačný. Či už tvoja rodina, zdravie, tie nohavice, ktoré tak rád nosíš. Dôvodov je veľa, stačí ich len nájsť. Skús nájsť aspoň 3 ", "pray",2);
+        habitMainRepository.insert(morningGratefulness);
+        Habit morningShower = new Habit("Ranná sprcha", "Studená sprcha ťa osvieži, prebudí a naštartuje tvoj metabolizmus správnym smerom. Studená sprcha rovnako podnecuje i chudnutie, zvyšuje ostražitosť, eliminuje stres a vytvára pocit pevnej vôle.", "coldshower", 2);
+        habitMainRepository.insert(morningShower);
+        Habit makeYourBed = new Habit("Ustlať posteľ", "Zaberie ti to menej než minútu, a zrána hneď splníš prvú úlohu dňa. Dodá ti to drobný pocit hrdosti, nabudí ťa to do ďalších povinností. Ustlaná posteľ pomáha dotvárať duševnú disciplínu. A ak tvoj deň nebol podľa predstáv, posledná skúsenosť tvojho dňa bude práve to niečo, čo si zvládol.", "bed", 2);
+        habitMainRepository.insert(makeYourBed);
+
+        Habit visualization = new Habit("Vizualizácia", "Predstav si, ako bude vyzerať tvoj deň, čo más všetko na pláne. Stačia to byť veci, ktoré potrebuješ spraviť, nemusí to byť detailný plán. Ak si totiž mozog dokáže niečo predstaviť, vizualizovať, samotná realizácia je jednoduchšia.", "vision", 2);
+        habitMainRepository.insert(visualization);
+
+        Habit breakfast = new Habit("Raňajky", "Najdôležitejšie jedlo dňa. Energia, ktorú získať naraňajkovaním sa je energia, ktorú si nesieš počas dňa. Snaž sa, aby boli tvoje raňajky zdravé. ", "breakfast",2);
+        habitMainRepository.insert(breakfast);
+
+        Habit timeForMe = new Habit("Chvíľa pre seba", "Často je nemožné nájsť si čas počas dňa, kedy nerobíš absolútne nič. Preto je najlepšou možnosťou ráno. Obetuj tomuto času 10-15 min, uži si ráno, slnko, vypočuj si obľúbenú pieseň. Budeš zrelaxovaný pred odštartovaním dňa a povinností.", "stones",2);
+        habitMainRepository.insert(timeForMe);
     }
 
 

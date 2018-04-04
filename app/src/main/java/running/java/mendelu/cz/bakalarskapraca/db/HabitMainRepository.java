@@ -59,7 +59,8 @@ public class HabitMainRepository {
 
             //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 1 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
 
-            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 1", null);
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 1"
+                    , null);
 
            // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
 
@@ -123,11 +124,110 @@ public class HabitMainRepository {
             List<Habit> result = new LinkedList<>();
             Cursor c = db.query(Habit.TABLE_HABITS,
                     null,
-                    null,
+                    Habit.PLAN + " = " + 1,
                     null,
                     null,
                     null,
                     null);
+
+            try {
+
+                while (c.moveToNext()) {
+                    result.add(new Habit(c));
+
+                }
+                c.close();
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+    }
+
+    public List<Habit> getAllMorningHabits(){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+
+        try {
+            List<Habit> result = new LinkedList<>();
+            Cursor c = db.query(Habit.TABLE_HABITS,
+                    null,
+                    Habit.PLAN + " = " + 2 + " OR " + Habit.PLAN + " = " + 1,
+                    null,
+                    null,
+                    null,
+                    null);
+
+
+            try {
+
+                while (c.moveToNext()) {
+                    result.add(new Habit(c));
+
+                }
+                c.close();
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+    }
+
+    public List<Habit> getAllLunchHabits(){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+
+        try {
+            List<Habit> result = new LinkedList<>();
+            Cursor c = db.query(Habit.TABLE_HABITS,
+                    null,
+                    Habit.PLAN + " = " + 3 + " OR " + Habit.PLAN + " = " + 1,
+                    null,
+                    null,
+                    null,
+                    null);
+
+
+            try {
+
+                while (c.moveToNext()) {
+                    result.add(new Habit(c));
+
+                }
+                c.close();
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+    }
+
+    public List<Habit> getAllEveningHabits(){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+
+        try {
+            List<Habit> result = new LinkedList<>();
+            Cursor c = db.query(Habit.TABLE_HABITS,
+                    null,
+                    Habit.PLAN + " = " + 4 + " OR " + Habit.PLAN + " = " + 1,
+                    null,
+                    null,
+                    null,
+                    null);
+
 
             try {
 

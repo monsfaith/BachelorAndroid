@@ -59,7 +59,6 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
 
 
         letsDoIt = (FloatingActionButton) findViewById(R.id.letsDoIt);
-        letsDoIt.setVisibility(View.GONE);
 
         cancel = (FloatingActionButton) findViewById(R.id.letsCancelit);
         info = (TextView) findViewById(R.id.infoAboutStartingPlans);
@@ -83,7 +82,7 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
                 setExamNotificationTomorrow();
                 finish();
                 } else {
-                //  Toast.makeText(getApplicationContext(), "Nutné zvoliť skúšku, na ktorú sa ideš pripravovať", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Nutné zvoliť skúšku, na ktorú sa ideš pripravovať", Toast.LENGTH_SHORT).show();
             }
             }
         });
@@ -144,14 +143,6 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         }
     }
 
-    private long getCurrentTime(){
-        long time = System.currentTimeMillis();
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(time);
-        cal.set(Calendar.SECOND,0);
-        cal.set(Calendar.MILLISECOND,0);
-        return cal.getTimeInMillis();
-    }
 
     //zrusenie denneho planu, ak boli notifiakcie spustene
     private void cancelDailyNotifications(){
@@ -175,14 +166,7 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? order by e.date",new String[]{String.valueOf(System.currentTimeMillis())});
     }
 
-    private long getCurrentDate(){
-        Calendar cal = Calendar.getInstance();
-        //cal.set(Calendar.HOUR_OF_DAY,0);
-        //cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.SECOND,0);
-        cal.set(Calendar.MILLISECOND,0);
-        return cal.getTimeInMillis();
-    }
+
 
     //ak zrusim tu exam notifikaciu, musim ju znova nastavit
     private void setExamNotificationTomorrow(){

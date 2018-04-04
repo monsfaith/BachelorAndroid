@@ -14,21 +14,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
+            <ImageButton
+                android:id="@+id/createNewSubjectButton"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@color/lime_700"
+                android:onClick="createNewSubject"
+                android:text="Vytvoriť nový predmet"
+                app:srcCompat="@drawable/ic_add_black_24dp" />
+
             <ListView
                 android:id="@+id/listViewSub"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
     </ScrollView>
-
-    <ImageButton
-        android:id="@+id/createNewSubjectButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="createNewSubject"
-        android:background="@color/lime_700"
-        android:text="Vytvoriť nový predmet"
-        app:srcCompat="@drawable/ic_add_black_24dp" />
 
 
 </LinearLayout>

@@ -2,8 +2,10 @@ package running.java.mendelu.cz.bakalarskapraca.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.TextureView;
@@ -126,6 +128,9 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
             }
         });
 
+
+        holder.habitImage.setImageDrawable(getResources(currentHabit.getIcon()));
+
         //holder.habitImage.setImageResource(currentHabit.getIconId());
 
 
@@ -134,6 +139,13 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
     @Override
     public int getItemCount() {
         return habits.size();
+    }
+
+    private Drawable getResources(String name){
+        Resources resources = context.getResources();
+        final int resourceId = resources.getIdentifier(name, "drawable",
+                context.getPackageName());
+        return resources.getDrawable(resourceId, null);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

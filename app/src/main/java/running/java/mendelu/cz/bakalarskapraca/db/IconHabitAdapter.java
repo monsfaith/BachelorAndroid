@@ -1,8 +1,11 @@
 package running.java.mendelu.cz.bakalarskapraca.db;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +29,13 @@ public class IconHabitAdapter extends RecyclerView.Adapter<IconHabitAdapter.MyVi
 
     private LayoutInflater layoutInflater;
     private List<PlanHabitAssociation> habits = Collections.emptyList();
+    private Context context;
 
 
     public IconHabitAdapter(Context context, List<PlanHabitAssociation> habits){
         layoutInflater = LayoutInflater.from(context);
         this.habits = habits;
+        this.context = context;
 
 
     }
@@ -45,13 +50,18 @@ public class IconHabitAdapter extends RecyclerView.Adapter<IconHabitAdapter.MyVi
     public void onBindViewHolder(IconHabitAdapter.MyViewHolder holder, int position) {
 
         PlanHabitAssociation pha = habits.get(position);
+        HabitMainRepository habitMainRepository = new HabitMainRepository(context);
+        Habit habit = habitMainRepository.getById(pha.getIdHabit());
 
         final int greyPicture = Color.argb(155, 185, 185, 185);
 
-       if (pha.getDone() != true){
+       if (pha.getDone() == true){
             holder.habitImage.setColorFilter(greyPicture, PorterDuff.Mode.SRC_ATOP);
 
         }
+
+
+        holder.habitImage.setImageDrawable(getResources(habit.getIcon()));
 
 
     }
@@ -59,6 +69,13 @@ public class IconHabitAdapter extends RecyclerView.Adapter<IconHabitAdapter.MyVi
     @Override
     public int getItemCount() {
         return habits.size();
+    }
+
+    private Drawable getResources(String name){
+        Resources resources = context.getResources();
+        final int resourceId = resources.getIdentifier(name, "drawable",
+                context.getPackageName());
+        return resources.getDrawable(resourceId, null);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

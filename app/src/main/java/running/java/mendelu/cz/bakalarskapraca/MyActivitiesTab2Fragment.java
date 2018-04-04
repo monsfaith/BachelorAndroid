@@ -35,6 +35,7 @@ import running.java.mendelu.cz.bakalarskapraca.db.Habit;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitToChooseAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
+import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
@@ -340,22 +341,77 @@ public class MyActivitiesTab2Fragment extends Fragment{
     }
 
     private void setAdapterView(){
-        setAdapters(dailyHabitToChooseAdapter, dailyRecyclerView, 1);
-        setAdapters(morningHabitToChooseAdapter, morningRecyclerView, 2);
-        setAdapters(lunchHabitToChooseAdapter, lunchRecyclerView, 3);
-        setAdapters(eveningHabitToChooseAdapter, eveningRecyclerView, 4);
+        setAdapters();
     }
 
-    private void setAdapters(HabitToChooseAdapter habitToChooseAdapter, RecyclerView recyclerView, int planId){
-        habitToChooseAdapter = new HabitToChooseAdapter(getActivity(),getAllHabits(),planId);
+    private void setAdapters(){
+        setAdapter(dailyHabitToChooseAdapter, dailyRecyclerView);
+        setMorningAdapter(morningHabitToChooseAdapter, morningRecyclerView);
+        setLunchAdapter(lunchHabitToChooseAdapter, lunchRecyclerView);
+        setEveningAdapter(eveningHabitToChooseAdapter, eveningRecyclerView);
+
+    }
+
+    private void setAdapter(HabitToChooseAdapter habitToChooseAdapter, RecyclerView recyclerView){
+        habitToChooseAdapter = new HabitToChooseAdapter(getActivity(),getAllHabits(),1);
         recyclerView.setAdapter(habitToChooseAdapter);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.HORIZONTAL));
+    }
+
+    private void setMorningAdapter(HabitToChooseAdapter habitToChooseAdapter, RecyclerView recyclerView) {
+        habitToChooseAdapter = new HabitToChooseAdapter(getActivity(), getMorningHabits(), 2);
+        recyclerView.setAdapter(habitToChooseAdapter);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
+    }
+
+    private void setLunchAdapter(HabitToChooseAdapter habitToChooseAdapter, RecyclerView recyclerView) {
+        habitToChooseAdapter = new HabitToChooseAdapter(getActivity(), getLunchHabits(), 3);
+        recyclerView.setAdapter(habitToChooseAdapter);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
+    }
+
+    private void setEveningAdapter(HabitToChooseAdapter habitToChooseAdapter, RecyclerView recyclerView) {
+        habitToChooseAdapter = new HabitToChooseAdapter(getActivity(), getEveningHabits(), 4);
+        recyclerView.setAdapter(habitToChooseAdapter);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
     }
 
     private Calendar setTime(Time time){
         Calendar cal = Calendar.getInstance();
         cal.setTime(time);
         return cal;
+
+    }
+
+    public List<Habit> getDailyHabits(){
+        List<Habit> habits = habitMainRepository.getAllHabits();
+
+        /*List<Exam> exams = new ArrayList<>();
+        String[] titles = {"ahj","dkd","fdfd"};
+        for (int i=0; i < titles.length; i++){
+            Exam ex = new Exam(new Date(),new Time(5655),3,2,2,"d",5);
+            ex.setClassroom(titles[i]);
+            exams.add(ex);
+        }*/
+        return habits;
+
+    }
+
+    public List<Habit> getMorningHabits(){
+        List<Habit> habits = habitMainRepository.getAllMorningHabits();
+        return habits;
+
+    }
+
+    public List<Habit> getLunchHabits(){
+        List<Habit> habits = habitMainRepository.getAllLunchHabits();
+        return habits;
+
+    }
+
+    public List<Habit> getEveningHabits(){
+        List<Habit> habits = habitMainRepository.getAllEveningHabits();
+        return habits;
 
     }
 
