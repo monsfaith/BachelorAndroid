@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 import running.java.mendelu.cz.bakalarskapraca.CreateExamActivity;
+import running.java.mendelu.cz.bakalarskapraca.MyPlanTab1Fragment;
 import running.java.mendelu.cz.bakalarskapraca.R;
 
 /**
@@ -37,14 +38,20 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
     private List<Habit> habits = Collections.emptyList();
     private Context context;
     private int idOfPlan;
+    private DialogInterface.OnClickListener listener;
+    private AlertDialog.Builder myBuilder;
+    private AlertDialog habitDialog;
+    private MyPlanTab1Fragment myPlanTabFragment;
 
 
 
-    public HabitToChooseAdapter(Context context, List<Habit> habits, int idOfPlan){
+    public HabitToChooseAdapter(Context context, List<Habit> habits, int idOfPlan, MyPlanTab1Fragment myPlanTabFragment){
         layoutInflater = LayoutInflater.from(context);
         this.habits = habits;
         this.context = context;
         this.idOfPlan = idOfPlan;
+        this.myBuilder = new AlertDialog.Builder(context);
+        this.myPlanTabFragment = myPlanTabFragment;
 
 
     }
@@ -72,7 +79,7 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder myBuilder = new AlertDialog.Builder(context);
+                //myBuilder = new AlertDialog.Builder(context);
                 View view = layoutInflater.inflate(R.layout.dialog_habit_info, null);
                 TextView habitInfoName = (TextView) view.findViewById(R.id.habitInfoName);
                 TextView habitInfoDescription = (TextView) view.findViewById(R.id.habitInfoDescription);
@@ -81,25 +88,27 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
                 habitInfoDescription.setText(habitMainRepository.getById(id).getDescription());
 
                 if (habitMainRepository.isInPlan(id, idOfPlan)){
-                    myBuilder.setPositiveButton("Odobrať", new DialogInterface.OnClickListener() {
+                    myBuilder.setPositiveButton("Odobrať", listener = new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                                 planMainRepository.deleteAssociation(idOfPlan, id);
                                 Toast.makeText(context, "Odobrané z plánu " + idOfPlan, Toast.LENGTH_SHORT).show();
+                                myPlanTabFragment.updateFragment();
 
                         }
 
                     });
                 } else {
 
-                    myBuilder.setPositiveButton("Pridať", new DialogInterface.OnClickListener() {
+                    myBuilder.setPositiveButton("Pridať", listener = new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                                 PlanHabitAssociation pha = new PlanHabitAssociation(id, idOfPlan);
                                 planMainRepository.insertAssociaton(pha);
                                 Toast.makeText(context, "Pridané do plánu " + idOfPlan, Toast.LENGTH_SHORT).show();
+                                myPlanTabFragment.updateFragment();
                         }
 
                     });
@@ -107,7 +116,7 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
 
                 myBuilder.setView(view);
                 myBuilder.setNegativeButton("Zrušiť", null);
-                AlertDialog habitDialog = myBuilder.create();
+                habitDialog = myBuilder.create();
                 habitDialog.show();
 
             }
@@ -119,6 +128,17 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
     public int getItemCount() {
         return habits.size();
     }
+
+    public DialogInterface.OnClickListener getListener(){
+            return listener;
+    }
+
+    public AlertDialog.Builder getDialog(){
+        return myBuilder;
+    }
+
+
+
 
     private Drawable getResources(String name){
         Resources resources = context.getResources();

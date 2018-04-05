@@ -52,7 +52,7 @@ import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotif
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainOverviewFragment extends Fragment implements FragmentInterface{
+public class MainOverviewFragment extends Fragment{
 
     private Button butt;
     private Button buttShow;
@@ -96,7 +96,7 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         floatingButton = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonAdd);
         recyclerView = (RecyclerView) view.findViewById(R.id.mainViewExamRecyclerView);
         recyclerViewHabits = (RecyclerView) view.findViewById(R.id.mainOverviewRecyclerViewPlan);
-        cardViewTwo = (CardView) view.findViewById(R.id.card_view_two);
+        //cardViewTwo = (CardView) view.findViewById(R.id.card_view_two);
         mainOpenHelper = new MainOpenHelper(getActivity());
         database = mainOpenHelper.getWritableDatabase();
         planMainRepository = new PlanMainRepository(getActivity());
@@ -249,11 +249,12 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
             recyclerViewHabits.setAdapter(iconHabitAdapter);
             recyclerViewHabits.setLayoutManager(new GridLayoutManager(getActivity(),4));
         } else {
-            TextView tx = new TextView(getActivity());
+            actualPlanTextView.setText("Plán neprebieha");
+            /*TextView tx = new TextView(getActivity());
             tx.setText("Nie je momentálne zvolený žiadny plán. ");
             tx.setPadding(50, 210, 0, 50);
             tx.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-            cardViewTwo.addView(tx);
+            cardViewTwo.addView(tx);*/
         }
 
 
@@ -465,9 +466,4 @@ public class MainOverviewFragment extends Fragment implements FragmentInterface{
         habitMainRepository.insert(timeForMe);
     }
 
-
-    @Override
-    public void fragmentSwitchToVisible() {
-        loadListView();
-    }
 }

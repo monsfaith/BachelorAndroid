@@ -20,10 +20,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -65,16 +68,36 @@ public class MyActivitiesTab2Fragment extends Fragment{
     private RecyclerView lunchRecyclerView;
     private RecyclerView eveningRecyclerView;
 
-    private Button timeButtonDaily;
-    private Button timeButtonMorning;
-    private Button timeButtonLunch;
-    private Button timeButtonEvening;
+    private ImageButton timeButtonDaily;
+    private ImageButton timeButtonMorning;
+    private ImageButton timeButtonLunch;
+    private ImageButton timeButtonEvening;
+
+    private TextView timeTextViewDaily;
+    private TextView timeTextViewMorning;
+    private TextView timeTextViewLunch;
+    private TextView timeTextViewEvening;
 
     private RelativeLayout morningRelativeLayout;
     private RelativeLayout eveningRelativeLayout;
     private RelativeLayout lunchRelativeLayout;
     private RelativeLayout dailyRelativeLayout;
 
+    private AlertDialog.Builder dailyDialog;
+    private AlertDialog.Builder morningDialog;
+    private AlertDialog.Builder lunchDialog;
+    private AlertDialog.Builder eveningDialog;
+
+    private AlertDialog.OnClickListener dailyListener;
+    private AlertDialog.OnClickListener morningListener;
+    private AlertDialog.OnClickListener lunchListener;
+    private AlertDialog.OnClickListener eveningListener;
+
+    private MyPlanTab1Fragment myPlanTabFragment;
+
+    public void setMyPlanTabFragment(MyPlanTab1Fragment mptf){
+        this.myPlanTabFragment = mptf;
+    }
 
     @Nullable
     @Override
@@ -96,10 +119,16 @@ public class MyActivitiesTab2Fragment extends Fragment{
 
 
         //http://jakewharton.github.io/butterknife/
-        timeButtonDaily = (Button) view.findViewById(R.id.timeButtonDaily);
-        timeButtonEvening = (Button) view.findViewById(R.id.timeButtonEvening);
-        timeButtonLunch = (Button) view.findViewById(R.id.timeButtonLunch);
-        timeButtonMorning = (Button) view.findViewById(R.id.timeButtonMorning);
+        timeButtonDaily = (ImageButton) view.findViewById(R.id.timeButtonDaily);
+        timeButtonEvening = (ImageButton) view.findViewById(R.id.timeButtonEvening);
+        timeButtonLunch = (ImageButton) view.findViewById(R.id.timeButtonLunch);
+        timeButtonMorning = (ImageButton) view.findViewById(R.id.timeButtonMorning);
+
+        timeTextViewDaily = (TextView) view.findViewById(R.id.timeTextViewDaily);
+        timeTextViewMorning = (TextView) view.findViewById(R.id.timeTextViewMorning);
+        timeTextViewLunch = (TextView) view.findViewById(R.id.timeTextViewLunch);
+        timeTextViewEvening = (TextView) view.findViewById(R.id.timeTextViewEvening);
+
 
 
         Toast.makeText(getActivity(), planMainRepository.getAllPlans().size() + " pocet planov", Toast.LENGTH_SHORT).show();
@@ -119,11 +148,34 @@ public class MyActivitiesTab2Fragment extends Fragment{
         setListeners(timeButtonLunch,3);
         setListeners(timeButtonEvening,4);
 
+        //setListeners(myPlanTabFragment);
+
         return view;
 
     }
 
-    private void setListeners(Button button, final int idPlan){
+    /*public void setListeners(MyPlanTab1Fragment fragment){
+        setDialogDaily(fragment);
+        setDialogEvening(fragment);
+        setDialogLunch(fragment);
+        setDialogMorning(fragment);
+    }
+
+
+    public void setDialogDaily(final MyPlanTab1Fragment fragment){
+        if (dailyHabitToChooseAdapter != null){
+            dailyDialog = dailyHabitToChooseAdapter.getDialog();
+            dailyDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    fragment.updateFragment();
+                }
+            });
+        }
+    }*/
+
+
+    private void setListeners(ImageButton button, final int idPlan){
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -329,13 +381,13 @@ public class MyActivitiesTab2Fragment extends Fragment{
     }
 
     private void setTimeButtons(){
-        setTimeTextViews(timeButtonDaily,1);
-        setTimeTextViews(timeButtonMorning,2);
-        setTimeTextViews(timeButtonLunch,3);
-        setTimeTextViews(timeButtonEvening,4);
+        setTimeTextViews(timeTextViewDaily,1);
+        setTimeTextViews(timeTextViewMorning,2);
+        setTimeTextViews(timeTextViewLunch,3);
+        setTimeTextViews(timeTextViewEvening,4);
     }
 
-    private void setTimeTextViews(Button button, long id){
+    private void setTimeTextViews(TextView button, long id){
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         button.setText(sdf.format(planMainRepository.getByType(id).getFromTime().getTime()) + " - " + sdf.format(planMainRepository.getByType(id).getToTime().getTime()));
     }
@@ -345,35 +397,35 @@ public class MyActivitiesTab2Fragment extends Fragment{
     }
 
     private void setAdapters(){
-        setAdapter(dailyHabitToChooseAdapter, dailyRecyclerView);
-        setMorningAdapter(morningHabitToChooseAdapter, morningRecyclerView);
-        setLunchAdapter(lunchHabitToChooseAdapter, lunchRecyclerView);
-        setEveningAdapter(eveningHabitToChooseAdapter, eveningRecyclerView);
+        setAdapter();
+        setMorningAdapter();
+        setLunchAdapter();
+        setEveningAdapter();
 
     }
 
-    private void setAdapter(HabitToChooseAdapter habitToChooseAdapter, RecyclerView recyclerView){
-        habitToChooseAdapter = new HabitToChooseAdapter(getActivity(),getAllHabits(),1);
-        recyclerView.setAdapter(habitToChooseAdapter);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.HORIZONTAL));
+    private void setAdapter(){
+        dailyHabitToChooseAdapter = new HabitToChooseAdapter(getActivity(),getAllHabits(),1, myPlanTabFragment);
+        dailyRecyclerView.setAdapter(dailyHabitToChooseAdapter);
+        dailyRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.HORIZONTAL));
     }
 
-    private void setMorningAdapter(HabitToChooseAdapter habitToChooseAdapter, RecyclerView recyclerView) {
-        habitToChooseAdapter = new HabitToChooseAdapter(getActivity(), getMorningHabits(), 2);
-        recyclerView.setAdapter(habitToChooseAdapter);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
+    private void setMorningAdapter() {
+        morningHabitToChooseAdapter = new HabitToChooseAdapter(getActivity(), getMorningHabits(), 2, myPlanTabFragment);
+        morningRecyclerView.setAdapter(morningHabitToChooseAdapter);
+        morningRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
     }
 
-    private void setLunchAdapter(HabitToChooseAdapter habitToChooseAdapter, RecyclerView recyclerView) {
-        habitToChooseAdapter = new HabitToChooseAdapter(getActivity(), getLunchHabits(), 3);
-        recyclerView.setAdapter(habitToChooseAdapter);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
+    private void setLunchAdapter() {
+        lunchHabitToChooseAdapter = new HabitToChooseAdapter(getActivity(), getLunchHabits(), 3, myPlanTabFragment);
+        lunchRecyclerView.setAdapter(lunchHabitToChooseAdapter);
+        lunchRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
     }
 
-    private void setEveningAdapter(HabitToChooseAdapter habitToChooseAdapter, RecyclerView recyclerView) {
-        habitToChooseAdapter = new HabitToChooseAdapter(getActivity(), getEveningHabits(), 4);
-        recyclerView.setAdapter(habitToChooseAdapter);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
+    private void setEveningAdapter() {
+        eveningHabitToChooseAdapter = new HabitToChooseAdapter(getActivity(), getEveningHabits(), 4, myPlanTabFragment);
+        eveningRecyclerView.setAdapter(eveningHabitToChooseAdapter);
+        eveningRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
     }
 
     private Calendar setTime(Time time){

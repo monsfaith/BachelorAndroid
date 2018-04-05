@@ -63,6 +63,8 @@ public class MyPlanTabsActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //tabLayout.setOnTabSelectedListener();
+
 
 
     }
@@ -80,8 +82,14 @@ public class MyPlanTabsActivity extends AppCompatActivity {
 
     private void setViewPager(ViewPager viewPager){
         TabsPageAdapter tabsPageAdapter = new TabsPageAdapter(getFragmentManager());
-        tabsPageAdapter.addFragment(new MyPlanTab1Fragment(), "Môj plán");
-        tabsPageAdapter.addFragment(new MyActivitiesTab2Fragment(), "Moje aktivity");
+        MyPlanTab1Fragment myPlanTab = new MyPlanTab1Fragment();
+        tabsPageAdapter.addFragment(myPlanTab,"Môj plán");
+
+        MyActivitiesTab2Fragment myActivitiesTab2Fragment = new MyActivitiesTab2Fragment();
+        //myActivitiesTab2Fragment.setListeners(myPlanTab);
+        myActivitiesTab2Fragment.setMyPlanTabFragment(myPlanTab);
+        tabsPageAdapter.addFragment(myActivitiesTab2Fragment, "Moje aktivity");
+
         viewPager.setAdapter(tabsPageAdapter);
     }
 

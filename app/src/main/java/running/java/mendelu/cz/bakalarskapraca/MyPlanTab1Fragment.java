@@ -11,9 +11,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.sip.SipAudioCall;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -107,6 +110,11 @@ public class MyPlanTab1Fragment extends Fragment {
 
     private Switch switchDaily;
     private View myView;
+
+
+    /*list.clear
+    list.addAll
+    notifyDaataetchanged*/
 
     @Nullable
     @Override
@@ -212,6 +220,7 @@ public class MyPlanTab1Fragment extends Fragment {
                                 }
                             }
                         });
+
 
                     dialogBuilder.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
                         @Override
@@ -508,6 +517,8 @@ public class MyPlanTab1Fragment extends Fragment {
         });
 
     }
+
+
 
 
 
@@ -882,6 +893,12 @@ public class MyPlanTab1Fragment extends Fragment {
 
         progressEveningBar.setProgress(habitMainRepository.getDoneEveningPlanHabits());
         progressEveningBar.setMax(habitMainRepository.getEveningPlanHabits().size());
+    }
+
+    public void updateFragment(){
+        updateProgressBars();
+        checkPlans();
+        setAdapters();
     }
 
 }

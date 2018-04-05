@@ -28,6 +28,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="e3465835aad25874ab26b29d25472cb73030f612" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main_view"
@@ -86,15 +89,9 @@
             android:exported="true"
             />
         <receiver android:name=".notifications.receivers.ExamNotificationReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
         </receiver>
         <receiver android:name=".notifications.receivers.DatabaseRecordReceiver"></receiver>
         <receiver android:name=".notifications.receivers.EveningHabitNotificationReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
         </receiver>
         <receiver android:name=".notifications.receivers.CancelEveningHabitNotificationReceiver">
         </receiver>
@@ -102,6 +99,8 @@
         </receiver>
         <receiver android:name=".notifications.receivers.CancelExamReceiver">
         </receiver>
-    </application>
 
+
+    </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

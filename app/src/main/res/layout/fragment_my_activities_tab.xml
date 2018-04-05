@@ -23,26 +23,42 @@
 
                 <TextView
                     android:id="@+id/dailyTextViewActivities"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
                     android:text="@string/celodenny"
-                    android:textAppearance="@android:style/TextAppearance.Material.Headline" />
+                    android:paddingRight="15dp"
+                    android:textAppearance="@android:style/TextAppearance.Material.Title"
+                    android:textSize="24sp" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/timeButtonDaily"
-                    style="@android:style/Widget.Material.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/dailyTextViewActivities"
+                    android:layout_alignTop="@id/dailyTextViewActivities"
+                    android:background="@color/grey_50"
+
+                    android:layout_alignParentRight="true"
+                    android:paddingEnd="10dp"
+
+                    app:srcCompat="@drawable/ic_edit_black_24dp">
+                </ImageButton>
+
+                <TextView
+                    android:id="@+id/timeTextViewDaily"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/cardViewDailyActivities"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="18dp"
-                    android:background="@color/grey_700"
+                    android:layout_toRightOf="@id/dailyTextViewActivities"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="5dp"
                     android:textAlignment="center"
-                    android:paddingRight="15dp" />
+                    android:textAppearance="@android:style/TextAppearance.Material.Title"
+                    android:textSize="14sp" />
 
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/cardViewDailyActivities"
@@ -75,25 +91,39 @@
 
                 <TextView
                     android:id="@+id/morningTextViewActivities"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
+                    android:paddingRight="15dp"
                     android:layout_marginStart="10dp"
                     android:text="@string/ranny"
-                    android:textAppearance="@android:style/TextAppearance.Material.Headline" />
+                    android:textAppearance="@android:style/TextAppearance.Material.Title"
+                    android:textSize="24sp" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/timeButtonMorning"
-                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_alignBottom="@id/morningTextViewActivities"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/grey_700"
-                    android:paddingRight="15dp"
+                    android:layout_alignTop="@id/morningTextViewActivities"
+                    android:background="@color/grey_50"
+                    android:paddingEnd="10dp"
+                    android:layout_alignParentRight="true"
+                    app:srcCompat="@drawable/ic_edit_black_24dp"
                     />
+
+                <TextView
+                    android:id="@+id/timeTextViewMorning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/cardViewMorningActivities"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="5dp"
+                    android:textAlignment="center"
+                    android:layout_toRightOf="@id/morningTextViewActivities"
+                    android:textAppearance="@android:style/TextAppearance.Material.Title"
+                    android:textSize="14sp" />
 
 
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -126,26 +156,41 @@
 
             <TextView
                 android:id="@+id/lunchTextViewActivities"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/obedny"
-                android:textAppearance="@android:style/TextAppearance.Material.Headline" />
+                android:paddingRight="15dp"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                android:textSize="24sp" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/timeButtonLunch"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/grey_50"
                 android:layout_alignBottom="@id/lunchTextViewActivities"
                 android:layout_alignParentRight="true"
-                android:background="@color/grey_700"
-                android:layout_marginRight="10dp"
-                android:paddingRight="15dp"
+                android:paddingEnd="10dp"
+
+                android:layout_alignTop="@id/lunchTextViewActivities"
+                app:srcCompat="@drawable/ic_edit_black_24dp"
                 />
+
+            <TextView
+                android:id="@+id/timeTextViewLunch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/cardViewLunchActivities"
+                android:layout_toRightOf="@id/lunchTextViewActivities"
+                android:gravity="center_horizontal"
+                android:paddingBottom="5dp"
+                android:textAlignment="center"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                android:textSize="14sp" />
 
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -177,27 +222,42 @@
 
             <TextView
                 android:id="@+id/eveningTextViewActivities"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="10dp"
+                android:paddingRight="15dp"
+
                 android:layout_marginTop="8dp"
                 android:text="@string/vecerny"
-                android:textAppearance="@android:style/TextAppearance.Material.Headline" />
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                android:textSize="24sp" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/timeButtonEvening"
-                style="@android:style/Widget.Material.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/grey_50"
                 android:layout_alignBottom="@id/eveningTextViewActivities"
+                android:layout_alignTop="@id/eveningTextViewActivities"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:background="@color/grey_700"
-                android:paddingRight="15dp"
+                android:paddingEnd="10dp"
+                app:srcCompat="@drawable/ic_edit_black_24dp"
                 />
 
+            <TextView
+                android:id="@+id/timeTextViewEvening"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:paddingBottom="5dp"
+                android:textAlignment="center"
+                android:layout_above="@+id/cardViewEveningActivities"
+                android:layout_alignBottom="@id/eveningTextViewActivities"
+                android:layout_toRightOf="@id/eveningTextViewActivities"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                android:textSize="14sp" />
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/cardViewEveningActivities"

@@ -1,6 +1,8 @@
 package running.java.mendelu.cz.bakalarskapraca;
 
 import android.os.Bundle;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -28,6 +30,7 @@ import java.util.Random;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
 
+
 public class MainViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private CharSequence mTitle;
@@ -49,7 +52,15 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main_view);
+
+        final Fabric fabric = new Fabric.Builder(this)
+                .kits(new Crashlytics())
+                .debuggable(true)
+                .build();
+        Fabric.with(fabric);
+
         /*butt = (Button) findViewById(R.id.buttonMoreee);
         butt = (Button) findViewById(R.id.planShowMore);
         floatingButton = (FloatingActionButton) findViewById(R.id.floatingActionButtonAdd);
@@ -142,7 +153,7 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
 
     public void onResume(){
         super.onResume();
-        setQuoteVisible();
+        //setQuoteVisible();
     }
 
     @Override
