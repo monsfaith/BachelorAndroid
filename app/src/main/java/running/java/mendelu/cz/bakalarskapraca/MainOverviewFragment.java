@@ -117,7 +117,7 @@ public class MainOverviewFragment extends Fragment{
             //setDatabasePlanTimeDaily();
 
             //DAVAM len docasne prec
-            //setExamNotification();
+            setExamNotification();
         } else {
             dailyPlan = planMainRepository.getByType(1);
             morningPlan = planMainRepository.getByType(2);
@@ -139,7 +139,7 @@ public class MainOverviewFragment extends Fragment{
             editor.commit();
         }*/
 
-        setExamNotification();
+        //setExamNotification();
         setDatabaseNotification();
         loadListView();
 
@@ -307,7 +307,7 @@ public class MainOverviewFragment extends Fragment{
                 return habitMainRepository.getEveningPlanHabits();
             } else {
                 actualPlan = 0;
-                actualPlanTextView.setText("Je to false, ale nic");
+                actualPlanTextView.setText("Neprebieha plán");
                 //Toast.makeText(getActivity(), "nic" + sdf.format(setPlanDateToCalendar(dailyPlan.getType())) + "", Toast.LENGTH_LONG).show();
                 return null;
             }
@@ -324,7 +324,7 @@ public class MainOverviewFragment extends Fragment{
                 return habitMainRepository.getDailyPlanHabits();
             } else {
                 actualPlan = 0;
-                actualPlanTextView.setText("Je to true, ale nic" + sdf.format(System.currentTimeMillis()) + " " + sdf.format(planMainRepository.getByType(1).getToTime().getTime()));
+                actualPlanTextView.setText("Neprebieha plán");
                 //Toast.makeText(getActivity(), "nic " + sdf.format(setPlanDateToCalendar(dailyPlan.getType())) + sdf.format(dailyPlan.getFromTime().getTime()) + " " + sdf.format(dailyPlan.getToTime().getTime()), Toast.LENGTH_LONG).show();
                 return null;
             }
@@ -365,7 +365,7 @@ public class MainOverviewFragment extends Fragment{
     public void onResume(){
         super.onResume();
         loadListView();
-        setPlan();
+        //setPlan();
         dailyPlan = planMainRepository.getByType(1);
         morningPlan = planMainRepository.getByType(2);
         lunchPlan = planMainRepository.getByType(3);
