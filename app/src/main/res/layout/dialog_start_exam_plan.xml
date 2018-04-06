@@ -14,13 +14,23 @@
         android:text="@string/chooseExam"
         android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/availableExamsRecyclerVie"
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="350dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/availableExamsRecyclerVie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp" />
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"

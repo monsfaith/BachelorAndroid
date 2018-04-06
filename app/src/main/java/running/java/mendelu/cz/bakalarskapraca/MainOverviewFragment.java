@@ -26,6 +26,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
@@ -97,7 +100,7 @@ public class MainOverviewFragment extends Fragment{
         floatingButton = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonAdd);
         recyclerView = (RecyclerView) view.findViewById(R.id.mainViewExamRecyclerView);
         recyclerViewHabits = (RecyclerView) view.findViewById(R.id.mainOverviewRecyclerViewPlan);
-        //cardViewTwo = (CardView) view.findViewById(R.id.card_view_two);
+        cardViewTwo = (CardView) view.findViewById(R.id.card_view_two);
         mainOpenHelper = new MainOpenHelper(getActivity());
         database = mainOpenHelper.getWritableDatabase();
         planMainRepository = new PlanMainRepository(getActivity());
@@ -254,11 +257,11 @@ public class MainOverviewFragment extends Fragment{
             recyclerViewHabits.setLayoutManager(new GridLayoutManager(getActivity(),4));
         } else {
             actualPlanTextView.setText("Plán neprebieha");
-            /*TextView tx = new TextView(getActivity());
-            tx.setText("Nie je momentálne zvolený žiadny plán. ");
+            progressBarReview.setVisibility(View.GONE);
+            TextView tx = new TextView(getActivity());
             tx.setPadding(50, 210, 0, 50);
             tx.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-            cardViewTwo.addView(tx);*/
+            cardViewTwo.addView(tx);
         }
 
 
