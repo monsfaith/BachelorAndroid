@@ -373,9 +373,11 @@ public class CreateExamActivity extends AppCompatActivity {
 
                 datePickerDialog = new DatePickerDialog(
                         CreateExamActivity.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        R.style.AlertDialog_AppCompat_Dialog,
                         onDateSetListener,
                         year, month, day
+
+                        //android.R.style.Theme_Holo_Light_Dialog_MinWidth
                 );
 
                 datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
@@ -461,14 +463,18 @@ public class CreateExamActivity extends AppCompatActivity {
             }
 
             finish();
-        } else if ((chosenDate.getText().toString().trim().length() == 0) || (chosenSubject.getText().toString().trim().length() == 0) || (chosenTime.getText().toString().trim().length() == 0)){
+        } else if ((chosenDate.getText().toString().trim().length() == 0)){
             chosenDate.setError("Vyplň dátum");
-            chosenSubject.setError("Zadaj predmet");
-            chosenTime.setError("Vyplň čas");
+            if ((chosenSubject.getText().toString().trim().length() == 0)){
+                chosenSubject.setError("Zadaj predmet");
+            }
+            if (chosenTime.getText().toString().trim().length() == 0){
+                chosenTime.setError("Vyplň čas");
+            }
+            }
 
         }
 
-    }
 
     public void onResume(){
         super.onResume();

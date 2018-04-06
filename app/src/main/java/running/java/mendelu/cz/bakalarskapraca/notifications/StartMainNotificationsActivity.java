@@ -38,8 +38,8 @@ import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotif
 
 public class StartMainNotificationsActivity extends AppCompatActivity {
 
-    private FloatingActionButton letsDoIt;
-    private FloatingActionButton cancel;
+    private Button letsDoIt;
+    private Button cancel;
     private TextView info;
     private PlanMainRepository planMainRepository;
     private ExamNotificationAdapter examNotificationAdapter;
@@ -58,9 +58,9 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
 
 
 
-        letsDoIt = (FloatingActionButton) findViewById(R.id.letsDoIt);
+        letsDoIt = (Button) findViewById(R.id.letsDoIt);
 
-        cancel = (FloatingActionButton) findViewById(R.id.letsCancelit);
+        cancel = (Button) findViewById(R.id.letsCancelit);
         info = (TextView) findViewById(R.id.infoAboutStartingPlans);
         planMainRepository = new PlanMainRepository(getApplicationContext());
 

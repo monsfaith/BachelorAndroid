@@ -31,11 +31,7 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="e3465835aad25874ab26b29d25472cb73030f612" />
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main_view"
-            android:screenOrientation="portrait"
-            />
+
         <activity
             android:name=".TasksDetailActivity"
             android:theme="@style/AppTheme"

@@ -54,10 +54,10 @@ public class ExamTomorrowNotificationActivity extends AppCompatActivity {
         startDailyPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContentValues contentValues = new ContentValues();
-                contentValues.put("enabled", true);
-                planMainRepository.update2(1,contentValues);
-                setTimeToNotification();
+                //ContentValues contentValues = new ContentValues();
+                //contentValues.put("enabled", true);
+                //planMainRepository.update2(1,contentValues);
+                //setTimeToNotification();
                 cancelExam();
                 setExamNotificationTomorrow();
                 finish();

@@ -92,7 +92,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
         if ((currentAssociation.getDone() == true) && (currentAssociation.getDate() != null)){
             if (sameDay(currentAssociation.getDate().getTime())){
                 holder.habitCheck.setChecked(true);
-                holder.habitCheck.setEnabled(false);
+                //holder.habitCheck.setEnabled(false);
 
             } else {
                 holder.habitCheck.setEnabled(true);
@@ -108,7 +108,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
 
         Habit currentHabit = habitMainRepository.getById(currentAssociation.getIdHabit());
         holder.habitName.setText(currentHabit.getName());
-        holder.habitDescription.setText(currentHabit.getDescription());
+        holder.habitDescription.setText(currentHabit.getShortDescription());
 
         final long id = currentAssociation.getId();
 
@@ -121,9 +121,12 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("done",true);
                     contentValues.put("date",System.currentTimeMillis());
-                    holder.habitCheck.setEnabled(false);
                     planMainRepository.updateAssociation(id, contentValues);
 
+                } else {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("done",false);
+                    planMainRepository.updateAssociation(id, contentValues);
                 }
             }
         });

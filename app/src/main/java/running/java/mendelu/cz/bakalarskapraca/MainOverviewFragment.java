@@ -15,6 +15,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,6 +111,7 @@ public class MainOverviewFragment extends Fragment{
         textDate.setText(sdf.format(System.currentTimeMillis()));
 
         //planMainRepository.deleteAllPlans();
+        Log.i("Bakalarka", "onCreate");
 
         if (planMainRepository.getAllPlans().size() != 4) {
             init();
@@ -118,12 +120,15 @@ public class MainOverviewFragment extends Fragment{
 
             //DAVAM len docasne prec
             setExamNotification();
+            setDatabaseNotification();
         } else {
             dailyPlan = planMainRepository.getByType(1);
             morningPlan = planMainRepository.getByType(2);
             lunchPlan = planMainRepository.getByType(3);
             eveningPlan = planMainRepository.getByType(4);
         }
+
+
 
         /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if (!prefs.getBoolean("firstTime", false)) {
@@ -139,9 +144,9 @@ public class MainOverviewFragment extends Fragment{
             editor.commit();
         }*/
 
-        //setExamNotification();
+        setExamNotification();
         setDatabaseNotification();
-        loadListView();
+        //altLoadListView();
 
         butt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -238,7 +243,6 @@ public class MainOverviewFragment extends Fragment{
     }
 
 
-
     public void loadListView(){
         examAdapter = new ExamAdapter(getActivity(), getExamResults());
         recyclerView.setAdapter(examAdapter);
@@ -259,6 +263,22 @@ public class MainOverviewFragment extends Fragment{
 
 
 
+
+    }
+
+    public void altLoadListView(){
+        if (setPlan() != null){
+            iconHabitAdapter = new IconHabitAdapter(getActivity(), setPlan());
+            recyclerViewHabits.setAdapter(iconHabitAdapter);
+            recyclerViewHabits.setLayoutManager(new GridLayoutManager(getActivity(),4));
+        } else {
+            actualPlanTextView.setText("Plán neprebieha");
+            /*TextView tx = new TextView(getActivity());
+            tx.setText("Nie je momentálne zvolený žiadny plán. ");
+            tx.setPadding(50, 210, 0, 50);
+            tx.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+            cardViewTwo.addView(tx);*/
+        }
 
     }
 
@@ -364,13 +384,15 @@ public class MainOverviewFragment extends Fragment{
 
     public void onResume(){
         super.onResume();
-        loadListView();
+        Log.i("Bakalarka","onResume");
         //setPlan();
         dailyPlan = planMainRepository.getByType(1);
         morningPlan = planMainRepository.getByType(2);
         lunchPlan = planMainRepository.getByType(3);
         eveningPlan = planMainRepository.getByType(4);
-        }
+        loadListView();
+
+    }
 
 
     private long getTodayEnd(){
@@ -443,27 +465,59 @@ public class MainOverviewFragment extends Fragment{
     }
 
     private void createMorningHabits(){
-        Habit believe = new Habit("Veriť si", "Je dôležité, aby si sa hneď zrána uistil, že zvládneš povinnosti, ktoré ťa cez deň čakajú. Povedz si, že to zvládneš. ", "believe", 2);
-        habitMainRepository.insert(believe);
-        Habit affection = new Habit("Prejaviť náklonnosť", "Ak s niekým bývaš, je dôležité prejaviť svoje city hneď z rána. Napríklad túlenie uvoľňuje veľa serotonínu, ktorý ťa dostatočne nabudí do nového dňa. ","love",2 );
-        habitMainRepository.insert(affection);
-        Habit tidyUp = new Habit("Upratať stôl", "Pokiaľ si si nestihol upratať svoj stôl alebo pracovné prostredie včera večer, urob tak teraz. Je lepšie tomu obetovať čas ráno než v priebehu dňa, nakoľko tvoj rozhodovací proces je už neskôr viac vyťažený.", "cleandesk",2);
-        habitMainRepository.insert(tidyUp);
-        Habit morningGratefulness = new Habit("Byť vďačný", "Keď naplníš svoju myseľ vďačnosťou a pozitívnosťou, chemické látky v mozgu ti umožnia, aby sa z týchto pocitov stal tvoj návyk. Vyhraď si čas na definovanie vecí, za ktoré si vďačný. Či už tvoja rodina, zdravie, tie nohavice, ktoré tak rád nosíš. Dôvodov je veľa, stačí ich len nájsť. Skús nájsť aspoň 3 ", "pray",2);
-        habitMainRepository.insert(morningGratefulness);
-        Habit morningShower = new Habit("Ranná sprcha", "Studená sprcha ťa osvieži, prebudí a naštartuje tvoj metabolizmus správnym smerom. Studená sprcha rovnako podnecuje i chudnutie, zvyšuje ostražitosť, eliminuje stres a vytvára pocit pevnej vôle.", "coldshower", 2);
-        habitMainRepository.insert(morningShower);
-        Habit makeYourBed = new Habit("Ustlať posteľ", "Zaberie ti to menej než minútu, a zrána hneď splníš prvú úlohu dňa. Dodá ti to drobný pocit hrdosti, nabudí ťa to do ďalších povinností. Ustlaná posteľ pomáha dotvárať duševnú disciplínu. A ak tvoj deň nebol podľa predstáv, posledná skúsenosť tvojho dňa bude práve to niečo, čo si zvládol.", "bed", 2);
-        habitMainRepository.insert(makeYourBed);
+        Habit believe = new Habit("Veriť si", "Je dôležité, aby si sa hneď zrána uistil, že zvládneš povinnosti, ktoré ťa cez deň čakajú. Povedz si, že to zvládneš. ","Povedz si, že všetko zvládneš." ,"believe", 2);
+        long idBelieve = habitMainRepository.insert(believe);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idBelieve,2));
 
-        Habit visualization = new Habit("Vizualizácia", "Predstav si, ako bude vyzerať tvoj deň, čo más všetko na pláne. Stačia to byť veci, ktoré potrebuješ spraviť, nemusí to byť detailný plán. Ak si totiž mozog dokáže niečo predstaviť, vizualizovať, samotná realizácia je jednoduchšia.", "vision", 2);
-        habitMainRepository.insert(visualization);
+        Habit affection = new Habit("Prejaviť náklonnosť", "Ak s niekým bývaš, je dôležité prejaviť svoje city hneď z rána. Napríklad túlenie uvoľňuje veľa serotonínu, ktorý ťa dostatočne nabudí do nového dňa. ", "Ak s niekým bývaš, je dôležité prejaviť svoje city hneď z rána.", "love",2 );
+        long idAff = habitMainRepository.insert(affection);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idAff,2));
 
-        Habit breakfast = new Habit("Raňajky", "Najdôležitejšie jedlo dňa. Energia, ktorú získať naraňajkovaním sa je energia, ktorú si nesieš počas dňa. Snaž sa, aby boli tvoje raňajky zdravé. ", "breakfast",2);
-        habitMainRepository.insert(breakfast);
 
-        Habit timeForMe = new Habit("Chvíľa pre seba", "Často je nemožné nájsť si čas počas dňa, kedy nerobíš absolútne nič. Preto je najlepšou možnosťou ráno. Obetuj tomuto času 10-15 min, uži si ráno, slnko, vypočuj si obľúbenú pieseň. Budeš zrelaxovaný pred odštartovaním dňa a povinností.", "stones",2);
-        habitMainRepository.insert(timeForMe);
+        Habit tidyUp = new Habit("Upratať stôl", "Pokiaľ si si nestihol upratať svoj stôl alebo pracovné prostredie včera večer, urob tak teraz. Je lepšie tomu obetovať čas ráno než v priebehu dňa, nakoľko tvoj rozhodovací proces je už neskôr viac vyťažený.","V priebehu dňa bude tvoj rozhodovací proces viac vyťažený", "cleandesk",2);
+        long idTidy = habitMainRepository.insert(tidyUp);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idTidy,2));
+
+
+        Habit morningGratefulness = new Habit("Byť vďačný", "Keď naplníš svoju myseľ vďačnosťou a pozitívnosťou, chemické látky v mozgu ti umožnia, aby sa z týchto pocitov stal tvoj návyk. Vyhraď si čas na definovanie vecí, za ktoré si vďačný. Či už tvoja rodina, zdravie, tie nohavice, ktoré tak rád nosíš. Dôvodov je veľa, stačí ich len nájsť. Skús nájsť aspoň 3 ", "Dôvodov je veľa, stačí ich len nájsť.", "pray",2);
+        long idGrate = habitMainRepository.insert(morningGratefulness);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idGrate,2));
+
+
+        Habit morningShower = new Habit("Studená sprcha", "Studená sprcha ťa osvieži, prebudí a naštartuje tvoj metabolizmus správnym smerom. Studená sprcha rovnako podnecuje i chudnutie, zvyšuje ostražitosť, eliminuje stres a vytvára pocit pevnej vôle.","Sprcha ťa osvieži, prebudí a zredukuje stres","coldshower", 2);
+        long idShower = habitMainRepository.insert(morningShower);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idShower,2));
+
+
+        Habit makeYourBed = new Habit("Ustlať posteľ", "Zaberie ti to menej než minútu, a zrána hneď splníš prvú úlohu dňa. Dodá ti to drobný pocit hrdosti, nabudí ťa to do ďalších povinností. Ustlaná posteľ pomáha dotvárať duševnú disciplínu. A ak tvoj deň nebol podľa predstáv, posledná skúsenosť tvojho dňa bude práve to niečo, čo si zvládol.", "Zaberie ti to menej než minútu, a zrána hneď splníš prvú úlohu dňa","bed", 2);
+        long idBed = habitMainRepository.insert(makeYourBed);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idBed,2));
+
+
+        Habit visualization = new Habit("Vizualizácia", "Predstav si, ako bude vyzerať tvoj deň, čo más všetko na pláne. Stačia to byť veci, ktoré potrebuješ spraviť, nemusí to byť detailný plán. Ak si totiž mozog dokáže niečo predstaviť, vizualizovať, samotná realizácia je jednoduchšia.", "Ak si mozog dokáže niečo predstaviť, vizualizovať, samotná realizácia je jednoduchšia","vision", 2);
+        long idVis = habitMainRepository.insert(visualization);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idVis,2));
+
+
+        Habit breakfast = new Habit("Raňajky", "Najdôležitejšie jedlo dňa. Energia, ktorú získaš naraňajkovaním sa je energia, ktorú si nesieš počas dňa. Snaž sa, aby boli tvoje raňajky zdravé. ", "Energia, ktorú získaš raňajkami, je energia, ktorú si nesieš počas dňa", "breakfast",2);
+        long idBreak = habitMainRepository.insert(breakfast);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idBreak,2));
+
+
+        Habit timeForMe = new Habit("Chvíľa pre seba", "Často je nemožné nájsť si čas počas dňa, kedy nerobíš absolútne nič. Preto je najlepšou možnosťou ráno. Obetuj tomuto času 10-15 min, uži si ráno, slnko, vypočuj si obľúbenú pieseň. Budeš zrelaxovaný pred odštartovaním dňa a povinností.", "Budeš zrelaxovaný pred odštartovaním dňa a povinností","stones",2);
+        long idTime = habitMainRepository.insert(timeForMe);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idTime,2));
+
+    }
+
+    public void onPause(){
+        super.onPause();
+        Log.i("Bakalarka","onPause");
+    }
+
+    public void onStart(){
+        super.onStart();
+                Log.i("Bakalarka", "onStart");
     }
 
 }

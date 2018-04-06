@@ -4,6 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/lime_700</item>
         <item name="colorAccent">@color/yellow_700</item>
+        <item name="android:datePickerDialogTheme">@style/AlertDialog.AppCompat.Dialog</item>
 
     </style>
 
@@ -22,9 +23,20 @@
         <item name="background">@color/lime_500</item>
     </style>
 
-    <style name="AlertDialog.AppCompat.Dialog" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorPrimary">@color/lime_500</item>
+    <style name="AlertDialog.AppCompat.Dialog" parent="android:Theme.Holo.Light.Dialog.MinWidth">
+        <item name="android:colorControlHighlight">@color/orange_300</item>
+        <item name="android:colorPressedHighlight">@color/orange_200</item>
+        <item name="android:textColorSecondary">@color/grey_600</item>
+        <item name="android:textColorHighlightInverse">@color/white</item>
+        <item name="android:textColorPrimary">@color/yellow_800</item>
+        <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>
 
+
+
+    </style>
+
+    <style name="MyDatePickerStyle" parent="@android:style/Widget.Material.Light.DatePicker">
+    <item name="android:dayOfWeekBackground">@color/white</item>
     </style>
 
 </resources>

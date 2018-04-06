@@ -45,7 +45,7 @@ public class CreateHabitActivity extends AppCompatActivity {
     public void createHabit(MenuItem item) {
 
         if (addHabitName.getText().toString().trim().length() != 0){
-            Habit habit = new Habit(addHabitName.getText().toString(), addHabitDescription.getText().toString(), "care128",1);
+            Habit habit = new Habit(addHabitName.getText().toString(), addHabitDescription.getText().toString(),"", "care128",1);
             Long id = habitMainRepository.insert(habit);
             Toast.makeText(this, "Aktivita vytvorená" + id + habitMainRepository.getById(id).getDone(), Toast.LENGTH_SHORT).show();
             finish();

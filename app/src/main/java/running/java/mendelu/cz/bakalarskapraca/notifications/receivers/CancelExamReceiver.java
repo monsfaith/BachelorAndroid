@@ -24,7 +24,7 @@ public class CancelExamReceiver extends BroadcastReceiver {
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 500, in,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-        Toast.makeText(context, "request code zrusenie " + 500, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Odložené na zajtra ", Toast.LENGTH_SHORT).show();
         notificationManager.cancel(500);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

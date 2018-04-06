@@ -80,7 +80,7 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
 
         if (isBadDaily(requestCode, planMainRepository.getByType(1).getEnabled()) == false) {
             if (id != 0) {
-                Toast.makeText(context,"Meni sa to",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context,"Meni sa to",Toast.LENGTH_SHORT).show();
                 notificationManager.notify(requestCode, builder.build());
             }
         }

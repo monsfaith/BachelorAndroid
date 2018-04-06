@@ -22,32 +22,33 @@
         android:layout_height="wrap_content"
         />
 
-    <RelativeLayout
+    <LinearLayout style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <android.support.design.widget.FloatingActionButton
+        <Button style="?android:attr/buttonBarButtonStyle"
             android:id="@+id/letsCancelit"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:text="ZRUŠIŤ"
+
 
             android:layout_toLeftOf="@id/letsDoIt"
             android:paddingTop="5dp"
             android:textAppearance="@android:style/TextAppearance.Material.Menu"
-            app:rippleColor="@color/green_100"
-            app:srcCompat="@drawable/ic_close_black_24dp" />
+            />
 
-        <android.support.design.widget.FloatingActionButton
+        <Button style="?android:attr/buttonBarButtonStyle"
             android:id="@+id/letsDoIt"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_weight="1"
             android:paddingTop="5dp"
-            android:textAppearance="@android:style/TextAppearance.Material.Menu"
-            app:srcCompat="@drawable/ic_check_black_24dp" />
-    </RelativeLayout>
+            android:text="POTVRDIŤ"
+            android:textAppearance="@android:style/TextAppearance.Material.Menu">
+
+        </Button>
+    </LinearLayout>
 </LinearLayout>

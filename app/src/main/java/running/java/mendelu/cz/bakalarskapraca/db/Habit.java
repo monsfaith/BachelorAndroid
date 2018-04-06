@@ -21,6 +21,7 @@ public class Habit {
     static final String NAME = "name";
     static final String DESCRIPTION = "description";
     static final String REPETITION_ID = "repetition_id";
+    static final String SHORT_DESCRIPTION = "short_description";
     //static final String REMIND = "remind"; //neurobit to, ale odlozit, boolean
     //static final String CANCEL = "cancel"; //dnes uz nepripominat
     static final String DONE = "done";
@@ -64,7 +65,7 @@ public class Habit {
 
     }
 
-    public Habit(String name, String description, String icon, int plan){
+    public Habit(String name, String description, String shortDescription, String icon, int plan){
         this.values = new ContentValues();
         this.setName(name);
         this.setDescription(description);
@@ -75,6 +76,7 @@ public class Habit {
         this.setRepetitionId(2);
         this.setIcon(icon);
         this.setPlan(plan);
+        this.setShortDescription(shortDescription);
     }
 
     public void setIcon(String icon) {
@@ -91,6 +93,14 @@ public class Habit {
 
     public int getPlan(){
         return values.getAsInteger(PLAN);
+    }
+
+    public void setShortDescription(String shortDescription){
+        values.put(SHORT_DESCRIPTION, shortDescription);
+    }
+
+    public String getShortDescription(){
+        return values.getAsString(SHORT_DESCRIPTION);
     }
 
 

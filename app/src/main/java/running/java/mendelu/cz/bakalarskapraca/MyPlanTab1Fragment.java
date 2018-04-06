@@ -171,10 +171,11 @@ public class MyPlanTab1Fragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
+                    if (planMainRepository.getByType(1).getEnabled() == true){
                     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
                     View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_start_exam_plan, null);
-                    FloatingActionButton doIt = (FloatingActionButton) view.findViewById(R.id.letsDoIt);
-                    FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.letsCancelit);
+                    Button doIt = (Button) view.findViewById(R.id.letsDoIt);
+                    Button fab = (Button) view.findViewById(R.id.letsCancelit);
                     TextView infoAboutPlan = (TextView) view.findViewById(R.id.infoAboutStartingPlans);
 
                     fab.setVisibility(View.GONE);
@@ -222,23 +223,25 @@ public class MyPlanTab1Fragment extends Fragment {
                         });
 
 
-                    dialogBuilder.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switchDaily.setChecked(true);
-                            progressDailyBar.setVisibility(View.VISIBLE);
-                            dailyPlanCardView.setVisibility(View.VISIBLE);
-                            settingsButtonDaily.setVisibility(View.VISIBLE);
-                            tx.setVisibility(View.VISIBLE);
-                            Toast.makeText(getActivity(), "Je nastaveny denny plan " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
-                            setVisible(0);
+                        dialogBuilder.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switchDaily.setChecked(true);
+                                progressDailyBar.setVisibility(View.VISIBLE);
+                                dailyPlanCardView.setVisibility(View.VISIBLE);
+                                settingsButtonDaily.setVisibility(View.VISIBLE);
+                                tx.setVisibility(View.VISIBLE);
+                                Toast.makeText(getActivity(), "Je nastaveny denny plan " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
+                                setVisible(0);
 
-                        }
-                    });
-                }
+                            }
+                        });
+                    }
                     dialogBuilder.setView(view);
                     AlertDialog dialog = dialogBuilder.create();
                     dialog.show();
+                }
+                //horna zatvorka bola pridana kvoli tomu getenabled == true kvoli onresume
 
                 } else {
                     if (planMainRepository.getByType(1).getEnabled() == false) {
@@ -263,7 +266,7 @@ public class MyPlanTab1Fragment extends Fragment {
 
         if (planMainRepository.getByType(1).getEnabled() == true){
             switchDaily.setChecked(true);
-            progressMorningBar.setVisibility(View.VISIBLE);
+            progressDailyBar.setVisibility(View.VISIBLE);
             dailyPlanCardView.setVisibility(View.VISIBLE);
             settingsButtonDaily.setVisibility(View.VISIBLE);
             tx.setVisibility(View.VISIBLE);
@@ -829,6 +832,7 @@ public class MyPlanTab1Fragment extends Fragment {
     public void onResume(){
         super.onResume();
         Log.i(TAG,"onResume");
+        refreshSwitch();
         eveningHabitAdapter.notifyDataSetChanged();
         morningHabitAdapter.notifyDataSetChanged();
         lunchHabitAdapter.notifyDataSetChanged();
@@ -836,6 +840,22 @@ public class MyPlanTab1Fragment extends Fragment {
         checkPlans();
         updateProgressBars();
         setAdapters();
+    }
+
+    public void refreshSwitch(){
+        if (switchDaily.isChecked() && planMainRepository.getByType(1).getEnabled() == false){
+            switchDaily.setChecked(false);
+            progressDailyBar.setVisibility(View.GONE);
+            dailyPlanCardView.setVisibility(View.GONE);
+            settingsButtonDaily.setVisibility(View.GONE);
+            setVisible(1);
+        } else if (switchDaily.isChecked() == false && planMainRepository.getByType(1).getEnabled() == true){
+            switchDaily.setChecked(true);
+            progressDailyBar.setVisibility(View.VISIBLE);
+            dailyPlanCardView.setVisibility(View.VISIBLE);
+            settingsButtonDaily.setVisibility(View.VISIBLE);
+            setVisible(0);
+        }
     }
 
     private void setExamNotification(){

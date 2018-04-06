@@ -4,7 +4,7 @@
 
     <item
         android:title="@string/pridatHabit"
-        android:icon="@drawable/ic_add_black_24dp"
+        android:icon="@drawable/ic_done_black_24dp"
         android:onClick="createHabit"
         app:showAsAction="always" />
 

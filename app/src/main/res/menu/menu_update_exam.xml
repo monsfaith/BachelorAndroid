@@ -4,7 +4,7 @@
 
     <item
         android:title="@string/updateExam"
-        android:icon="@android:drawable/ic_menu_save"
+        android:icon="@drawable/ic_done_black_24dp"
         android:onClick="updateExam"
         app:showAsAction="always" />
 

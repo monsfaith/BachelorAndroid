@@ -19,14 +19,12 @@
         android:id="@+id/dailyTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="5dp"
         android:text="@string/celodenny"
-        android:textAppearance="@android:style/TextAppearance.Material.Title" />
+        android:textAppearance="@android:style/TextAppearance.Material.Title"
+        android:textSize="24sp" />
 
 
     <TextView
@@ -128,6 +126,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="5dp"
         android:text="@string/ranny"
+        android:textSize="24sp"
         android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
     <ProgressBar
@@ -206,6 +205,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="5dp"
         android:text="@string/obedny"
+        android:textSize="24sp"
         android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
     <ProgressBar
@@ -276,6 +276,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="5dp"
         android:text="@string/vecerny"
+        android:textSize="24sp"
         android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
     <ProgressBar

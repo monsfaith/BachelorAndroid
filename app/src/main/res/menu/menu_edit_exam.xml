@@ -4,7 +4,7 @@
 
     <item
         android:title="@string/upravitExam"
-        android:icon="@drawable/ic_edit_black_24dp"
+        android:icon="@drawable/ic_edit_white_24dp"
         android:onClick="editExam"
         app:showAsAction="always" />
 

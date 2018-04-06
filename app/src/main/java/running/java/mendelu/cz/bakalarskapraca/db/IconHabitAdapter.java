@@ -19,6 +19,7 @@ import org.w3c.dom.Text;
 import java.util.Collections;
 import java.util.List;
 
+import running.java.mendelu.cz.bakalarskapraca.CheckedImage;
 import running.java.mendelu.cz.bakalarskapraca.R;
 
 /**
@@ -53,12 +54,15 @@ public class IconHabitAdapter extends RecyclerView.Adapter<IconHabitAdapter.MyVi
         HabitMainRepository habitMainRepository = new HabitMainRepository(context);
         Habit habit = habitMainRepository.getById(pha.getIdHabit());
 
-        final int greyPicture = Color.argb(155, 185, 185, 185);
+        //final int greyPicture = Color.argb(175, 204, 204, 0);
 
        if (pha.getDone() == true){
-            holder.habitImage.setColorFilter(greyPicture, PorterDuff.Mode.SRC_ATOP);
+            //holder.habitImage.setColorFilter(greyPicture, PorterDuff.Mode.SRC_ATOP);
+            holder.habitImage.setChecked(true);
 
-        }
+        } else {
+           holder.habitImage.setChecked(false);
+       }
 
 
         holder.habitImage.setImageDrawable(getResources(habit.getIcon()));
@@ -80,11 +84,11 @@ public class IconHabitAdapter extends RecyclerView.Adapter<IconHabitAdapter.MyVi
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView habitImage;
+        CheckedImage habitImage;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            habitImage = (ImageView) itemView.findViewById(R.id.habitOverviewImage);
+            habitImage = (CheckedImage) itemView.findViewById(R.id.habitOverviewImage);
 
 
         }

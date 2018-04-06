@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+<ScrollView
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -16,6 +24,7 @@
         android:layout_weight="1"
         android:paddingTop="5dp"
         app:srcCompat="@drawable/book" />
+
 
     <TextView
         android:id="@+id/pickSubject"
@@ -56,6 +65,8 @@
         android:paddingTop="15dp"
         android:text="Dátum"
         android:textAppearance="@android:style/TextAppearance.Material.SearchResult.Subtitle" />
+
+
 
     <EditText
         android:id="@+id/chosenDate"
@@ -208,11 +219,12 @@
         android:id="@+id/examNote"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/strut"
-        android:layout_alignParentRight="true"
-        android:layout_alignRight="@id/chosenDays"
-        android:layout_below="@id/chosenDays"
-        android:layout_marginLeft="10dp"
+        android:layout_alignRight="@id/strut"
+        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@id/chosenDays"
+        android:layout_below="@id/classroomInput"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
         android:paddingTop="15dp"
         android:text="Poznámka"
         android:textAppearance="@android:style/TextAppearance.Material.SearchResult.Subtitle" />
@@ -234,3 +246,5 @@
 
 
 </RelativeLayout>
+</ScrollView>
+</LinearLayout>

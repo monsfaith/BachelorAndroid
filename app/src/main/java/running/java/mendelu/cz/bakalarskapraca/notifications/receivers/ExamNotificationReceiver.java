@@ -51,7 +51,8 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         Intent doExamIntent = new Intent(context, StartMainNotificationsActivity.class);
 
         //nie dnes
-        Intent notToday = new Intent(context, ExamTomorrowNotificationActivity.class);
+        Intent notToday = new Intent(context, ExamTomorrowReceiver.class);
+        //Intent notToday = new Intent(context, ExamTomorrowNotificationActivity.class);
         notToday.putExtra("AFTER",500);
 
         ExamMainRepository examMainRepository = new ExamMainRepository(context);
@@ -74,7 +75,7 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
 
         //long closestExamId = intent.getIntExtra("EXAMID",0);
 
-        NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_menu_share, "Začať", doIntent);
+        NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_done_black_24dp, "Začať", doIntent);
         NotificationCompat.Action actionNot = new NotificationCompat.Action(R.drawable.ic_menu_share, "Odložiť na zajtra", notTodayIntent);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
@@ -92,10 +93,10 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         exams = examMainRepository.findNextExams().size();
         if (exams == 0){
             contentTitle = "Uži si deň voľna";
-            contentText = "Nečakajú ťa žiadne skúšky.";
+            contentText = "Nečakajú ťa žiadne skúšky";
         } else {
             contentTitle = "V blízkej dobe ťa čakajú skušky ";
-            contentText = "Začni svoj učebný plán a priprav sa na skúšky efektívne a bez stresov. ";
+            contentText = "Priprav sa na skúšky efektívne a bez stresov ";
             builder.addAction(action).addAction(actionNot);
         }
 
@@ -108,7 +109,7 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
         .setContentTitle(contentTitle)
         .setLights(0xf9cc00, 300, 3000)
-        .setPriority(Notification.PRIORITY_HIGH)
+        .setPriority(Notification.PRIORITY_DEFAULT)
         //.addAction(actionDelay)
         .setContentText(contentText)
         .setAutoCancel(true);
