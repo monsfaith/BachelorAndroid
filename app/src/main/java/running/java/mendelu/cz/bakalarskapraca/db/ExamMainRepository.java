@@ -280,7 +280,7 @@ public class ExamMainRepository {
 
         SQLiteDatabase db = mainOpenHelper.getWritableDatabase();
 
-            return db.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? and e.date < ?",new String[]{String.valueOf(date.getTime()), String.valueOf(cal1.getTimeInMillis())});
+            return db.rawQuery("SELECT e.*, s.name, s.color FROM exam e left join subject s on e.subject_id = s._id where e.date > ? and e.date < ?",new String[]{String.valueOf(date.getTime()), String.valueOf(cal1.getTimeInMillis())});
         }
 
 
@@ -289,7 +289,7 @@ public class ExamMainRepository {
 
         SQLiteDatabase db = mainOpenHelper.getWritableDatabase();
 
-            return db.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? order by e.date",new String[]{String.valueOf(date.getTime())});
+            return db.rawQuery("SELECT e.*, s.name, s.color FROM exam e left join subject s on e.subject_id = s._id where e.date > ? order by e.date",new String[]{String.valueOf(date.getTime())});
 
     }
 

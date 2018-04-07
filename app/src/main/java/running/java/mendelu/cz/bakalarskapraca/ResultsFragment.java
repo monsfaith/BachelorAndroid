@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Time;
@@ -30,6 +31,7 @@ public class ResultsFragment extends Fragment {
     private ResultAdapter resultAdapter;
     private MainOpenHelper mainOpenHelper;
     private SQLiteDatabase database;
+    private TextView noExams;
 
 
     public ResultsFragment() {
@@ -44,10 +46,14 @@ public class ResultsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_results, container, false);
         examMainRepository = new ExamMainRepository(getContext());
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewResults);
+        noExams = (TextView) view.findViewById(R.id.noExams);
         Toast.makeText(getActivity(), "ja som skuska", Toast.LENGTH_SHORT).show();
 
         //resultAdapter = new ResultAdapter(getActivity(),getResults());
 
+        if (getResults().size() == 0){
+            noExams.setVisibility(View.VISIBLE);
+        }
 
         mainOpenHelper = new MainOpenHelper(getActivity());
         database = mainOpenHelper.getWritableDatabase();

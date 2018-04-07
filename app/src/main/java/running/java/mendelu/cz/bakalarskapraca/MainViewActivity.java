@@ -164,7 +164,7 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         if (quotes.size() > 40){
             fab.setVisibility(View.VISIBLE);
             Random rand = new Random();
-            int n = rand.nextInt(quotes.size()) + 1;
+            int n = rand.nextInt(quotes.size());
             quote = quotes.get(n).getText();
             author = quotes.get(n).getAuthor();
             /*fab.setOnClickListener(new View.OnClickListener() {

@@ -19,7 +19,7 @@ public class OneExamDetailActivity extends AppCompatActivity {
 
     private TextView subjectTextView;
     private TextView dateTextView;
-    private TextView timeTextView;
+    //private TextView timeTextView;
     private TextView daysTextView;
     private TextView classroomTextView;
     private TextView noteTextView;
@@ -37,7 +37,7 @@ public class OneExamDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_one_exam_detail);
         subjectTextView = (TextView) findViewById(R.id.examSubjectDetail);
         dateTextView = (TextView) findViewById(R.id.examDateDetail);
-        timeTextView = (TextView) findViewById(R.id.examTimeDetail);
+        //timeTextView = (TextView) findViewById(R.id.examTimeDetail);
         daysTextView = (TextView) findViewById(R.id.examDaysDetail);
         classroomTextView = (TextView) findViewById(R.id.examClassroomDetail);
         noteTextView = (TextView) findViewById(R.id.examNoteDetail);
@@ -84,12 +84,12 @@ public class OneExamDetailActivity extends AppCompatActivity {
         examId = intentExam.getId();
         Toast.makeText(this, "Id: " + examId, Toast.LENGTH_LONG).show();
         subjectTextView.setText(subjectMainRepository.getById(intentExam.getSubjectId()).getName());
-        dateTextView.setText(android.text.format.DateFormat.format("dd.MM.yyyy", intentExam.getDate()).toString());
-        timeTextView.setText(android.text.format.DateFormat.format("HH:mm", intentExam.getTime()).toString());
-        daysTextView.setText(String.valueOf(intentExam.getDays()));
+        subjectTextView.setTextColor(subjectMainRepository.getById(intentExam.getSubjectId()).getColor());
+        dateTextView.setText(android.text.format.DateFormat.format("dd.MM.yyyy", intentExam.getDate()).toString() + ", " + android.text.format.DateFormat.format("HH:mm", intentExam.getTime()).toString() + " hod. ");
+        //timeTextView.setText(android.text.format.DateFormat.format("HH:mm", intentExam.getTime()).toString() + " hod") ;
+        daysTextView.setText(String.valueOf(intentExam.getStudying() + "/" + intentExam.getDays()));
         classroomTextView.setText(String.valueOf(intentExam.getClassroom()));
         noteTextView.setText(String.valueOf(intentExam.getNote()));
-        quoteTextView.setText("Tough times never last, but tough people do");
 
     }
 

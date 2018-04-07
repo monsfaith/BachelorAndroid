@@ -14,9 +14,21 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewResults"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content">
 
         </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/noExams"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="4dp"
+            android:text="Neprebehli žiadne skúšky"
+            android:textSize="15sp"
+            android:visibility="gone"
+            android:textAppearance="@android:style/TextAppearance.Material.Widget.ActionBar.Subtitle" />
+
     </LinearLayout>
 
 </FrameLayout>

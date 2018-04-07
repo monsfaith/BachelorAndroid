@@ -16,7 +16,7 @@ public class Subject {
 
     static final String TABLE_SUBJECTS = "subject";
     static final String ID = BaseColumns._ID;
-    static final String SHORTCUT = "shortcut";
+    static final String COLOR = "color";
     static final String NAME = "name";
 
     protected ContentValues values; //package protected jsme si to udelali
@@ -26,10 +26,10 @@ public class Subject {
         DatabaseUtils.cursorRowToContentValues(cursor,values);
     }
 
-    public Subject(String name, String shortcut) {
+    public Subject(String name, int color) {
         this.values = new ContentValues();
         this.setName(name);
-        this.setShortcut(shortcut);
+        this.setColor(color);
     }
 
     public void setName(String name) {
@@ -44,11 +44,11 @@ public class Subject {
         return values.getAsLong(ID);
     }
 
-    public void setShortcut(String shortcut) {
-        values.put(SHORTCUT,shortcut);
+    public void setColor(int color) {
+        values.put(COLOR,color);
     }
 
-    public String getShortcut(){
-        return values.getAsString(SHORTCUT);
+    public int getColor(){
+        return values.getAsInteger(COLOR);
     }
 }

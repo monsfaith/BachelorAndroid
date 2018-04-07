@@ -15,7 +15,7 @@ import java.util.Date;
 public class MainOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "main.db";
-    private static final int DATABASE_VERSION = 57;
+    private static final int DATABASE_VERSION = 58;
 
     public MainOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,8 +39,8 @@ public class MainOpenHelper extends SQLiteOpenHelper {
                 Exam.REALIZATION + " INTEGER NOT NULL " + ")");
         db.execSQL("CREATE TABLE " + Subject.TABLE_SUBJECTS + " (" +
                 Subject.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                Subject.SHORTCUT + " TEXT, " +
-                Subject.NAME + " TEXT " + ")");
+                Subject.COLOR + " INTEGER NOT NULL, " +
+                Subject.NAME + " TEXT NOT NULL" + ")");
         db.execSQL("CREATE TABLE " + Habit.TABLE_HABITS + " (" +
                 Habit.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 Habit.NAME + " TEXT NOT NULL, " +

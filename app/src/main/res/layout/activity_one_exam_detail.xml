@@ -9,6 +9,7 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
+        android:layout_marginBottom="15dp"
         android:layout_height="wrap_content" >
 
         <LinearLayout
@@ -21,64 +22,116 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
+                android:textStyle="bold"
                 android:paddingTop="20dp"
-                android:textAppearance="@android:style/TextAppearance.Material.Large" />
+                android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
             <TextView
                 android:id="@+id/examDateDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+                android:textSize="18sp"
 
-            <TextView
-                android:id="@+id/examTimeDetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
-            <TextView
-                android:id="@+id/examDaysDetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+                android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
             <TextView
                 android:id="@+id/examClassroomDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+                android:textSize="18sp"
+                android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
             <TextView
                 android:id="@+id/examNoteDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+                android:textSize="18sp"
+                android:layout_marginBottom="5dp"
+                android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
-            <ImageView
-                android:id="@+id/examDetailImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/book" />
         </LinearLayout>
-
     </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_marginBottom="15dp"
+
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/examDaysActual"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:layout_marginTop="15dp"
+                    android:text="Počet dní venovaných na učenie ku stanoveným dňom: "
+                    android:textAppearance="@android:style/TextAppearance.Material.Caption"
+                    android:textSize="15sp" />
+
+                    <TextView
+                    android:id="@+id/examDaysDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_gravity="center_horizontal"
+                    android:paddingLeft="20dp"
+                    android:textSize="18sp"
+                    android:textAppearance="@android:style/TextAppearance.Material.Title" />
+
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
+
         android:id="@+id/cardViewDetailQuote"
         android:layout_height="wrap_content" >
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/examDetailImage"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/book" />
+
         <TextView
             android:id="@+id/examQuoteDetail"
-            android:paddingLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:text="„Vždy sa to zdá nemožným… až kým to neurobíš.“"
+            android:textAppearance="@android:style/TextAppearance.Material.Caption"
+            android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
+
+        <TextView
+            android:id="@+id/examQuoteAuthor"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center_horizontal"
+            android:text="Nelson Mandela"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

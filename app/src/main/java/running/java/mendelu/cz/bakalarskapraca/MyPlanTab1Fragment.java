@@ -575,7 +575,7 @@ public class MyPlanTab1Fragment extends Fragment {
         ContentValues contentValues = new ContentValues();
         contentValues.put("repetition_id",minute*60000);
         planMainRepository.update2(idPlan, contentValues);
-        Toast.makeText(getActivity(), "Upozornenie nastavene kazdych " + minute + " min " + planMainRepository.getByType(idPlan).getRepetition() + " "  + planMainRepository.getByType(idPlan).getType(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Upozornenie nastavené každých " + minute + " min. ", Toast.LENGTH_SHORT).show();
 
     }
 
