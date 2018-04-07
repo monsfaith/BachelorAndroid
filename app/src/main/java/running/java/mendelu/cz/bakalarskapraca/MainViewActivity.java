@@ -101,7 +101,7 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
                 .repeat(2)
                 .playOn(fab);
         fab.setVisibility(View.GONE);
-        setQuoteVisible();
+        //setQuoteVisible();
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -204,7 +204,7 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
 
     public void onResume(){
         super.onResume();
-        //setQuoteVisible();
+        setQuoteVisible();
     }
 
     @Override

@@ -63,4 +63,5 @@
     <string name="pridatSub">Pridať predmet</string>
     <string name="ritual">Názov rituálu</string>
     <string name="description">Podrobnosti</string>
+    <string name="paletka">Farba predmetu</string>
 </resources>

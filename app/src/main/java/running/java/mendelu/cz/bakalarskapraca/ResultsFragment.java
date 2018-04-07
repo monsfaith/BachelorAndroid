@@ -51,7 +51,7 @@ public class ResultsFragment extends Fragment {
 
         mainOpenHelper = new MainOpenHelper(getActivity());
         database = mainOpenHelper.getWritableDatabase();
-        resultAdapter = new ResultAdapter(getActivity(), getJoinResults());
+        resultAdapter = new ResultAdapter(getActivity(), getResults());
 
         recyclerView.setAdapter(resultAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -64,19 +64,19 @@ public class ResultsFragment extends Fragment {
 
 
     public List<Exam> getResults(){
-        List<Exam> exams = examMainRepository.findAllExams();
+        List<Exam> exams = examMainRepository.findDoneExams();
         return exams;
 
     }
 
     //INNER JOIN subject ON exam.subject_id = subject.id
 
-    private Cursor getJoinResults(){
+    /*private Cursor getJoinResults(){
         return database.rawQuery("SELECT * FROM exam join subject on exam.subject_id = subject._id where exam.date < ?",new String[]{String.valueOf(System.currentTimeMillis())});
 
         //new String[]{String.valueOf(parameter?)}
 
 
-    }
+    }*/
 
 }

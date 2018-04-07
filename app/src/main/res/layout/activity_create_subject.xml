@@ -7,6 +7,14 @@
     android:orientation="vertical"
     tools:context="running.java.mendelu.cz.bakalarskapraca.CreateSubjectActivity">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/book" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -31,28 +39,33 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/skratka"
+        android:text="@string/paletka"
         android:paddingTop="10dp"
         android:layout_gravity="center_horizontal"
         android:paddingLeft="10dp"
         android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
     <EditText
-        android:id="@+id/subjectShortcutInput"
+        android:id="@+id/subjectShortcutInputEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:focusable="false"
+        android:hint="klikni pre výber farby"
+        android:gravity="center"
         android:paddingLeft="10dp"
+        android:visibility="gone"
         android:paddingBottom="15dp"
         android:layout_gravity="center_horizontal"
         android:inputType="textPersonName"
         />
 
-    <ImageView
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/subjectShortcutInput"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/book"
-        />
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/ic_add_black_24dp"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

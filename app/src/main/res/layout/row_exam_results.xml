@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -16,46 +16,70 @@
                 android:id="@+id/subjectColoricon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_notification_overlay" />
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                app:srcCompat="@drawable/cirl" />
 
             <TextView
                 android:id="@+id/examName"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
                 android:layout_toRightOf="@id/subjectColoricon"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                android:textSize="18sp" />
 
 
             <TextView
                 android:id="@+id/examDateResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:layout_below="@id/examName"
-                android:text="@string/dateResult" />
+                android:layout_alignLeft="@id/examName"
+                android:text="@string/dateResult"
+                android:layout_marginBottom="15dp"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                android:textSize="14sp" />
+
+
 
             <TextView
                 android:id="@+id/examGrade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/examDateResult"
-                android:text="@string/znamka" />
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/znamka"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/concreteGrade"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/examGrade"
-                android:layout_below="@id/examDateResult"
-                android:paddingLeft="10dp"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/concreteTry"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/examDateResult"
+                android:layout_alignParentRight="true"
                 android:layout_below="@id/examGrade"
-                android:paddingLeft="10dp"
-                android:text="TextView" />
+                android:layout_marginRight="10dp"
+                android:visibility="gone"
+                android:textAppearance="@android:style/TextAppearance.Material.Title" />
+
+            <ImageButton
+                android:id="@+id/addExamResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/examDateResult"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/examGrade"
+                android:layout_marginRight="10dp"
+                app:srcCompat="@drawable/ic_add_circle_black_32dp"
+                android:background="@android:color/transparent"
+                />
 
 
         </RelativeLayout>
@@ -63,4 +87,4 @@
     </android.support.v7.widget.CardView>
 
 
-</LinearLayout>
+</RelativeLayout>

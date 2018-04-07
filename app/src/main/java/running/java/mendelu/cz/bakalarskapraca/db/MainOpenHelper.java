@@ -15,7 +15,7 @@ import java.util.Date;
 public class MainOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "main.db";
-    private static final int DATABASE_VERSION = 56;
+    private static final int DATABASE_VERSION = 57;
 
     public MainOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -26,9 +26,9 @@ public class MainOpenHelper extends SQLiteOpenHelper {
                 Exam.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 Exam.DATE + " INTEGER NOT NULL, " +
                 Exam.TIME + " INTEGER NOT NULL, " +
-                Exam.SUCCESS + " INTEGER NOT NULL, " +
+                //Exam.SUCCESS + " INTEGER NOT NULL, " +
                 Exam.CLASSROOM + " TEXT, " +
-                Exam.TRYON + " INTEGER NOT NULL, " +
+                //Exam.TRYON + " INTEGER NOT NULL, " +
                 Exam.STUDYING + " INTEGER NOT NULL, " +
                 Exam.DIFFICULTY + " INTEGER NOT NULL, " +
                 Exam.DAYS + " INTEGER NOT NULL, " +

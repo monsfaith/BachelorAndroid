@@ -212,7 +212,7 @@ public class MainOverviewFragment extends Fragment{
                 calendar.add(Calendar.DAY_OF_MONTH,1);
             }
 
-            Toast.makeText(getActivity(), "Exam Notification nastavena od " + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Exam Notification nastavena od " + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
             Intent i = new Intent(getActivity(), ExamNotificationReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -240,7 +240,7 @@ public class MainOverviewFragment extends Fragment{
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        Toast.makeText(getActivity(), "Database Record update o" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Database Record update o" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pendingIntent);
 
     }

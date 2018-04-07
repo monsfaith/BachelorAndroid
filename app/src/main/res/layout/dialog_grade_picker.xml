@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textGrade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:text="Písomné známky"
+        android:textAppearance="@android:style/TextAppearance.Material.Title" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_height="70dp">
+    <Button
+        android:id="@+id/gradeA"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:text="A"
+        android:textSize="20dp"
+        android:background="@drawable/roundbutton"
+        android:textColor="@color/yellow_700"
+        />
+
+    <Button
+        android:id="@+id/gradeB"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:text="B"
+        android:textSize="20dp"
+        android:textColor="@color/yellow_800"
+
+        android:background="@drawable/roundbutton" />
+
+    <Button
+        android:id="@+id/gradeC"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:text="C"
+        android:textSize="20dp"
+        android:textColor="@color/orange_700"
+
+        android:background="@drawable/roundbutton" />
+
+    <Button
+        android:id="@+id/gradeD"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:text="D"
+        android:textSize="20dp"
+        android:textColor="@color/orange_900"
+
+        android:background="@drawable/roundbutton" />
+
+    <Button
+        android:id="@+id/gradeE"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:text="E"
+        android:textSize="20dp"
+        android:textColor="@color/red_700"
+        android:background="@drawable/roundbutton" />
+
+    <Button
+        android:id="@+id/gradeF"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:text="F"
+        android:textSize="20dp"
+        android:textColor="@color/red_900"
+
+        android:background="@drawable/roundbutton" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/numberGrade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:text="Číselné známky"
+        android:textAppearance="@android:style/TextAppearance.Material.Title" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_height="75dp">
+    <Button
+        android:id="@+id/grade1"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:text="1"
+        android:textSize="20dp"
+        android:textColor="@color/lime_500"
+        android:background="@drawable/roundbutton"
+        />
+
+    <Button
+        android:id="@+id/grade2"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:text="2"
+        android:textSize="20dp"
+
+        android:textColor="@color/lime_800"
+        android:background="@drawable/roundbutton" />
+
+    <Button
+        android:id="@+id/grade3"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:text="3"
+        android:textSize="20dp"
+        android:textColor="@color/green_700"
+
+        android:background="@drawable/roundbutton" />
+
+    <Button
+        android:id="@+id/grade4"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:text="4"
+        android:textSize="20dp"
+        android:textColor="@color/cyan_700"
+
+        android:background="@drawable/roundbutton" />
+
+    <Button
+        android:id="@+id/grade5"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:text="5"
+        android:textSize="20dp"
+        android:textColor="@color/blue_800"
+
+        android:background="@drawable/roundbutton" />
+    </LinearLayout>
+</LinearLayout>

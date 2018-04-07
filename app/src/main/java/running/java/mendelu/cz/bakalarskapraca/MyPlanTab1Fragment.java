@@ -529,9 +529,9 @@ public class MyPlanTab1Fragment extends Fragment {
     private void setSettingsButtons(final int idPlan) {
         AlertDialog.Builder myBuilder = new AlertDialog.Builder(getActivity());
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_set_notification, null);
-        ImageButton setNotification25 = (ImageButton) view.findViewById(R.id.setNotification25);
-        ImageButton setNotification40 = (ImageButton) view.findViewById(R.id.setNotification40);
-        ImageButton setNotification60 = (ImageButton) view.findViewById(R.id.setNotification60);
+        Button setNotification25 = (Button) view.findViewById(R.id.setNotification25);
+        Button setNotification40 = (Button) view.findViewById(R.id.setNotification40);
+        Button setNotification60 = (Button) view.findViewById(R.id.setNotification60);
 
         myBuilder.setNegativeButton("Zrušiť", null);
         myBuilder.setView(view);

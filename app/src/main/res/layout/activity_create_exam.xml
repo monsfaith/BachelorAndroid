@@ -43,7 +43,6 @@
         android:layout_below="@id/pickSubject"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:focusable="false"
         android:inputType="textPersonName"
         android:onClick="choseSubject"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
@@ -232,13 +231,12 @@
 
     <EditText
         android:id="@+id/noteInput"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/strut"
-        android:layout_alignParentRight="true"
-        android:layout_alignRight="@id/examTime"
+        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@id/examTime"
         android:layout_below="@id/examNote"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:ems="10"
         android:inputType="textMultiLine"

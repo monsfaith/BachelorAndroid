@@ -94,6 +94,7 @@ public class CreateExamActivity extends AppCompatActivity {
         examMainRepository = new ExamMainRepository(this);
         planMainRepository = new PlanMainRepository(this);
 
+
         Toast.makeText(this, "Pocet subjektov: " + subjectMainRepository.findAllSubjects().size() + examMainRepository.findAllExams().size(), Toast.LENGTH_LONG).show();
 
         seekbarDifficulty.setEnabled(false);
@@ -151,22 +152,8 @@ public class CreateExamActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (days != 0){
-                    if ((setMaxSeekBar() / 7) < 1) {
-                        chosenDays.setText(progressSeekbar + "s");
-                        seekBarUpdate();
-
-                    } else {
-                        chosenDays.setText(seekbarDifficulty.getProgress() * setMaxSeekBar() / 7 + " d");
-                        seekBarUpdate();
-
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (days != 0){
+                //if (days != 0){
+                /*if (chosenTime.getText().toString().trim().length() != 0){
                     if ((setMaxSeekBar() / 7) < 1) {
                         chosenDays.setText(progressSeekbar + "");
                         seekBarUpdate();
@@ -174,6 +161,27 @@ public class CreateExamActivity extends AppCompatActivity {
                     } else {
                         chosenDays.setText(seekbarDifficulty.getProgress() * setMaxSeekBar() / 7 + "");
                         seekBarUpdate();
+
+                    }*/
+                }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //if (days != 0){
+                if (chosenTime.getText().toString().trim().length() != 0){
+                    if ((setMaxSeekBar() / 7) < 1) {
+                        //seekBarUpdate();
+                        if (setMaxSeekBar() == 0){
+                            seekbarDifficulty.setMax(1);
+                            chosenDays.setText("" + 0);
+                        }else {
+                            seekbarDifficulty.setMax(setMaxSeekBar());
+                            //chosenDays.setText(seekbarDifficulty.getProgress() * setMaxSeekBar() / 7 + " ");
+                        }
+                    } else {
+                        //seekBarUpdate();
+                        seekbarDifficulty.setMax(7);
+                        chosenDays.setText(seekbarDifficulty.getProgress() * setMaxSeekBar() / 7 + " ");
                     }
                 }
 
@@ -191,15 +199,25 @@ public class CreateExamActivity extends AppCompatActivity {
                 //int days;
 
                 if ((setMaxSeekBar() / 7) < 1) {
-                    seekbarDifficulty.setMax(setMaxSeekBar());
-                    barDays = progress;
-                    days = barDays;
+                    if (setMaxSeekBar() == 0){
+                        seekbarDifficulty.setMax(1);
+                        days = 0;
+                    } else {
+                        seekbarDifficulty.setMax(setMaxSeekBar());
+                        barDays = progress;
+                        days = barDays;
+
+                        //
+                        progressSeekbar = progress;
+                    }
+
                 } else {
                     seekbarDifficulty.setMax(7);
                     barDays = (progress*setMaxSeekBar()/7);
+                    progressSeekbar = progress;
                     days = barDays;
                 }
-                chosenDays.setText("" + barDays);
+                chosenDays.setText("" + days);
             }
 
             @Override
@@ -479,7 +497,7 @@ public class CreateExamActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         setMaxSeekBar();
-        seekBarUpdate();
+        //seekBarUpdate();
 
     }
 
@@ -491,17 +509,27 @@ public class CreateExamActivity extends AppCompatActivity {
                 progressSeekbar = progress;
 
                 if ((setMaxSeekBar() / 7) < 1) {
-                    seekbarDifficulty.setMax(setMaxSeekBar());
-                    barDays = progress;
-                    days = barDays;
+                    if (setMaxSeekBar() == 0){
+                        seekbarDifficulty.setMax(1);
+                        days = 0;
+                    } else {
+                        seekbarDifficulty.setMax(setMaxSeekBar());
+                        barDays = progress;
+                        days = barDays;
+
+                        //
+                        progressSeekbar = progress;
+                    }
                 } else {
                     //barDays = (setMaxSeekBar() / 7) * progress;
                     //seekbarDifficulty.setMax(setMaxSeekBar()/2);
                     seekbarDifficulty.setMax(7);
                     barDays = (progress*setMaxSeekBar()/7);
+                    //
+                    progressSeekbar = progress;
                     days = barDays;
                 }
-                chosenDays.setText("" + barDays);
+                chosenDays.setText("" + days);
             }
 
             @Override

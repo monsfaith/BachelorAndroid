@@ -4,23 +4,69 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
-    <ImageButton
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:text="Zvoľ si časový interval upozornení v minútach"
+        android:textAppearance="@android:style/TextAppearance.Material.Caption" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_height="90dp">
+
+
+
+    <Button
         android:id="@+id/setNotification25"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/book" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="25"
+        android:textColor="@color/yellow_700"
+        android:textStyle="bold"
+        android:textSize="30dp"
+        android:background="@drawable/roundbutton"
+    />
 
-    <ImageButton
+    <Button
         android:id="@+id/setNotification40"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/book" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/lime_500"
+        android:text="45"
+        android:textStyle="bold"
 
-    <ImageButton
+        android:textSize="30dp"
+
+        android:background="@drawable/roundbutton"
+         />
+
+    <Button
         android:id="@+id/setNotification60"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/book" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/cyan_700"
+        android:textSize="30dp"
+        android:textStyle="bold"
+
+        android:text="60"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/roundbutton"
+        />
+
+    </LinearLayout>
 </LinearLayout>

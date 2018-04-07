@@ -36,6 +36,8 @@ dependencies {
 
     compile 'com.jakewharton:butterknife:8.8.1'
 
+    compile 'com.github.eltos:simpledialogfragment:2.2.2'
+
     compile 'com.daimajia.easing:library:2.0@aar'
     compile 'com.daimajia.androidanimations:library:2.3@aar'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'

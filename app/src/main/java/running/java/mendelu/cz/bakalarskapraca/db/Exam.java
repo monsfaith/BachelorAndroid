@@ -20,9 +20,9 @@ public class Exam {
     static final String ID = BaseColumns._ID;
     static final String DATE = "date";
     static final String TIME = "time";
-    static final String SUCCESS = "success";
+    //static final String SUCCESS = "success";
     static final String CLASSROOM = "classroom";
-    static final String TRYON = "tryon";
+    //static final String TRYON = "tryon";
     static final String DIFFICULTY = "difficulty";
     static final String DAYS = "days";
     static final String REALIZATION = "realization";
@@ -44,12 +44,12 @@ public class Exam {
         this.setDateTime(date, time);
         this.setDays(days);
         this.setRealization(false);
-        this.setSuccess(false);
-        this.setTry(1);
+        //this.setSuccess(false);
+        //this.setTry(1);
         this.setDifficulty(difficulty);
         this.setClassroom(classroom);
         this.setSubjectId(subjectId);
-        this.setGrade("achjoj");
+        this.setGrade("");
         //this.setRating(0);
         this.setNote(note);
         this.setStudying(0);
@@ -77,11 +77,6 @@ public class Exam {
         values.put(TIME, time.getTime());
     }
 
-    public void setSuccess(boolean success)
-    {
-        int bool = (success)? 1 : 0;
-        values.put(SUCCESS, bool);
-    }
 
     public void setDateTime(Date date, Time time){
         Calendar cal1 = Calendar.getInstance();
@@ -103,10 +98,6 @@ public class Exam {
         values.put(CLASSROOM, classroom);
     }
 
-    public void setTry(int tryon)
-    {
-        values.put(TRYON, tryon);
-    }
 
     public void setDifficulty(int difficulty)
     {
@@ -145,9 +136,6 @@ public class Exam {
 
     }
 
-    public boolean getSuccess(){
-        return (values.getAsInteger(SUCCESS) == 1);
-    }
 
     public boolean getRealization(){
         return (values.getAsInteger(REALIZATION) == 1);
@@ -157,9 +145,6 @@ public class Exam {
         return values.getAsString(CLASSROOM);
     }
 
-    public int getTryOn(){
-        return values.getAsInteger(TRYON);
-    }
 
     public int getDifficulty(){
         return values.getAsInteger(DIFFICULTY);
@@ -167,11 +152,6 @@ public class Exam {
 
     public int getDays(){
         return values.getAsInteger(DAYS);
-    }
-
-    public void increaseTryOn(){
-        int tryOn = values.getAsInteger(TRYON);
-        values.put(TRYON, tryOn++);
     }
 
 
