@@ -462,7 +462,7 @@ public class CreateExamActivity extends AppCompatActivity {
                             calendar.setTimeInMillis(System.currentTimeMillis());
                             /*contentValues.put("enabled",false);
                             planMainRepository.update2(1, contentValues);*/
-                            calendar.add(Calendar.MINUTE, 1);
+                            calendar.add(Calendar.MINUTE, 15);
 
                             Intent i = new Intent(getApplicationContext(), ExamNotificationReceiver.class);
                             i.putExtra("NOEXAMS",1);

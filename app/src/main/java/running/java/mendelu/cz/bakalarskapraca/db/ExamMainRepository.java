@@ -129,7 +129,7 @@ public class ExamMainRepository {
                     null,
                     null,
                     null,
-                    null); //dobra metoda pro vsetky selecty, ktore budem mat v appke
+                    Exam.DATE); //dobra metoda pro vsetky selecty, ktore budem mat v appke
 
             try {
 
@@ -191,7 +191,7 @@ public class ExamMainRepository {
             Exam result = null;
             Cursor c = db.query(Exam.TABLE,
                     null,
-                    Exam.DATE + " < " + calendar.getTimeInMillis(),
+                    Exam.DATE + " > " + calendar.getTimeInMillis(),
                     null,
                     null,
                     null,
@@ -284,12 +284,111 @@ public class ExamMainRepository {
         }
 
 
+    public List<Exam> getExamResultsList(long date){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTimeInMillis(date);
+        cal1.set(Calendar.HOUR_OF_DAY,23);
+        cal1.set(Calendar.MINUTE,59);
+
+        try {
+            List<Exam> result = new LinkedList<>();
+            Cursor c = db.query(Exam.TABLE,
+                    null,
+                    Exam.DATE + " > " + date + " AND " + Exam.DATE + " < " + cal1.getTimeInMillis(),
+                    null,
+                    null,
+                    null,
+                    Exam.DATE);
+
+            try {
+
+                while (c.moveToNext()) {
+                    result.add(new Exam(c));
+
+                }
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+    }
+
+    public List<Exam> getExamResultsListNotification(){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+
+        try {
+            List<Exam> result = new LinkedList<>();
+            Cursor c = db.query(Exam.TABLE,
+                    null,
+                    Exam.DATE + " > " + System.currentTimeMillis(),
+                    null,
+                    null,
+                    null,
+                    Exam.DATE);
+
+            try {
+
+                while (c.moveToNext()) {
+                    result.add(new Exam(c));
+
+                }
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+    }
+
+
+
     public Cursor getOtherExamResults(Date date){
 
 
         SQLiteDatabase db = mainOpenHelper.getWritableDatabase();
 
             return db.rawQuery("SELECT e.*, s.name, s.color FROM exam e left join subject s on e.subject_id = s._id where e.date > ? order by e.date",new String[]{String.valueOf(date.getTime())});
+
+    }
+
+    public List<Exam> getOtherExamResultsList(long date){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+
+        try {
+            List<Exam> result = new LinkedList<>();
+            Cursor c = db.query(Exam.TABLE,
+                    null,
+                    Exam.DATE + " > " + date,
+                    null,
+                    null,
+                    null,
+                    Exam.DATE);
+
+            try {
+
+                while (c.moveToNext()) {
+                    result.add(new Exam(c));
+
+                }
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
 
     }
 

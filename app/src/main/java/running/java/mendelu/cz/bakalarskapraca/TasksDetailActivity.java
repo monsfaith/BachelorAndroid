@@ -115,21 +115,21 @@ public class TasksDetailActivity extends AppCompatActivity {
 
         todayView.setText(sdf.format(cal.getTime()));
 
-        examAdapter = new ExamAdapter(this, examMainRepository.getExamResults(cal.getTime()));
+        examAdapter = new ExamAdapter(this, examMainRepository.getExamResultsList(cal.getTimeInMillis()));
         recyclerView.setAdapter(examAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-        cal.add(Calendar.DATE,1);
+        cal.add(Calendar.DAY_OF_MONTH,1);
         cal.set(Calendar.HOUR_OF_DAY,0);
         cal.set(Calendar.MINUTE,1);
         tomorrowView.setText(sdf.format(cal.getTime()));
 
-        examAdapterTomorrow = new ExamAdapter(this, examMainRepository.getExamResults(cal.getTime()));
+        examAdapterTomorrow = new ExamAdapter(this, examMainRepository.getExamResultsList(cal.getTimeInMillis()));
         recyclerViewTomorrow.setAdapter(examAdapterTomorrow);
         recyclerViewTomorrow.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-        cal.add(Calendar.DATE,1);
-        examAdapterOther = new ExamAdapter(this, examMainRepository.getOtherExamResults(cal.getTime()));
+        cal.add(Calendar.DAY_OF_MONTH,1);
+        examAdapterOther = new ExamAdapter(this, examMainRepository.getOtherExamResultsList(cal.getTimeInMillis()));
         recyclerViewOther.setAdapter(examAdapterOther);
         recyclerViewOther.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         otherView.setText("od " + sdf.format(cal.getTime()));

@@ -62,7 +62,8 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
     @Override
     public void onBindViewHolder(ExamAdapter.MyViewHolder holder, int position) {
 
-        //Exam currentExam = exams.get(position);
+        final Exam currentExam = exams.get(position);
+        SubjectMainRepository subjectMainRepository = new SubjectMainRepository(context);
 
 
         /*Exam currentExam = exams.get(position);
@@ -74,7 +75,7 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
         holder.examSatisfaction.setNumStars(4);
         //holder.habitImage.setImageResource(currentHabit.getIconId());*/
 
-        if (!cursor.moveToPosition(position)) {
+        /*if (!cursor.moveToPosition(position)) {
             return;
         }
 
@@ -84,7 +85,13 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
         long studyDate = cursor.getLong(cursor.getColumnIndex(Exam.STUDY_DATE));
         long examTime = cursor.getLong(cursor.getColumnIndex(Exam.TIME));
         String examNote = cursor.getString(cursor.getColumnIndex(Exam.NOTE));
-        int colorSubject = cursor.getInt(cursor.getColumnIndex(Subject.COLOR));
+        int colorSubject = cursor.getInt(cursor.getColumnIndex(Subject.COLOR));*/
+
+        String subjectName = subjectMainRepository.getById(currentExam.getSubjectId()).getName();
+        String examClassroom = currentExam.getClassroom();
+        long examDate = currentExam.getDate().getTime();
+        String examNote = currentExam.getNote();
+        int colorSubject = subjectMainRepository.getById(currentExam.getSubjectId()).getColor();
 
         holder.subjectName.setText(subjectName);
         holder.subjectName.setTextColor(colorSubject);
@@ -94,7 +101,8 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
         holder.examIcon.getBackground().setColorFilter(new LightingColorFilter(colorSubject,0));
 
         holder.examEdit.setOnClickListener(new View.OnClickListener() {
-            long examId = cursor.getLong(cursor.getColumnIndex(Exam.ID));
+            //long examId = cursor.getLong(cursor.getColumnIndex(Exam.ID));
+            long examId = currentExam.getId();
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, examId + "fungzzuje?", Toast.LENGTH_LONG).show();
@@ -114,7 +122,8 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
 
     @Override
     public int getItemCount() {
-        return cursor.getCount();
+        //return cursor.getCount();
+        return exams.size();
     }
 
 

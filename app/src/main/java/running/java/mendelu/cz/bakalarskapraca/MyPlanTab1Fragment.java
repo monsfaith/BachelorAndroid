@@ -42,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import running.java.mendelu.cz.bakalarskapraca.db.Exam;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamNotificationAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitAdapter;
@@ -823,10 +824,14 @@ public class MyPlanTab1Fragment extends Fragment {
 
     }
 
-    private Cursor getExamResults(){
+    /*private Cursor getExamResults(){
         MainOpenHelper mainOpenHelper = new MainOpenHelper(getActivity());
         SQLiteDatabase database = mainOpenHelper.getWritableDatabase();
-        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? order by e.date",new String[]{String.valueOf(System.currentTimeMillis())});
+        return database.rawQuery("SELECT e.*, s.name, s.color FROM exam e left join subject s on e.subject_id = s._id where e.date > ? order by e.date",new String[]{String.valueOf(System.currentTimeMillis())});
+    }*/
+
+    private List<Exam> getExamResults(){
+        return examMainRepository.getExamResultsListNotification();
     }
 
     public void onResume(){

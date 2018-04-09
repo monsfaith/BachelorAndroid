@@ -80,6 +80,8 @@
             android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:excludeFromRecents="true">
         </activity>
+        <activity android:name=".notifications.SleepNotificationActivity">
+        </activity>
         <receiver android:name=".notifications.receivers.DailyHabitNotificationReceiver"
             android:enabled="true"
             android:exported="true"
@@ -94,6 +96,8 @@
         <receiver android:name=".notifications.receivers.DatabaseTimeChangeReceiver">
         </receiver>
         <receiver android:name=".notifications.receivers.CancelExamReceiver">
+        </receiver>
+        <receiver android:name=".notifications.receivers.SleepReceiver">
         </receiver>
 
 

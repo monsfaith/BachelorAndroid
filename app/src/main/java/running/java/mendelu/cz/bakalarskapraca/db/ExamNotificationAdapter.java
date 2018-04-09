@@ -17,7 +17,9 @@ import android.widget.Toast;
 
 import java.sql.Time;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import running.java.mendelu.cz.bakalarskapraca.OneExamDetailActivity;
 import running.java.mendelu.cz.bakalarskapraca.R;
@@ -36,12 +38,21 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
     //spocitava pocet fajok pri skuske
     private int count;
     private boolean zero = false;
+    private List<Exam> exams = Collections.emptyList();
 
     public ExamNotificationAdapter(Context context, Cursor cursor){
         layoutInflater = LayoutInflater.from(context);
         this.cursor = cursor;
         this.context = context;
         this.count = 0;
+
+    }
+
+    public ExamNotificationAdapter(Context context, List<Exam> exams){
+        layoutInflater = LayoutInflater.from(context);
+        this.exams = exams;
+        this.context = context;
+
 
     }
 
@@ -57,34 +68,46 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
     @Override
     public void onBindViewHolder(final ExamNotificationAdapter.MyViewHolder holder, int position) {
 
-        if (!cursor.moveToPosition(position)) {
+        /*if (!cursor.moveToPosition(position)) {
             return;
-        }
+        }*/
+
+        final Exam currentExam = exams.get(position);
+        SubjectMainRepository subjectMainRepository = new SubjectMainRepository(context);
 
 
 
 
-        String subjectName = cursor.getString(cursor.getColumnIndex(Subject.NAME));
-        long examDate = cursor.getLong(cursor.getColumnIndex(Exam.DATE));
-        long examTime = cursor.getLong(cursor.getColumnIndex(Exam.TIME));
-       // final long idExam = cursor.getLong(cursor.getColumnIndex(Exam.ID));
+        //String subjectName = cursor.getString(cursor.getColumnIndex(Subject.NAME));
+        //long examDate = cursor.getLong(cursor.getColumnIndex(Exam.DATE));
+        //long examTime = cursor.getLong(cursor.getColumnIndex(Exam.TIME));
 
+        String subjectName = subjectMainRepository.getById(currentExam.getSubjectId()).getName();
+        long examDate = currentExam.getDate().getTime();
 
 
 
         holder.subjectName.setText(subjectName);
-        holder.examDate.setText(android.text.format.DateFormat.format("dd.MM.yyyy", new Date(examDate)) + ", " + (android.text.format.DateFormat.format("HH:mm", new Time(examTime))));
+        holder.examDate.setText(android.text.format.DateFormat.format("dd.MM.yyyy HH:mm", new Date(examDate)));
 
-        int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
-        int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
+        //int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
+        //int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
+        int wantedDays = currentExam.getDays();
+        int actualDays = currentExam.getStudying();
+
+
         holder.examDays.setText(actualDays + "/" + wantedDays);
 
         holder.examCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
-            long idEx = cursor.getLong(cursor.getColumnIndex(Exam.ID));
-            long studyDate = cursor.getLong(cursor.getColumnIndex(Exam.STUDY_DATE));
-            int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
-            int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
+            //long idEx = cursor.getLong(cursor.getColumnIndex(Exam.ID));
+            //long studyDate = cursor.getLong(cursor.getColumnIndex(Exam.STUDY_DATE));
+            //int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
+            //int actualDays = cursor.getInt(cursor.getColumnIndex(Exam.STUDYING));
+            long idEx = currentExam.getId();
+            long studyDate = currentExam.getStudyDate();
+            int wantedDays = currentExam.getDays();
+            int actualDays = currentExam.getStudying();
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -163,7 +186,8 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
 
     @Override
     public int getItemCount() {
-        return cursor.getCount();
+        return exams.size();
+        //return cursor.getCount();
     }
 
 

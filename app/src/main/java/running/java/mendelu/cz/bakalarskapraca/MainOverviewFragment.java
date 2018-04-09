@@ -51,6 +51,7 @@ import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DatabaseR
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DatabaseTimeChangeReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.SleepReceiver;
 
 
 /**
@@ -149,6 +150,7 @@ public class MainOverviewFragment extends Fragment{
 
         setExamNotification();
         setDatabaseNotification();
+        setSleepNotification();
         //altLoadListView();
 
         butt.setOnClickListener(new View.OnClickListener() {
@@ -245,9 +247,29 @@ public class MainOverviewFragment extends Fragment{
 
     }
 
+    public void setSleepNotification(){
+        Intent i = new Intent(getContext(), SleepReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 50, i, 0);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+
+        if (examMainRepository.getClosestExam() != null) {
+            long date = examMainRepository.getClosestExam().getDate().getTime();
+            calendar.setTimeInMillis(date);
+            calendar.add(Calendar.HOUR_OF_DAY, -8);
+            if (alarmManager != null){
+                Toast.makeText(getActivity(),"Sleep notif o " + new SimpleDateFormat("dd.MM.yyyy HH:mm").format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent );
+            }
+        }
+
+    }
+
 
     public void loadListView(){
-        examAdapter = new ExamAdapter(getActivity(), getExamResults());
+        //examAdapter = new ExamAdapter(getActivity(), getExamResults());
+        examAdapter = new ExamAdapter(getActivity(), examMainRepository.getExamResultsList(System.currentTimeMillis()));
         recyclerView.setAdapter(examAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 

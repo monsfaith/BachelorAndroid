@@ -17,6 +17,7 @@ import java.util.Calendar;
 import running.java.mendelu.cz.bakalarskapraca.R;
 import running.java.mendelu.cz.bakalarskapraca.db.Exam;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.SubjectMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.ExamPostponeNotificationActivity;
 import running.java.mendelu.cz.bakalarskapraca.notifications.ExamTomorrowNotificationActivity;
@@ -114,7 +115,10 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         .setContentText(contentText)
         .setAutoCancel(true);
 
-        notificationManager.notify(500, builder.build());
+        PlanMainRepository planMainRepository = new PlanMainRepository(context);
+        if (planMainRepository.getByType(1).getEnabled() == true) {
+            notificationManager.notify(500, builder.build());
+        }
     }
 
     private void setExamNotification(Context context){

@@ -1,0 +1,20 @@
+package running.java.mendelu.cz.bakalarskapraca.notifications;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import running.java.mendelu.cz.bakalarskapraca.R;
+
+/**
+ * Created by Monika on 10.04.2018.
+ */
+
+public class SleepNotificationActivity extends AppCompatActivity{
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_notification_sleep);
+
+    }
+}

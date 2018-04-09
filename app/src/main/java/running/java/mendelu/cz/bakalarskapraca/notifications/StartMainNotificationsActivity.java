@@ -23,6 +23,7 @@ import org.apache.http.conn.scheme.HostNameResolver;
 import java.util.Calendar;
 
 import running.java.mendelu.cz.bakalarskapraca.R;
+import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamNotificationAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.MainOpenHelper;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
@@ -46,6 +47,7 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
     private MainOpenHelper mainOpenHelper;
     private SQLiteDatabase database;
     private RecyclerView recyclerView;
+    private ExamMainRepository examMainRepository;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,8 +65,10 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         cancel = (Button) findViewById(R.id.letsCancelit);
         info = (TextView) findViewById(R.id.infoAboutStartingPlans);
         planMainRepository = new PlanMainRepository(getApplicationContext());
+        examMainRepository = new ExamMainRepository(getApplicationContext());
 
-        examNotificationAdapter = new ExamNotificationAdapter(getApplicationContext(), getExamResults());
+        //examNotificationAdapter = new ExamNotificationAdapter(getApplicationContext(), getExamResults());
+        examNotificationAdapter = new ExamNotificationAdapter(getApplicationContext(), examMainRepository.getExamResultsListNotification());
                 recyclerView = (RecyclerView) findViewById(R.id.availableExamsRecyclerVie);
         recyclerView.setAdapter(examNotificationAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -162,9 +166,9 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         planMainRepository.update2(1,contentValues);
     }
 
-    private Cursor getExamResults(){
-        return database.rawQuery("SELECT e.*, s.name, s.shortcut FROM exam e left join subject s on e.subject_id = s._id where e.date > ? order by e.date",new String[]{String.valueOf(System.currentTimeMillis())});
-    }
+    /*private Cursor getExamResults(){
+        return database.rawQuery("SELECT e.*, s.name, s.color FROM exam e left join subject s on e.subject_id = s._id where e.date > ? order by e.date",new String[]{String.valueOf(System.currentTimeMillis())});
+    }*/
 
 
 
