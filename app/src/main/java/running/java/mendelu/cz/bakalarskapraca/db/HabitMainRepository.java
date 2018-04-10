@@ -36,6 +36,8 @@ public class HabitMainRepository {
 
     }
 
+
+
     public long update(long id, String column, int value){
         ContentValues cv = new ContentValues();
         cv.put(column,value);
@@ -124,7 +126,7 @@ public class HabitMainRepository {
             List<Habit> result = new LinkedList<>();
             Cursor c = db.query(Habit.TABLE_HABITS,
                     null,
-                    Habit.PLAN + " = " + 1,
+                    null,
                     null,
                     null,
                     null,
@@ -160,7 +162,7 @@ public class HabitMainRepository {
                     null,
                     null,
                     null,
-                    null);
+                    Habit.PLAN + " DESC");
 
 
             try {
@@ -193,7 +195,7 @@ public class HabitMainRepository {
                     null,
                     null,
                     null,
-                    null);
+                    Habit.PLAN + " DESC");
 
 
             try {
@@ -226,7 +228,7 @@ public class HabitMainRepository {
                     null,
                     null,
                     null,
-                    null);
+                    Habit.PLAN + " DESC");
 
 
             try {
