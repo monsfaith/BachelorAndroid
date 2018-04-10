@@ -1,10 +1,12 @@
 package running.java.mendelu.cz.bakalarskapraca.notifications.receivers;
 
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -15,6 +17,9 @@ import java.util.Calendar;
 public class ExamTomorrowReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        //Toast.makeText(context, "rusim exam receiver", Toast.LENGTH_SHORT).show();
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(500);
         cancelExam(context);
         setExamNotificationTomorrow(context);
 

@@ -46,6 +46,7 @@ import running.java.mendelu.cz.bakalarskapraca.db.Subject;
 import running.java.mendelu.cz.bakalarskapraca.db.SubjectAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.SubjectMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.SleepReceiver;
 
 public class CreateExamActivity extends AppCompatActivity {
 
@@ -498,6 +499,31 @@ public class CreateExamActivity extends AppCompatActivity {
         super.onResume();
         setMaxSeekBar();
         //seekBarUpdate();
+
+    }
+
+    public void setSleepNotification(){
+        Intent i = new Intent(getApplicationContext(), SleepReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 50, i, 0);
+        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+
+        if (examMainRepository.getClosestExam() != null) {
+            long date = examMainRepository.getClosestExam().getDate().getTime();
+            calendar.setTimeInMillis(date);
+            Calendar control = calendar;
+            control.set(Calendar.HOUR,3);
+            calendar.add(Calendar.HOUR_OF_DAY, -8);
+            long notification = calendar.getTimeInMillis();
+            if (control.after(new Date(notification))){
+
+            if (alarmManager != null) {
+                Toast.makeText(getApplicationContext(), "Sleep notif o " + new SimpleDateFormat("dd.MM.yyyy HH:mm").format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, notification, AlarmManager.INTERVAL_DAY, pendingIntent);
+            }
+            }
+        }
 
     }
 

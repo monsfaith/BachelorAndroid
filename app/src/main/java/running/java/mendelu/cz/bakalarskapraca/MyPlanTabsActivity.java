@@ -61,7 +61,9 @@ public class MyPlanTabsActivity extends AppCompatActivity {
             }
         });*/
 
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
 
         //tabLayout.setOnTabSelectedListener();
 

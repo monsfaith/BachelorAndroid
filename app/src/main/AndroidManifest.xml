@@ -35,6 +35,7 @@
         <activity
             android:name=".TasksDetailActivity"
             android:theme="@style/AppTheme"
+            android:label="Skúšky"
             android:screenOrientation="portrait"
             />
         <activity
