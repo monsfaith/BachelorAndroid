@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -73,13 +74,20 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
 
         holder.habitName.setText(currentHabit.getName());
         final Long id = currentHabit.getId();
-        //Picasso.get().load("R.drawable." + currentHabit.getIcon()).into(holder.habitImage);
-        holder.habitImage.setImageDrawable(getResources(currentHabit.getIcon()));
-        final int opacityPicture = Color.argb(155, 255, 255, 255);
         final HabitMainRepository habitMainRepository = new HabitMainRepository(context);
-        if (!habitMainRepository.isInPlan(id, idOfPlan)){
-            holder.habitImage.setColorFilter(opacityPicture, PorterDuff.Mode.SRC_ATOP);
 
+        boolean inPlan = habitMainRepository.isInPlan(id,idOfPlan);
+
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier(currentHabit.getIcon(), "drawable",
+                context.getPackageName());
+
+        Glide.with(context).load(resourceId).override(256,256).into(holder.habitImage);
+        //Picasso.get().load("R.drawable." + currentHabit.getIcon()).into(holder.habitImage);
+        //holder.habitImage.setImageDrawable(getResources(currentHabit.getIcon()));
+        final int opacityPicture = Color.argb(155, 255, 255, 255);
+        if (!inPlan){
+            holder.habitImage.setColorFilter(opacityPicture, PorterDuff.Mode.SRC_ATOP);
         }
 
 

@@ -399,7 +399,18 @@ public class CreateExamActivity extends AppCompatActivity {
                         //android.R.style.Theme_Holo_Light_Dialog_MinWidth
                 );
 
-                datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
+                /*datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
+                if (chosenDate.getText().toString().trim().length() != 0){
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    try {
+                        long date = sdf.parse(chosenDate.getText().toString()).getTime();
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(date);
+                        datePickerDialog.updateDate(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) - 1,calendar.get(Calendar.DAY_OF_MONTH));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }*/
 
 
                 datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

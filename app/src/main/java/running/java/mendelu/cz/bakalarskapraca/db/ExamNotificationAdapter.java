@@ -131,7 +131,7 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
 
                         holder.examDays.setText(actualDays + "/" + wantedDays);
 
-                        Toast.makeText(context, "checknute" + count, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "checknute" + count, Toast.LENGTH_SHORT).show();
                     } else {
                         count = count + 1;
                     }
@@ -146,7 +146,7 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
                     if (count > 0) {
                         count = count - 1;
                     }
-                    Toast.makeText(context, "nechecknute" + count, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "nechecknute" + count, Toast.LENGTH_SHORT).show();
 
                 }
             }

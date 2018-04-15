@@ -40,14 +40,31 @@
                 android:layout_alignStart="@+id/todayView"
                 android:layout_below="@+id/todayView"
                 android:layout_marginTop="12dp" />-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_below="@id/todayView"
+                android:id="@+id/relativeLayout"
+                android:layout_height="wrap_content">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/mainViewExamRecyclerView"
-                android:layout_below="@id/todayView"
                 android:paddingLeft="16dp"
                 android:paddingTop="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/noExamsToday"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="Dnes ťa nečakajú žiadne skúšky."
+                android:textSize="15dp"
+                android:visibility="invisible"
+                android:textAppearance="@android:style/TextAppearance.Material.Caption" />
+
+            </RelativeLayout>
 
             <!--<ListView
                 android:id="@+id/otherStudyListView"
@@ -61,7 +78,7 @@
                 android:id="@+id/textDateToday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/mainViewExamRecyclerView"
+                android:layout_above="@+id/relativeLayout"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="12dp"
@@ -74,7 +91,7 @@
                 android:id="@+id/buttonMoreee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/mainViewExamRecyclerView"
+                android:layout_below="@+id/relativeLayout"
                 android:background="@color/cardview_light_background"
                 android:gravity="start|center"
                 android:onClick="detailShow"

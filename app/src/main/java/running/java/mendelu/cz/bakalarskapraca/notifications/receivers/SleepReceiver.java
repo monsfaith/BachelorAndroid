@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import running.java.mendelu.cz.bakalarskapraca.R;
@@ -50,20 +51,29 @@ public class SleepReceiver extends BroadcastReceiver {
     }
 
     public void setSleepNotification(Context context){
-
         Intent i = new Intent(context, SleepReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 50, i, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
+        Calendar threeHours = Calendar.getInstance();
         ExamMainRepository examMainRepository = new ExamMainRepository(context);
 
-        if (examMainRepository.findNextExams().size() > 1) {
-            long date = examMainRepository.findNextExams().get(1).getDate().getTime();
+        if (examMainRepository.getClosestExam() != null) {
+            long date = examMainRepository.getClosestExam().getDate().getTime();
             calendar.setTimeInMillis(date);
             calendar.add(Calendar.HOUR_OF_DAY, -8);
-            if (alarmManager != null){
-                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent );
+            threeHours.setTimeInMillis(date);
+            threeHours.set(Calendar.HOUR, 2);
+            threeHours.set(Calendar.MINUTE, 0);
+            if (threeHours.after(calendar.getTimeInMillis())) {
+
+
+                if (alarmManager != null) {
+                    if (System.currentTimeMillis() < calendar.getTimeInMillis()) {
+                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                    }
+                }
             }
         }
 

@@ -82,6 +82,7 @@ public class MainOverviewFragment extends Fragment{
     private Plan eveningPlan;
     private TextView actualPlanTextView;
     private TextView textDate;
+    private TextView noExamsToday;
 
 
     public MainOverviewFragment() {
@@ -110,6 +111,7 @@ public class MainOverviewFragment extends Fragment{
         actualPlanTextView = (TextView) view.findViewById(R.id.actualPlanTextView);
         progressBarReview = (ProgressBar) view.findViewById(R.id.progressBarReview);
         textDate = (TextView) view.findViewById(R.id.textDateToday);
+        noExamsToday = (TextView) view.findViewById(R.id.noExamsToday);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         textDate.setText(sdf.format(System.currentTimeMillis()));
@@ -123,6 +125,7 @@ public class MainOverviewFragment extends Fragment{
             createMorningHabits();
             createLunchHabits();
             createEveningHabits();
+            createOtherHabits();
             //setDatabasePlanTimeDaily();
 
             //DAVAM len docasne prec
@@ -133,6 +136,10 @@ public class MainOverviewFragment extends Fragment{
             morningPlan = planMainRepository.getByType(2);
             lunchPlan = planMainRepository.getByType(3);
             eveningPlan = planMainRepository.getByType(4);
+        }
+
+        if (examMainRepository.getExamResultsList(System.currentTimeMillis()).size() == 0){
+            noExamsToday.setVisibility(View.VISIBLE);
         }
 
 
@@ -256,14 +263,24 @@ public class MainOverviewFragment extends Fragment{
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
+        Calendar threeHours = Calendar.getInstance();
 
         if (examMainRepository.getClosestExam() != null) {
             long date = examMainRepository.getClosestExam().getDate().getTime();
             calendar.setTimeInMillis(date);
             calendar.add(Calendar.HOUR_OF_DAY, -8);
-            if (alarmManager != null){
-                Toast.makeText(getActivity(),"Sleep notif o " + new SimpleDateFormat("dd.MM.yyyy HH:mm").format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
-                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent );
+            threeHours.setTimeInMillis(date);
+            threeHours.set(Calendar.HOUR, 2);
+            threeHours.set(Calendar.MINUTE, 0);
+            if (threeHours.after(calendar.getTimeInMillis())) {
+
+
+                if (alarmManager != null) {
+                    Toast.makeText(getActivity(), "Sleep notif o " + new SimpleDateFormat("dd.MM.yyyy HH:mm").format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+                    if (System.currentTimeMillis() < calendar.getTimeInMillis()) {
+                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                    }
+                }
             }
         }
 
@@ -419,6 +436,9 @@ public class MainOverviewFragment extends Fragment{
         lunchPlan = planMainRepository.getByType(3);
         eveningPlan = planMainRepository.getByType(4);
         loadListView();
+        if (examMainRepository.getExamResultsList(System.currentTimeMillis()).size() != 0){
+            noExamsToday.setVisibility(View.GONE);
+        }
 
     }
 
@@ -431,9 +451,9 @@ public class MainOverviewFragment extends Fragment{
     }
 
 
-    private Cursor getExamResults(){
+    /*private Cursor getExamResults(){
         return database.rawQuery("SELECT e.*, s.name, s.color FROM exam e left join subject s on e.subject_id = s._id where e.date > ? AND e.date < ?",new String[]{String.valueOf(System.currentTimeMillis()), String.valueOf(getTodayEnd())});
-    }
+    }*/
 
 
     private void init(){
@@ -588,43 +608,33 @@ public class MainOverviewFragment extends Fragment{
     private void createOtherHabits(){
         Habit bellyBreathing = new Habit("Dýchanie bruchom","Jednu ruku si polož na brucho a druhú na hrudník. Snaž sa svoj dych smerovať na brucho, aby sa tvoja ruka na bruchu pohybovala a ruka na hrudníku zostala bez pohybu. Kontrolované dýchanie pomáha uvoľňovať stres a napätie. ", "Snaž sa sústrediť na svoje dýchanie a vydychovať do brucha. ","nose",1);
         long idBelly = habitMainRepository.insert(bellyBreathing);
-        planMainRepository.insertAssociaton(new PlanHabitAssociation(idBelly,1));
 
         Habit breathing = new Habit("Dýchanie","Kontrolované dýchanie pomáha uvoľňovať stres a napätie. Pri vydychovaní si skús predstaviť, ako sa tvoje telo zbavuje všetkého negatívneho a stáva sa uvoľneným. Vydychovanie by malo trvať 2x viac ako nádych a zvyčajná dĺžka trvania relaxácie je 2-3 minúty.", "Zbav sa negativity. Nech je tvoj výdych 2x dlhší ako nádych. ", "lungs",1);
         long idBreathing = habitMainRepository.insert(breathing);
-        planMainRepository.insertAssociaton(new PlanHabitAssociation(idBreathing,1));
 
         Habit muscle = new Habit("Relaxácia svalov","Snaž sa uvoľňovať a napínať jednotlivé svaly a pritom sa na túto činnosť sústreďovať. Začni buď od hlavy až k päte, alebo naopak. Cieľom je uvoľniť nepotrebné napätie v tele. ", "Uvoľni si nepotrebné napätie v tele napínaním a uvoľňovaním jednotlivých svalov.", "lotusposition", 1);
         long idMuscle = habitMainRepository.insert(muscle);
-        planMainRepository.insertAssociaton(new PlanHabitAssociation(idMuscle,1));
 
         Habit imagine = new Habit("Predstav si","Vizualizovanie si príjemného miesta alebo situácie rovnako patrí medzi osvedčené meditačné a relaxačné techniky. Súčasťou účinného vykonania je zapojiť čo najviac zmyslov. ", "Predstav si obľúbené miesto alebo situáciu, zapoj čo najviac zmyslov a uvoľni napätie. ", "beach",1);
         long idImagine = habitMainRepository.insert(imagine);
-        planMainRepository.insertAssociaton(new PlanHabitAssociation(idImagine,1));
 
         Habit exercise = new Habit("Cvičenie", "Cvičenie má pozitívny vplyv na zmierňovanie únavy, zlepšovanie ostražitosti a sústredenia, a celkovo na lepšiu funkčnosť kognitívnych funkcií. Cvičením sa uvoľňujú endorfíny, a naopak sa znižuje úroveň stresových hormónov. Nie je nutné cvičiť do úplného vyčerpania, stačí primerane rozhýbať svoje telo", "Rozhýb svoje telo, či už náročnejším workoutom alebo jemným pretiahnutím svalov. Sústreď sa na telo.", "exercise",1);
         long idExercise = habitMainRepository.insert(exercise);
-        planMainRepository.insertAssociaton(new PlanHabitAssociation(idExercise,1));
 
         Habit animal = new Habit("Domáci maznáčik", "Zvieratá pomáhajú ľuďom uvoľňovať bolesť, stres, úzkosť, napätie či únavu. Rôzne štúdie preukázali, že prítomnosť zvieraťa v domácnostiach redukovala úroveň stresu u ľudí, na ktorých vplývali rôzne stresory.","Ak máš zviera, povenuj sa mu krátku chvíľu. ", "dog", 1);
         long idAnimal = habitMainRepository.insert(animal);
-        planMainRepository.insertAssociaton(new PlanHabitAssociation(idAnimal,1));
 
         Habit classicalMusic = new Habit("Klasická hudba", "Doktor Kevin Labar sa vyjadril, že klasická hudba dokáže zlepšiť intelektuálny výkon. Jej počúvaním sa v tele vytvára upokojujúci pocit spojený s uvoľňovaním dopamínu a znižovaním úrovne stresových hormónov, čo v konečnom dôsledku vytvára pokojnú náladu a stav mysle.", "Počúvaním klasickej hudby sa zvyšuje aktivita génov súvisiacich s učením, pamäťou či uvoľňovaním dobrých hormónov", "music",1);
         long idMusic = habitMainRepository.insert(classicalMusic);
-        planMainRepository.insertAssociaton(new PlanHabitAssociation(idMusic,1));
 
         Habit humor = new Habit("Humor","Úsmev a smiech sú dobrými životabudičmi a zdrojmi energie. Každý deň si nájdi spôsoby, ako sa dať rozosmiať a považuj to za nutnú súčasť dňa.", "Nájdi si zdroj zábavy, ktorý ťa pobaví a uvoľní. Smiech lieči. ", "laughing",1);
         long idHumor = habitMainRepository.insert(humor);
-        planMainRepository.insertAssociaton(new PlanHabitAssociation(idHumor,1));
 
         Habit coloring = new Habit("Vyfarbovanie", "Vyfarbovanie, či už vo forme antistresových omaľovániek alebo inej formy, má značný vplyv na obmedzenie prítomnosti negatívnych myšlienok a je zdrojom oddychu. Pravidelné vymaľovávanie podporuje kreativitu, logiku a uvoľňuje stres.", "Pravidelné vymaľovávanie podporuje kreativitu, logiku a uvoľňuje stres.", "color",1);
         long idColoring = habitMainRepository.insert(coloring);
-        planMainRepository.insertAssociaton(new PlanHabitAssociation(idColoring,1));
 
         Habit notice = new Habit("Všímavosť", "Byť všímamým, pozorovať okolie i svoje pocity je súčasťou relaxačných techník vedúcich k uvoľňovaniu stresu. Cieľom je zamerať sa na súčasné okamihy namiesto venovania pozornosti strachom o budúcnosť. Účelom je zamerať sa na svoj dych, následne na zvuky, myšlienky, bez ohľadu na to, či sú dobré, alebo zlé. ", "Zameraj na sa na myšlienky, zvuky, dych. Zacieľ svoje sústredenie na prítomný okamih.", "observe", 1);
         long idNotice = habitMainRepository.insert(notice);
-        planMainRepository.insertAssociaton(new PlanHabitAssociation(idNotice,1));
 
         //Habit coffee =
 
@@ -634,15 +644,13 @@ public class MainOverviewFragment extends Fragment{
 
         Habit friends = new Habit("Rodina a priatelia", "Stretnutie s blízkymi osobami redukuje uvoľňovanie stresového hormónu v ťažkých situáciách v porovnaní so situáciami, keď blízky priateľ nebol prítomný.", "Venuj čas blízkej osobe.", "friends",1);
         long idFriends = habitMainRepository.insert(friends);
-        planMainRepository.insertAssociaton(new PlanHabitAssociation(idFriends,1));
 
         Habit walking = new Habit("Prechádzka", "Štúdie na Stanfordskej univerzite preukázali, že prechádzanie sa zvyšuje kreativitu. Nie je dôležité prostredie, ale samotný akt prechádzania sa. Ak je to však možné, pokús sa stráviť krátky čas i prechádzkou na čerstvom vzduchu. Príroda má značný vplyv na zníženie hladiny stresu. ","Prechádzanie sa podporuje kreativitu. ", "walking", 1);
 
         //Habit call
 
-        Habit reading = new Habit("Čítanie","Na zníženie hladiny stresu má významný účinok i čítanie kníh, ktoré navyše pomáhajú zlepšovať predstavivosť, napomáhajú k lepšiemu a kvalitnejšiemu spánku, a rovnako čítanie ukázalo priaznivý vplyv na predchádzanie problémov s výskytom Alzheimerovej choroby.", "Napomáha k zlepšeniu predstavivosti a kvalitnejšiemu spánku.", "book",1);
+        Habit reading = new Habit("Čítanie","Na zníženie hladiny stresu má významný účinok i čítanie kníh, ktoré navyše pomáhajú zlepšovať predstavivosť, napomáhajú k lepšiemu a kvalitnejšiemu spánku, a rovnako čítanie ukázalo priaznivý vplyv na predchádzanie problémov s výskytom Alzheimerovej choroby.", "Napomáha k zlepšeniu predstavivosti a kvalitnejšiemu spánku.", "book128",1);
         long idReading = habitMainRepository.insert(reading);
-        planMainRepository.insertAssociaton(new PlanHabitAssociation(idReading,1));
 
 
 

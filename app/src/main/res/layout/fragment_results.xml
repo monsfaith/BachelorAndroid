@@ -6,7 +6,7 @@
     tools:context="running.java.mendelu.cz.bakalarskapraca.ResultsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -22,13 +22,24 @@
             android:id="@+id/noExams"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:layout_marginLeft="4dp"
-            android:text="Neprebehli žiadne skúšky"
-            android:textSize="15sp"
+            android:layout_below="@id/noExamImage"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
             android:visibility="gone"
-            android:textAppearance="@android:style/TextAppearance.Material.Widget.ActionBar.Subtitle" />
+            android:text="Neprebehli žiadne skúšky"
+            android:textAppearance="@android:style/TextAppearance.Material.Widget.ActionBar.Subtitle"
+            android:textSize="15sp"
+            />
 
-    </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:id="@+id/noExamImage"
+            android:visibility="gone"
+            android:src="@drawable/book"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 
 </FrameLayout>

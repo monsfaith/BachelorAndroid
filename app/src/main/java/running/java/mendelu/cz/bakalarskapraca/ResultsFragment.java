@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +33,7 @@ public class ResultsFragment extends Fragment {
     private MainOpenHelper mainOpenHelper;
     private SQLiteDatabase database;
     private TextView noExams;
-
+    private ImageView noExamsImage;
 
     public ResultsFragment() {
         // Required empty public constructor
@@ -47,12 +48,14 @@ public class ResultsFragment extends Fragment {
         examMainRepository = new ExamMainRepository(getContext());
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewResults);
         noExams = (TextView) view.findViewById(R.id.noExams);
+        noExamsImage = (ImageView) view.findViewById(R.id.noExamImage);
         Toast.makeText(getActivity(), "ja som skuska", Toast.LENGTH_SHORT).show();
 
         //resultAdapter = new ResultAdapter(getActivity(),getResults());
 
         if (getResults().size() == 0){
             noExams.setVisibility(View.VISIBLE);
+            noExamsImage.setVisibility(View.VISIBLE);
         }
 
         mainOpenHelper = new MainOpenHelper(getActivity());

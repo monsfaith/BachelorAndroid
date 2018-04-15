@@ -6,11 +6,15 @@
 
     <TextView
         android:id="@+id/textViewTimePickerFrom"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="TextView"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+        android:layout_marginTop="10dp"
+        android:background="@color/yellow_300"
+        android:textSize="17sp"
+        android:gravity="center"
+        android:textAppearance="@android:style/TextAppearance.Material.Caption" />
 
     <TimePicker
         android:id="@+id/timePickerFrom"
@@ -21,11 +25,15 @@
 
     <TextView
         android:id="@+id/textViewTimePickerTo"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@color/yellow_300"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:gravity="center"
         android:text="TextView"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+        android:textSize="17sp"
+
+        android:textAppearance="@android:style/TextAppearance.Material.Caption" />
 
     <TimePicker
         android:id="@+id/timePickerTo"
