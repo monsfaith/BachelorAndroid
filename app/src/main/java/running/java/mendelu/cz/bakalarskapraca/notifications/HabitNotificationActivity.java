@@ -12,6 +12,9 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 import org.w3c.dom.Text;
 
 import java.util.List;
@@ -70,6 +73,11 @@ public class HabitNotificationActivity extends AppCompatActivity{
                 startActivity(i);
             }
         });
+
+        YoYo.with(Techniques.Swing)
+                .duration(700)
+                .repeat(3)
+                .playOn(fabAccept);
 
         /*fabAccept.setOnClickListener(new View.OnClickListener() {
             @Override

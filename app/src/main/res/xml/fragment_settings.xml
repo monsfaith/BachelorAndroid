@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent" android:layout_width="match_parent">
+
+    <PreferenceCategory
+        android:title="Notifikácie"
+        android:key="notif_category">
+
+        <CheckBoxPreference
+            android:key="turn_notif"
+            android:summary="Zapnúť alebo vypnúť notifikácie denného plánu"
+            android:title="Zapnutie/vypnutie"
+            android:defaultValue="true"/>
+
+        <running.java.mendelu.cz.bakalarskapraca.TimePickerPreference
+            android:key="edit"
+            android:title="Študijná notifikácia"
+            android:summary="Čas príchodu notifikácie týkajúcej sa príprav na skúšky"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Osobné informácie"
+        android:key="personal_category">
+
+
+        <EditTextPreference
+            android:key="full_name"
+            android:title="Meno"
+            android:summary="Vyplň svoje krstné meno"
+            android:dialogTitle="Tvoje meno"
+            android:dialogMessage="Vyplň svoje krstné meno"
+            android:defaultValue=""
+            android:inputType="textCapWords"/>
+
+    </PreferenceCategory>
+
+
+</android.support.v7.preference.PreferenceScreen>

@@ -5,12 +5,18 @@
         <item name="colorPrimary">@color/lime_700</item>
         <item name="colorAccent">@color/yellow_700</item>
         <item name="android:datePickerDialogTheme">@style/AlertDialog.AppCompat.Dialog</item>
+        <item name="preferenceTheme">
+            @style/PreferenceThemeOverlay.v14.Material
+        </item>
 
     </style>
 
     <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/lime_700</item>
         <item name="colorAccent">@color/yellow_700</item>
+        <item name="preferenceTheme">
+            @style/PreferenceThemeOverlay.v14.Material
+        </item>
 
     </style>
 

@@ -17,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 import org.w3c.dom.Text;
 
 import java.util.Calendar;
@@ -109,6 +112,8 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
         Habit currentHabit = habitMainRepository.getById(currentAssociation.getIdHabit());
         holder.habitName.setText(currentHabit.getName());
         holder.habitDescription.setText(currentHabit.getShortDescription());
+        holder.habitImage.setImageDrawable(getResources(currentHabit.getIcon()));
+
 
         final long id = currentAssociation.getId();
 
@@ -120,6 +125,10 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
                 if (isChecked){
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("done",true);
+                    YoYo.with(Techniques.Swing)
+                            .duration(500)
+                            .repeat(1)
+                            .playOn(holder.habitImage);
                     contentValues.put("date",System.currentTimeMillis());
                     planMainRepository.updateAssociation(id, contentValues);
 
@@ -132,7 +141,6 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
         });
 
 
-        holder.habitImage.setImageDrawable(getResources(currentHabit.getIcon()));
 
         //holder.habitImage.setImageResource(currentHabit.getIconId());
 

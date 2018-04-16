@@ -553,7 +553,7 @@ public class MyPlanTab1Fragment extends Fragment {
             setNotification40.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setPlanNotification(40, idPlan);
+                    setPlanNotification(50, idPlan);
                     setNotificationTime(idPlan);
                     dialog.cancel();
                 }
@@ -562,7 +562,7 @@ public class MyPlanTab1Fragment extends Fragment {
             setNotification60.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setPlanNotification(60, idPlan);
+                    setPlanNotification(90, idPlan);
                     setNotificationTime(idPlan);
                     dialog.cancel();
                 }

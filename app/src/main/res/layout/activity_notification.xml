@@ -124,16 +124,6 @@
         android:layout_below="@id/startStudy"
         >
 
-        <TextView
-            android:id="@+id/motivationalQuote"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="5dp"
-            android:text="@string/habitActivity"
-            android:textAppearance="@android:style/TextAppearance.Material.Caption" />
     </android.support.v7.widget.CardView>
 
     </RelativeLayout>
