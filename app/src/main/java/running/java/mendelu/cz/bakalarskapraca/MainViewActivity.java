@@ -1,6 +1,7 @@
 package running.java.mendelu.cz.bakalarskapraca;
 
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -112,6 +114,7 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         navigationView.setCheckedItem(R.id.nav_home);
 
 
+
     }
 
     public void getJsonQuotes(){
@@ -138,6 +141,8 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
             e.printStackTrace();
         }
     }
+
+
 
 
 
@@ -213,14 +218,14 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navigation_main, menu);
         return true;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -236,7 +241,7 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -251,13 +256,21 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
             }*/
 
             android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             ft.replace(R.id.mainFrameLayout,mainOverviewFragment);
             ft.commit();
 
         } else if (id == R.id.nav_exams) {
             android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.mainFrameLayout,resultsFragment);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            ft.replace(R.id.mainFrameLayout, resultsFragment);
             ft.commit();
+        } else if (id == R.id.nav_settings) {
+            android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.mainFrameLayout, new SettingsFragment());
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            ft.commit();
+
         } else if (id == R.id.nav_info) {
 
         } else if (id == R.id.nav_icons) {

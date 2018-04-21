@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Time;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class ResultsFragment extends Fragment {
     private SQLiteDatabase database;
     private TextView noExams;
     private ImageView noExamsImage;
+    private List<Exam> exams = Collections.emptyList();
 
     public ResultsFragment() {
         // Required empty public constructor
@@ -58,8 +60,6 @@ public class ResultsFragment extends Fragment {
             noExamsImage.setVisibility(View.VISIBLE);
         }
 
-        mainOpenHelper = new MainOpenHelper(getActivity());
-        database = mainOpenHelper.getWritableDatabase();
         resultAdapter = new ResultAdapter(getActivity(), getResults());
 
         recyclerView.setAdapter(resultAdapter);
@@ -73,9 +73,16 @@ public class ResultsFragment extends Fragment {
 
 
     public List<Exam> getResults(){
-        List<Exam> exams = examMainRepository.findDoneExams();
+        exams = examMainRepository.findDoneExams();
         return exams;
 
+    }
+
+    private void loadResults(){
+        resultAdapter = new ResultAdapter(getActivity(), getResults());
+
+        recyclerView.setAdapter(resultAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     //INNER JOIN subject ON exam.subject_id = subject.id
@@ -87,5 +94,11 @@ public class ResultsFragment extends Fragment {
 
 
     }*/
+
+    public void onResume(){
+        super.onResume();
+        loadResults();
+
+    }
 
 }

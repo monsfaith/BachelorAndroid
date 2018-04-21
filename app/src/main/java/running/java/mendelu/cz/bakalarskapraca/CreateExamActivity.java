@@ -15,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -100,6 +101,10 @@ public class CreateExamActivity extends AppCompatActivity {
 
         seekbarDifficulty.setEnabled(false);
         chosenDays.setEnabled(false);
+        chosenDate.setFocusable(false);
+        chosenDate.setKeyListener(null);
+        chosenDate.requestFocus();
+        choseDate();
         chosenTime.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -318,6 +323,7 @@ public class CreateExamActivity extends AppCompatActivity {
         subjectAdapter = new SubjectAdapter(this);
 
 
+
         myBuilder.setTitle("Vybrať predmet");
         myBuilder.setAdapter(subjectAdapter, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
@@ -332,6 +338,14 @@ public class CreateExamActivity extends AppCompatActivity {
 
         myBuilder.setView(mView);
         myBuilder.setNegativeButton("Zrušiť", null);
+        /*myBuilder.setNeutralButton("Ukázať skryté predmety", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                shownHiddenSubject = 2;
+                subjectAdapter.notifyDataSetChanged();
+                subjectAdapter = new SubjectAdapter(getApplicationContext(),activity);
+            }
+        });*/
         /*AlertDialog dialog = myBuilder.create();
         dialog.show();*/
         subjectDialog = myBuilder.create();
@@ -380,7 +394,7 @@ public class CreateExamActivity extends AppCompatActivity {
 
     }
 
-    public void choseDate(View view) {
+    public void choseDate() {
 
         chosenDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -493,15 +507,17 @@ public class CreateExamActivity extends AppCompatActivity {
             }
 
             finish();
-        } else if ((chosenDate.getText().toString().trim().length() == 0)){
-            chosenDate.setError("Vyplň dátum");
+        }
+
+        if ((chosenDate.getText().toString().trim().length() == 0)){
+            chosenDate.setError("Vyplň dátum");}
             if ((chosenSubject.getText().toString().trim().length() == 0)){
                 chosenSubject.setError("Zadaj predmet");
             }
             if (chosenTime.getText().toString().trim().length() == 0){
                 chosenTime.setError("Vyplň čas");
             }
-            }
+
 
         }
 
@@ -593,6 +609,7 @@ public class CreateExamActivity extends AppCompatActivity {
         examMainRepository.update2(intentExam.getId(),contentValues);
         finish();
     }
+
 }
 
 

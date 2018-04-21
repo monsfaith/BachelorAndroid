@@ -18,6 +18,7 @@ public class Subject {
     static final String ID = BaseColumns._ID;
     static final String COLOR = "color";
     static final String NAME = "name";
+    static final String HIDDEN = "hidden";
 
     protected ContentValues values; //package protected jsme si to udelali
 
@@ -30,6 +31,7 @@ public class Subject {
         this.values = new ContentValues();
         this.setName(name);
         this.setColor(color);
+        this.setHidden(false);
     }
 
     public void setName(String name) {
@@ -51,4 +53,14 @@ public class Subject {
     public int getColor(){
         return values.getAsInteger(COLOR);
     }
+
+    public void setHidden(boolean hid){
+        int hidden = (hid)? 1 : 0;
+        this.values.put(HIDDEN,hidden);
+    }
+
+    public boolean getCancel(){
+        return (values.getAsInteger(HIDDEN) == 1);
+    }
+
 }

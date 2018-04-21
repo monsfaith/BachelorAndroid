@@ -7,7 +7,7 @@
         android:title="Notifikácie"
         android:key="notif_category">
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:key="turn_notif"
             android:summary="Zapnúť alebo vypnúť notifikácie denného plánu"
             android:title="Zapnutie/vypnutie"

@@ -16,6 +16,7 @@ import java.util.Calendar;
 import running.java.mendelu.cz.bakalarskapraca.R;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.db.SubjectMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelExamReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
@@ -34,6 +35,7 @@ public class ExamTomorrowNotificationActivity extends AppCompatActivity {
     private Button startDailyPlan;
     private Button cancelDialog;
     private PlanMainRepository planMainRepository;
+    private SubjectMainRepository subjectMainRepository;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -44,6 +46,7 @@ public class ExamTomorrowNotificationActivity extends AppCompatActivity {
         planMainRepository = new PlanMainRepository(getApplicationContext());
         startDailyPlan = (Button) findViewById(R.id.startDailyPlan);
         cancelDialog = (Button) findViewById(R.id.cancelTomorrowDialog);
+        subjectMainRepository = new SubjectMainRepository(getApplicationContext());
 
         /*if (getIntent().getExtras() != null) {
             int id = getIntent().getIntExtra("AFTER", 0);
@@ -77,8 +80,11 @@ public class ExamTomorrowNotificationActivity extends AppCompatActivity {
     private void setExamNotificationTomorrow(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.MINUTE,00);
-        calendar.set(Calendar.HOUR_OF_DAY,8);
+        //calendar.set(Calendar.MINUTE,00);
+        //calendar.set(Calendar.HOUR_OF_DAY,8);
+
+        calendar.set(Calendar.MINUTE,subjectMainRepository.getProjectById(1).getMinute());
+        calendar.set(Calendar.HOUR_OF_DAY,subjectMainRepository.getProjectById(1).getHour());
         calendar.add(Calendar.DAY_OF_MONTH,1);
         Intent i = new Intent(getApplicationContext(), ExamNotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);

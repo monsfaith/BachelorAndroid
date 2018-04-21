@@ -6,9 +6,11 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.widget.Toast;
 
 import running.java.mendelu.cz.bakalarskapraca.R;
@@ -32,6 +34,11 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
             shownIntent.putExtra("ID", id);
 
         }
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean isChecked = settings.getBoolean("turn_notif", true);
+        String name = settings.getString("full_name","");
+
         //shownIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         int requestCode = id * 100;
@@ -52,26 +59,50 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
         if (requestCode == 200) {
             builder.setSmallIcon(R.drawable.ic_brightness_5_black_24dp);
             contentTitle = "Ranný plán";
-            contentText = "Naštartuj sa do nového dňa! ";
+            if (name.trim().length() != 0){
+                contentText = name + ", naštartuj sa do nového dňa! ";
+
+            } else {
+                contentText = "Naštartuj sa do nového dňa! ";
+
+            }
 
         }
 
         if (requestCode == 300) {
             builder.setSmallIcon(R.drawable.ic_brightness_medium_black_24dp);
             contentTitle = "Obedný plán";
-            contentText = "Nezabúdaj na svoje rituály ani v priebehu dňa";
+            if (name.trim().length() != 0){
+                contentText = name + ", nezabúdaj na svoje rituály ani v priebehu dňa";
+
+            } else {
+                contentText = "Nezabúdaj na svoje rituály ani v priebehu dňa";
+
+            }
         }
 
         if (requestCode == 400) {
             builder.setSmallIcon(R.drawable.ic_brightness_3_black_24dp);
             contentTitle = "Večerný plán";
-            contentText = "Ostaň bez stresu i ku koncu dňa";
+            if (name.trim().length() != 0){
+                contentText = name + ", ostaň bez stresu i ku koncu dňa";
+
+            } else {
+                contentText = "Ostaň bez stresu i ku koncu dňa";
+
+            }
         }
 
         if (requestCode == 100) {
             builder.setSmallIcon(R.drawable.ic_lens_black_24dp);
             contentTitle = "Denný plán";
-            contentText = "Buď bližšie k svojím cieľom!";
+            if (name.trim().length() != 0){
+                contentText = name + ", buď bližšie k svojím cieľom!";
+
+            } else {
+                contentText = "Buď bližšie k svojím cieľom!";
+
+            }
         }
 
 
@@ -80,7 +111,7 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
 
         if (isBadDaily(requestCode, planMainRepository.getByType(1).getEnabled()) == false) {
             if (id != 0) {
-                //Toast.makeText(context,"Meni sa to",Toast.LENGTH_SHORT).show();
+                if (!(isChecked == false && planMainRepository.getByType(1).getEnabled() == true))
                 notificationManager.notify(requestCode, builder.build());
             }
         }

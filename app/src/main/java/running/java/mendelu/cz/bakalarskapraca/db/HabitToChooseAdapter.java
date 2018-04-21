@@ -88,6 +88,8 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
         final int opacityPicture = Color.argb(155, 255, 255, 255);
         if (!inPlan){
             holder.habitImage.setColorFilter(opacityPicture, PorterDuff.Mode.SRC_ATOP);
+        } else {
+            holder.habitImage.setColorFilter(null);
         }
 
 

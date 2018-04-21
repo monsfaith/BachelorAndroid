@@ -23,14 +23,16 @@ public class TimePickerPreference extends DialogPreference {
     }
 
     public TimePickerPreference(Context context, AttributeSet attrs,
+                                int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    public TimePickerPreference(Context context, AttributeSet attrs,
                                 int defStyleAttr) {
         this(context, attrs, defStyleAttr, defStyleAttr);
     }
 
-    public TimePickerPreference(Context context, AttributeSet attrs,
-                                int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
+
 
     public int getTime() {
         return time;

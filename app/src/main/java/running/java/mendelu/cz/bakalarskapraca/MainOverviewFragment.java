@@ -6,11 +6,13 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +38,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import running.java.mendelu.cz.bakalarskapraca.db.Exam;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.Habit;
@@ -45,6 +48,8 @@ import running.java.mendelu.cz.bakalarskapraca.db.MainOpenHelper;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.db.Project;
+import running.java.mendelu.cz.bakalarskapraca.db.SubjectMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DailyHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DatabaseRecordReceiver;
@@ -83,6 +88,7 @@ public class MainOverviewFragment extends Fragment{
     private TextView actualPlanTextView;
     private TextView textDate;
     private TextView noExamsToday;
+    private SubjectMainRepository subjectMainRepository;
 
 
     public MainOverviewFragment() {
@@ -112,16 +118,19 @@ public class MainOverviewFragment extends Fragment{
         progressBarReview = (ProgressBar) view.findViewById(R.id.progressBarReview);
         textDate = (TextView) view.findViewById(R.id.textDateToday);
         noExamsToday = (TextView) view.findViewById(R.id.noExamsToday);
+        subjectMainRepository = new SubjectMainRepository(getActivity());
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         textDate.setText(sdf.format(System.currentTimeMillis()));
 
         //planMainRepository.deleteAllPlans();
         Log.i("Bakalarka", "onCreate");
+        Project project = new Project(8,0,"",1);
 
 
         if (planMainRepository.getAllPlans().size() != 4) {
             init();
+            subjectMainRepository.insertProject(project);
             createMorningHabits();
             createLunchHabits();
             createEveningHabits();
@@ -142,6 +151,9 @@ public class MainOverviewFragment extends Fragment{
             noExamsToday.setVisibility(View.VISIBLE);
         }
 
+        subjectMainRepository.insertProject(project);
+
+
 
 
         /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -161,7 +173,7 @@ public class MainOverviewFragment extends Fragment{
         setExamNotification();
         setDatabaseNotification();
         setSleepNotification();
-        //altLoadListView();
+        loadListView();
 
         butt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,6 +198,14 @@ public class MainOverviewFragment extends Fragment{
                 startActivity(i);
             }
         });
+
+
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        boolean isChecked = settings.getBoolean("turn_notif", true);
+
+        Toast.makeText(getActivity(), "Project info " + subjectMainRepository.getProjectById(1).getHour() + " " + subjectMainRepository.getProjectById(1).getTurnOn() + isChecked,Toast.LENGTH_SHORT).show();
+
 
         return view;
     }
@@ -218,8 +238,12 @@ public class MainOverviewFragment extends Fragment{
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         //nova cast, podla mna
-            calendar.set(Calendar.MINUTE,00);
-            calendar.set(Calendar.HOUR_OF_DAY,8);
+            //calendar.set(Calendar.MINUTE,00);
+            //calendar.set(Calendar.HOUR_OF_DAY,8);
+
+            //po upraveni settings
+            calendar.set(Calendar.MINUTE,subjectMainRepository.getProjectById(1).getMinute());
+            calendar.set(Calendar.HOUR_OF_DAY,subjectMainRepository.getProjectById(1).getHour());
             if (System.currentTimeMillis() > calendar.getTimeInMillis()){
                 calendar.add(Calendar.DAY_OF_MONTH,1);
             }
@@ -289,26 +313,32 @@ public class MainOverviewFragment extends Fragment{
 
     public void loadListView(){
         //examAdapter = new ExamAdapter(getActivity(), getExamResults());
-        examAdapter = new ExamAdapter(getActivity(), examMainRepository.getExamResultsList(System.currentTimeMillis()));
+        examAdapter = new ExamAdapter(getActivity(), getExamResults(System.currentTimeMillis()));
         recyclerView.setAdapter(examAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        if (setPlan() != null){
-            iconHabitAdapter = new IconHabitAdapter(getActivity(), setPlan());
+        List<PlanHabitAssociation> pha = setPlan();
+
+        if (pha != null){
+            iconHabitAdapter = new IconHabitAdapter(getActivity(), pha);
             recyclerViewHabits.setAdapter(iconHabitAdapter);
             recyclerViewHabits.setLayoutManager(new GridLayoutManager(getActivity(),4));
         } else {
             actualPlanTextView.setText("Plán neprebieha");
-            progressBarReview.setVisibility(View.GONE);
+            /*progressBarReview.setVisibility(View.GONE);
             TextView tx = new TextView(getActivity());
             tx.setPadding(50, 210, 0, 50);
             tx.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-            cardViewTwo.addView(tx);
+            cardViewTwo.addView(tx);*/
         }
 
 
 
 
+    }
+
+    private List<Exam> getExamResults(long date){
+        return examMainRepository.getExamResultsList(date);
     }
 
     public void altLoadListView(){
@@ -332,6 +362,21 @@ public class MainOverviewFragment extends Fragment{
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         Calendar from = Calendar.getInstance();
         Calendar to = Calendar.getInstance();
+        Calendar eveningCalFrom = Calendar.getInstance();
+        Calendar eveningCalTo = Calendar.getInstance();
+
+        eveningCalFrom.set(Calendar.HOUR_OF_DAY,eveningPlan.getFromHour());
+        eveningCalFrom.set(Calendar.MINUTE,eveningPlan.getFromMinute());
+        eveningCalTo.set(Calendar.HOUR_OF_DAY,eveningPlan.getToHour());
+        eveningCalTo.set(Calendar.MINUTE,eveningPlan.getToMinute());
+        eveningCalTo.add(Calendar.DATE,1);
+        long evFrom1 = eveningCalFrom.getTimeInMillis();
+        long evTo1 = eveningCalTo.getTimeInMillis();
+
+        eveningCalFrom.add(Calendar.DATE,-1);
+        long evFrom2 = eveningCalFrom.getTimeInMillis();
+        eveningCalTo.add(Calendar.DATE,-1);
+        long evTo2 = eveningCalTo.getTimeInMillis();
 
         if (dailyPlan.getEnabled() == false) {
             if ((setPlanDateToCalendar(morningPlan.getType()) > morningPlan.getFromTime().getTime() || setPlanDateToCalendar(morningPlan.getType()) == morningPlan.getFromTime().getTime()) && (setPlanDateToCalendar(morningPlan.getType()) < morningPlan.getToTime().getTime())){
@@ -370,7 +415,33 @@ public class MainOverviewFragment extends Fragment{
                 progressBarReview.setMax(habitMainRepository.getEveningPlanHabits().size());
                 progressBarReview.setProgress(habitMainRepository.getDoneEveningPlanHabits());
                 return habitMainRepository.getEveningPlanHabits();
-            } else {
+            } else if ((System.currentTimeMillis() > evFrom1) && (System.currentTimeMillis() < evTo1)) {
+                from.set(Calendar.HOUR_OF_DAY,eveningPlan.getFromHour());
+                from.set(Calendar.MINUTE,eveningPlan.getFromMinute());
+                to.set(Calendar.HOUR_OF_DAY,eveningPlan.getToHour());
+                to.set(Calendar.MINUTE,eveningPlan.getToMinute());
+
+                //Toast.makeText(getActivity(), "evening " + actualPlan + " aktu " + sdf.format(setPlanDateToCalendar(eveningPlan.getType())) + " " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                actualPlan = 4;
+                actualPlanTextView.setText(R.string.vecerny);
+                progressBarReview.setMax(habitMainRepository.getEveningPlanHabits().size());
+                progressBarReview.setProgress(habitMainRepository.getDoneEveningPlanHabits());
+                return habitMainRepository.getEveningPlanHabits();
+            }
+            else if ((System.currentTimeMillis() > evFrom2) && (System.currentTimeMillis() < evTo2)) {
+                from.set(Calendar.HOUR_OF_DAY,eveningPlan.getFromHour());
+                from.set(Calendar.MINUTE,eveningPlan.getFromMinute());
+                to.set(Calendar.HOUR_OF_DAY,eveningPlan.getToHour());
+                to.set(Calendar.MINUTE,eveningPlan.getToMinute());
+
+                //Toast.makeText(getActivity(), "evening " + actualPlan + " aktu " + sdf.format(setPlanDateToCalendar(eveningPlan.getType())) + " " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                actualPlan = 4;
+                actualPlanTextView.setText(R.string.vecerny);
+                progressBarReview.setMax(habitMainRepository.getEveningPlanHabits().size());
+                progressBarReview.setProgress(habitMainRepository.getDoneEveningPlanHabits());
+                return habitMainRepository.getEveningPlanHabits();
+            }
+            else {
                 actualPlan = 0;
                 actualPlanTextView.setText("Neprebieha plán");
                 //Toast.makeText(getActivity(), "nic" + sdf.format(setPlanDateToCalendar(dailyPlan.getType())) + "", Toast.LENGTH_LONG).show();

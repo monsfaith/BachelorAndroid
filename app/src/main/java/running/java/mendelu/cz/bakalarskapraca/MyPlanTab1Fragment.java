@@ -51,6 +51,8 @@ import running.java.mendelu.cz.bakalarskapraca.db.MainOpenHelper;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.db.Subject;
+import running.java.mendelu.cz.bakalarskapraca.db.SubjectMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
@@ -111,6 +113,7 @@ public class MyPlanTab1Fragment extends Fragment {
 
     private Switch switchDaily;
     private View myView;
+    private SubjectMainRepository subjectMainRepository;
 
 
     /*list.clear
@@ -127,6 +130,7 @@ public class MyPlanTab1Fragment extends Fragment {
         habitMainRepository = new HabitMainRepository(getActivity());
         planMainRepository = new PlanMainRepository(getActivity());
         examMainRepository = new ExamMainRepository(getActivity());
+        subjectMainRepository = new SubjectMainRepository(getActivity());
 
         dailyRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewDailyHabits);
         morningRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewMorningHabits);
@@ -167,6 +171,7 @@ public class MyPlanTab1Fragment extends Fragment {
 
 
         updateProgressBars();
+
 
         switchDaily.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -210,6 +215,8 @@ public class MyPlanTab1Fragment extends Fragment {
                                     //cancelDividedNotification(1);
                                     //NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
                                     //notificationManager.cancel(100);
+
+
                                     cancelDividedNotification(1);
                                     setNotificationTime(2);
                                     setNotificationTime(3);
@@ -429,6 +436,20 @@ public class MyPlanTab1Fragment extends Fragment {
         to.set(Calendar.HOUR_OF_DAY,plan.getToHour());
         to.set(Calendar.MINUTE,plan.getToMinute());
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
+        //kvoli vecernemu?
+        if (idPlan == 4){
+            if (planMainRepository.getByType(4).getToHour() < planMainRepository.getByType(4).getFromHour()){
+                to.add(Calendar.DATE,1);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY,00);
+                calendar.set(Calendar.MINUTE,1);
+                if (from.after(calendar)){
+                    from.add(Calendar.DATE,-1);
+                    to.add(Calendar.DATE,-1);
+                }
+            }
+        }
 
         if (System.currentTimeMillis() < from.getTimeInMillis()) {
             setDividedNotifications(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
@@ -866,12 +887,12 @@ public class MyPlanTab1Fragment extends Fragment {
     private void setExamNotification(){
         Calendar calendar = Calendar.getInstance();
         ContentValues contentValues = new ContentValues();
-        Toast.makeText(getActivity(), examMainRepository.findNextExams().size() + " size of exams", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), examMainRepository.findNextExams().size() + " size of exams", Toast.LENGTH_SHORT).show();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
         //nova cast, podla mna
-        calendar.set(Calendar.MINUTE,00);
-        calendar.set(Calendar.HOUR_OF_DAY,8);
+        calendar.set(Calendar.MINUTE,subjectMainRepository.getProjectById(1).getMinute());
+        calendar.set(Calendar.HOUR_OF_DAY,subjectMainRepository.getProjectById(1).getHour());
 
         if (System.currentTimeMillis() > calendar.getTimeInMillis()){
             calendar.add(Calendar.DAY_OF_MONTH,1);

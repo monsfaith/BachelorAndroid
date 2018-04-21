@@ -16,6 +16,7 @@ import java.util.Date;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.db.SubjectMainRepository;
 
 /**
  * Created by Monika on 12.03.2018.
@@ -84,8 +85,11 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
 
     private void setExamNotificationTomorrow(Context context){
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MINUTE,00);
-        calendar.set(Calendar.HOUR_OF_DAY,8);
+        //calendar.set(Calendar.MINUTE,00);
+        //calendar.set(Calendar.HOUR_OF_DAY,8);
+        SubjectMainRepository subjectMainRepository = new SubjectMainRepository(context);
+        calendar.set(Calendar.MINUTE,subjectMainRepository.getProjectById(1).getMinute());
+        calendar.set(Calendar.HOUR_OF_DAY,subjectMainRepository.getProjectById(1).getHour());
         //calendar.add(Calendar.DAY_OF_MONTH,1);
         Intent i = new Intent(context, ExamNotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 500, i, PendingIntent.FLAG_UPDATE_CURRENT);

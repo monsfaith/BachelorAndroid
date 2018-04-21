@@ -96,7 +96,17 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
         holder.subjectName.setText(subjectName);
         holder.subjectName.setTextColor(colorSubject);
         holder.examDate.setText(android.text.format.DateFormat.format("dd.MM.yyyy HH:mm", new Date(examDate)));
-        holder.examDetails.setText((examClassroom +  ", " + examNote));
+        if (examClassroom.trim().length() == 0){
+            if (examNote.trim().length() == 0){
+                holder.examDetails.setText("");
+            } else {
+                holder.examDetails.setText(examNote);
+            }
+        } else if (examNote.trim().length() == 0){
+            holder.examDetails.setText(examClassroom);
+        } else {
+            holder.examDetails.setText((examClassroom + ", " + examNote));
+        }
 
         holder.examIcon.getBackground().setColorFilter(new LightingColorFilter(colorSubject,0));
 

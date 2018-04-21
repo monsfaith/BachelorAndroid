@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:id="@+id/group1">
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
@@ -14,8 +15,14 @@
             android:title="Skúšky" />
     </group>
 
+    <group android:checkableBehavior="single"
+        android:id="@+id/group2">
     <item android:title="Aplikácia">
-        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="Nastavenia" />
+
             <item
                 android:id="@+id/nav_info"
                 android:icon="@drawable/ic_info_black_24dp"
@@ -25,7 +32,7 @@
                 android:id="@+id/nav_icons"
                 android:icon="@drawable/ic_image_black_24dp"
                 android:title="Použité ikony" />
-        </menu>
     </item>
+    </group>
 
 </menu>

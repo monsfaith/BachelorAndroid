@@ -28,6 +28,8 @@ import running.java.mendelu.cz.bakalarskapraca.db.ExamNotificationAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.MainOpenHelper;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.db.Subject;
+import running.java.mendelu.cz.bakalarskapraca.db.SubjectMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelExamReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
@@ -178,8 +180,11 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
     private void setExamNotificationTomorrow(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.MINUTE,00);
-        calendar.set(Calendar.HOUR_OF_DAY,8);
+        //calendar.set(Calendar.MINUTE,00);
+        //calendar.set(Calendar.HOUR_OF_DAY,8);
+        SubjectMainRepository subjectMainRepository = new SubjectMainRepository(getApplicationContext());
+        calendar.set(Calendar.MINUTE,subjectMainRepository.getProjectById(0).getMinute());
+        calendar.set(Calendar.HOUR_OF_DAY,subjectMainRepository.getProjectById(0).getHour());
         calendar.add(Calendar.DAY_OF_MONTH,1);
         Intent i = new Intent(getApplicationContext(), ExamNotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);

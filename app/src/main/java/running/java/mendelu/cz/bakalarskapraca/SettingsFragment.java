@@ -1,9 +1,13 @@
 package running.java.mendelu.cz.bakalarskapraca;
 
+import android.content.ContentValues;
 import android.os.Bundle;
+import android.preference.SwitchPreference;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+
+import running.java.mendelu.cz.bakalarskapraca.db.SubjectMainRepository;
 
 /**
  * Created by Monika on 16.04.2018.
@@ -11,10 +15,13 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
+    //SubjectMainRepository subjectMainRepository = new SubjectMainRepository(getActivity());
+
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.fragment_settings);
+
 
 
     }

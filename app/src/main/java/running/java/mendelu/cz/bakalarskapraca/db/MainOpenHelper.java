@@ -15,7 +15,7 @@ import java.util.Date;
 public class MainOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "main.db";
-    private static final int DATABASE_VERSION = 62;
+    private static final int DATABASE_VERSION = 69;
 
     public MainOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,6 +40,7 @@ public class MainOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + Subject.TABLE_SUBJECTS + " (" +
                 Subject.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 Subject.COLOR + " INTEGER NOT NULL, " +
+                Subject.HIDDEN + " INTEGER NOT NULL, " +
                 Subject.NAME + " TEXT NOT NULL" + ")");
         db.execSQL("CREATE TABLE " + Habit.TABLE_HABITS + " (" +
                 Habit.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -77,6 +78,13 @@ public class MainOpenHelper extends SQLiteOpenHelper {
                 //PlanHabitAssociation.REMIND + " INTEGER NOT NULL, " +
                 //PlanHabitAssociation.CANCEL + " INTEGER NOT NULL, " +
                 PlanHabitAssociation.ID_PLAN + " INTEGER NOT NULL " + ")");
+        db.execSQL("CREATE TABLE " + Project.TABLE_PROJECT + " (" +
+                Project.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                Project.HOUR + " INTEGER NOT NULL, " +
+                Project.MINUTE + " INTEGER NOT NULL, " +
+                Project.TURNON + " INTEGER NOT NULL, " +
+                Project.NAME + " TEXT NOT NULL" + ")");
+
 
     }
 
@@ -93,10 +101,13 @@ public class MainOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + Habit.TABLE_HABITS);
         db.execSQL("DROP TABLE IF EXISTS " + Plan.TABLE_PLANS);
         db.execSQL("DROP TABLE IF EXISTS " + PlanHabitAssociation.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + Project.TABLE_PROJECT);
+
 
 
         onCreate(db);
 
     }
+
 
 }
