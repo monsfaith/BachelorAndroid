@@ -53,6 +53,8 @@ public class IconHabitAdapter extends RecyclerView.Adapter<IconHabitAdapter.MyVi
         PlanHabitAssociation pha = habits.get(position);
         HabitMainRepository habitMainRepository = new HabitMainRepository(context);
         Habit habit = habitMainRepository.getById(pha.getIdHabit());
+        holder.habitImage.setImageDrawable(getResources(habit.getIcon()));
+
 
         //final int greyPicture = Color.argb(175, 204, 204, 0);
 
@@ -65,7 +67,6 @@ public class IconHabitAdapter extends RecyclerView.Adapter<IconHabitAdapter.MyVi
        }
 
 
-        holder.habitImage.setImageDrawable(getResources(habit.getIcon()));
 
 
     }

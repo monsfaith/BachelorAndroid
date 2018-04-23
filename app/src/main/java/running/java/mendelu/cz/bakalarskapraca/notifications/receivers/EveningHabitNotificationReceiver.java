@@ -35,6 +35,7 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
 
         }
 
+
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         boolean isChecked = settings.getBoolean("turn_notif", true);
         String name = settings.getString("full_name","");

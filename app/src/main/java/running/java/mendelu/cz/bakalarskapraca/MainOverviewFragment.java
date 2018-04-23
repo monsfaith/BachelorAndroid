@@ -127,6 +127,10 @@ public class MainOverviewFragment extends Fragment{
         Log.i("Bakalarka", "onCreate");
         Project project = new Project(8,0,"",1);
 
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        int time = settings.getInt("edit", 0);
+        Toast.makeText(getActivity(), "time je " + time, Toast.LENGTH_SHORT).show();
+
 
         if (planMainRepository.getAllPlans().size() != 4) {
             init();
@@ -201,8 +205,8 @@ public class MainOverviewFragment extends Fragment{
 
 
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean isChecked = settings.getBoolean("turn_notif", true);
+        SharedPreferences settings1 = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        boolean isChecked = settings1.getBoolean("turn_notif", true);
 
         Toast.makeText(getActivity(), "Project info " + subjectMainRepository.getProjectById(1).getHour() + " " + subjectMainRepository.getProjectById(1).getTurnOn() + isChecked,Toast.LENGTH_SHORT).show();
 
@@ -674,13 +678,18 @@ public class MainOverviewFragment extends Fragment{
         Habit sleep = new Habit("Spánok", "Americká organizácia National Sleep Foundation vo výskume zaoberajúcom sa odporúčanou dĺžkou spánku zistila, že mladých dospelých je najvhodnejšia doba trvania spánku 7 - 8 hodín, pričom nedostatok spánku má negatívny vplyv na imunitu, pamäť, premýšľanie či koncentráciu.", "Odporúčaná doba spánku je 7 - 8 hodín. Ak to nie je možné, magnézium a vitamín D3 umožnia ľahšie vstávanie.", "sleep", 4);
         long idSleep = habitMainRepository.insert(sleep);
         planMainRepository.insertAssociaton(new PlanHabitAssociation(idSleep,4));
+
+        Habit toDo = new Habit("To-do list", "Pre efektívne zvládnutie povinnosti nasledujúci deň sa odporúča spísať si 5 najdôležitejších činností, najlepšie na papier.", "Spíš si 5 najdôležitejší činností, ktoré ťa zajtra čakajú.","todo",4);
+        long idToDo = habitMainRepository.insert(toDo);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idToDo,4));
+
     }
 
     private void createOtherHabits(){
-        Habit bellyBreathing = new Habit("Dýchanie bruchom","Jednu ruku si polož na brucho a druhú na hrudník. Snaž sa svoj dych smerovať na brucho, aby sa tvoja ruka na bruchu pohybovala a ruka na hrudníku zostala bez pohybu. Kontrolované dýchanie pomáha uvoľňovať stres a napätie. ", "Snaž sa sústrediť na svoje dýchanie a vydychovať do brucha. ","nose",1);
+        Habit bellyBreathing = new Habit("Dýchanie bruchom","Jednu ruku si polož na brucho a druhú na hrudník. Snaž sa svoj dych smerovať na brucho, aby sa tvoja ruka na bruchu pohybovala a ruka na hrudníku zostala bez pohybu. Kontrolované dýchanie pomáha uvoľňovať stres a napätie. ", "Snaž sa sústrediť na svoje dýchanie a vydychovať do brucha. ","lungs",1);
         long idBelly = habitMainRepository.insert(bellyBreathing);
 
-        Habit breathing = new Habit("Dýchanie","Kontrolované dýchanie pomáha uvoľňovať stres a napätie. Pri vydychovaní si skús predstaviť, ako sa tvoje telo zbavuje všetkého negatívneho a stáva sa uvoľneným. Vydychovanie by malo trvať 2x viac ako nádych a zvyčajná dĺžka trvania relaxácie je 2-3 minúty.", "Zbav sa negativity. Nech je tvoj výdych 2x dlhší ako nádych. ", "lungs",1);
+        Habit breathing = new Habit("Dýchanie","Kontrolované dýchanie pomáha uvoľňovať stres a napätie. Pri vydychovaní si skús predstaviť, ako sa tvoje telo zbavuje všetkého negatívneho a stáva sa uvoľneným. Vydychovanie by malo trvať 2x viac ako nádych a zvyčajná dĺžka trvania relaxácie je 2-3 minúty.", "Zbav sa negativity. Nech je tvoj výdych 2x dlhší ako nádych. ", "nose",1);
         long idBreathing = habitMainRepository.insert(breathing);
 
         Habit muscle = new Habit("Relaxácia svalov","Snaž sa uvoľňovať a napínať jednotlivé svaly a pritom sa na túto činnosť sústreďovať. Začni buď od hlavy až k päte, alebo naopak. Cieľom je uvoľniť nepotrebné napätie v tele. ", "Uvoľni si nepotrebné napätie v tele napínaním a uvoľňovaním jednotlivých svalov.", "lotusposition", 1);
@@ -707,21 +716,62 @@ public class MainOverviewFragment extends Fragment{
         Habit notice = new Habit("Všímavosť", "Byť všímamým, pozorovať okolie i svoje pocity je súčasťou relaxačných techník vedúcich k uvoľňovaniu stresu. Cieľom je zamerať sa na súčasné okamihy namiesto venovania pozornosti strachom o budúcnosť. Účelom je zamerať sa na svoj dych, následne na zvuky, myšlienky, bez ohľadu na to, či sú dobré, alebo zlé. ", "Zameraj na sa na myšlienky, zvuky, dych. Zacieľ svoje sústredenie na prítomný okamih.", "observe", 1);
         long idNotice = habitMainRepository.insert(notice);
 
-        //Habit coffee =
 
-        //Habit tea =
+        Habit yoga = new Habit("Jóga", "Jóga je skvelý prostriedok na uvoľnenie tela i duše. Pomáha odblokovať stuhnuté svalstvo a dostať sa do duševnej a telesnej rovnováhy.", "Uvoľní tvoje telo i dušu.", "yoga",1);
+        long idYoga = habitMainRepository.insert(yoga);
 
-        //Habit water =
+        Habit water = new Habit("Pitný režim","Nedostatok prijímanej vody môže mať negatívny vplyv na funkčnosť poznávacích funkcií, ako sú koncentrácia, ostražitosť a problémy s pamäťou. Voda takisto pozitívne vplýva na elimináciu nervozity alebo úzkosti, a jej pravidelným pitím upokojuje myseľ. Je dôležité vypiť aspoň 2 litre vody.", "Ak cítiš smäd, dochádza k dehydratácii. Vypi aspoň 2 litre vody.", "drop",1);
+        long idWater = habitMainRepository.insert(water);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idWater,1));
 
-        Habit friends = new Habit("Rodina a priatelia", "Stretnutie s blízkymi osobami redukuje uvoľňovanie stresového hormónu v ťažkých situáciách v porovnaní so situáciami, keď blízky priateľ nebol prítomný.", "Venuj čas blízkej osobe.", "friends",1);
+
+        Habit distractions = new Habit("Nájdi ticho", "Pri relaxácii je potrebné nájsť si tiché a kľudné prostredie, pri ktorom sa stačí iba rozjímať. Snaž sa eliminovať všetky prvky, ktoré ťa rozrušujú a uži si ticho.", "Eliminuj všetky rozrušenia a uži si ticho.","silence",1);
+        long idDistr = habitMainRepository.insert(distractions);
+
+        Habit reward = new Habit("Odmeň sa","Vykonal si niečo, na čo si pyšný? Ak je to tá dlho odkladaná aktivita, tá náročná úloha, odmeň sa tým, čo ti urobí najväčšiu radosť. Zaslúžiš si to!","Zaslúžiš si to! Odmeň sa za čokoľvek, z čoho sa tešíš, že si vykonal/a.", "reward", 1);
+        long idReward = habitMainRepository.insert(reward);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idReward,1));
+
+
+        Habit friends = new Habit("Rodina a priatelia", "Stretnutie s blízkymi osobami redukuje uvoľňovanie stresového hormónu v ťažkých situáciách v porovnaní so situáciami, keď blízky priateľ nebol prítomný.", "Venuj čas blízkej osobe.", "teamwork",1);
         long idFriends = habitMainRepository.insert(friends);
 
-        Habit walking = new Habit("Prechádzka", "Štúdie na Stanfordskej univerzite preukázali, že prechádzanie sa zvyšuje kreativitu. Nie je dôležité prostredie, ale samotný akt prechádzania sa. Ak je to však možné, pokús sa stráviť krátky čas i prechádzkou na čerstvom vzduchu. Príroda má značný vplyv na zníženie hladiny stresu. ","Prechádzanie sa podporuje kreativitu. ", "walking", 1);
+        Habit walking = new Habit("Prechádzka", "Štúdie na Stanfordskej univerzite preukázali, že prechádzanie sa zvyšuje kreativitu. Nie je dôležité prostredie, ale samotný akt prechádzania sa. Ak je to však možné, pokús sa stráviť krátky čas i prechádzkou na čerstvom vzduchu. Príroda má značný vplyv na zníženie hladiny stresu. ","Prechádzka ti obnoví aktivitu mozgu. ", "walking", 1);
+        long idWalking = habitMainRepository.insert(walking);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idWalking,1));
 
-        //Habit call
 
-        Habit reading = new Habit("Čítanie","Na zníženie hladiny stresu má významný účinok i čítanie kníh, ktoré navyše pomáhajú zlepšovať predstavivosť, napomáhajú k lepšiemu a kvalitnejšiemu spánku, a rovnako čítanie ukázalo priaznivý vplyv na predchádzanie problémov s výskytom Alzheimerovej choroby.", "Napomáha k zlepšeniu predstavivosti a kvalitnejšiemu spánku.", "book128",1);
+        Habit nature = new Habit("Preskúmaj prírodu","Prírodné zvuky a prostredie sú zdrojom ukľudňujúcich pocitov. Prechádzka po lese, parku, pri rieke ti obnoví aktivitu mozgu, sústredenie a budeš zregenerovaný.", "Príroda je zdrojom kreativity a pokojnej mysle.","nature",1);
+        long idNature = habitMainRepository.insert(nature);
+
+        Habit call = new Habit("Zavolať blízkej osobe", "Niekedy nie je možné sa stretnúť s osobou, ktorú máš rád. Často i jej/jeho hlas v telefóne je zdrojom radostných pocitov a uvoľnenia. Zavolaj niekomu, koho by si rád počul.", "Zavolaj niekomu, koho chceš počuť.", "phone",1);
+        long idCall = habitMainRepository.insert(call);
+
+        Habit reading = new Habit("Čítanie","Na zníženie hladiny stresu má významný účinok i čítanie kníh, ktoré navyše pomáhajú zlepšovať predstavivosť, napomáhajú k lepšiemu a kvalitnejšiemu spánku, a rovnako čítanie ukázalo priaznivý vplyv na predchádzanie problémov s výskytom Alzheimerovej choroby.", "Prečítaj si časť zo svojej obľúbenej knižky.", "book128",1);
         long idReading = habitMainRepository.insert(reading);
+
+        Habit inspired = new Habit("Inšpiruj sa", "Často sa ľudia dostávajú do situácie, keď strácajú motiváciu k výkonu rôznych činností. Nájdi si chvíľu pre nájdenie svojho zdroja inšpirácie.","Vyhľadaj si niečo, čo ťa inšpiruje.","inspired",1);
+        long idInspired = habitMainRepository.insert(inspired);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idInspired,1));
+
+
+        Habit fruits = new Habit("Ovocie a zelenina","Obsahujú veľa minerálov a vitamínov, ktoré sú pre tvoje telo veľmi prospešné. Pomáhajú predchádzať obezite, znižujú cholesterol a krvný tlak. Pomáhajú ako prevencia proti srdcovým ochoreniam.","Obsahujú prospešné vitamíny a minerály napomáhajúce tvojmu zdraviu.","fruits",1);
+        long idFrutis = habitMainRepository.insert(fruits);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idFrutis,1));
+
+
+        Habit stretching = new Habit("Strečing", "Strečing je účinná metóda pri redukovaní stresu. Spočíva v uvoľnení svalov a natiahnutí svalov a je to časovo nenáročná záležitosť.", "Ruky z oblasti šije postupne vzpaž a postav sa na špičky.","friends",1);
+        long idStretch = habitMainRepository.insert(stretching);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idStretch,1));
+
+
+        Habit tea = new Habit("Čaj","Antioxidanty v čaji slúžia ako prevencia proti viacerým chorobám. Hydratuje a povzbudzuje telo a znižuje úroveň stresových hormónov.","Pomôže ti zrelaxovať a lepšie sa sústrediť.","tea",1);
+        long idTea = habitMainRepository.insert(tea);
+
+        Habit air = new Habit("Čerstvý vzduch", "Ak si v uzavretej miestnosti, je dobré sa ísť nadýchnuť pri okno, pozorovať okolie. Prekrví ti to mozog a i krátka prechádzka je nápomocná. Vôňa čerstvého vzduchu znižuje stres a zvyšuje pocit šťastia.","Nadýchaj sa čerstvého vzduchu aj z izby","",1);
+        long idAir = habitMainRepository.insert(air);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idAir,1));
+
 
 
 
