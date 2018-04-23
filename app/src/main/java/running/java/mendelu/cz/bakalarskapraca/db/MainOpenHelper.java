@@ -15,7 +15,7 @@ import java.util.Date;
 public class MainOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "main.db";
-    private static final int DATABASE_VERSION = 69;
+    private static final int DATABASE_VERSION = 72;
 
     public MainOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -50,6 +50,7 @@ public class MainOpenHelper extends SQLiteOpenHelper {
                 //Habit.CANCEL + " INTEGER, " +
                 Habit.DONE + " INTEGER NOT NULL, " +
                 Habit.ASSOCIATON_TABLE_ID + " INTEGER, " +
+                Habit.AUTHOR + " TEXT, " +
                 //Habit.DATE + " INTEGER, " +
                 //Habit.REMIND + " INTEGER, " +
                 Habit.REPETITION_ID + " INTEGER NOT NULL, " +

@@ -274,7 +274,10 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         } else if (id == R.id.nav_info) {
 
         } else if (id == R.id.nav_icons) {
-
+            android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.mainFrameLayout, new IconsFragment());
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            ft.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

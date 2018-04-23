@@ -250,6 +250,39 @@ public class HabitMainRepository {
 
     }
 
+    public List<Habit> getAuthorHabits(String author){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+
+        try {
+            List<Habit> result = new LinkedList<>();
+            Cursor c = db.query(Habit.TABLE_HABITS,
+                    null,
+                    Habit.AUTHOR + " = '" + author + "'",
+                    null,
+                    null,
+                    null,
+                    Habit.PLAN + " DESC");
+
+
+            try {
+
+                while (c.moveToNext()) {
+                    result.add(new Habit(c));
+
+                }
+                c.close();
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+    }
+
     public List<Habit> getAllDoneHabits(){
         SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
 
