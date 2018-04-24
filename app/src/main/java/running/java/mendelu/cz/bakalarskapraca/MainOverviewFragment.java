@@ -129,7 +129,35 @@ public class MainOverviewFragment extends Fragment{
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         int time = settings.getInt("edit", 0);
-        Toast.makeText(getActivity(), "time je " + time, Toast.LENGTH_SHORT).show();
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time*60000);
+        cal.add(Calendar.HOUR_OF_DAY,-1);
+        Toast.makeText(getActivity(), "time je " + new SimpleDateFormat("HH:mm").format(cal.getTimeInMillis()) + "" + time, Toast.LENGTH_SHORT).show();
+
+        ContentValues contentValues = new ContentValues();
+
+        /*
+        public void checkFirstRun() {
+    boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
+    if (isFirstRun){
+        // Place your dialog code here to display the dialog
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+          .edit()
+          .putBoolean("isFirstRun", false)
+          .apply();
+    }
+}
+
+
+         */
+
+
+
+
+
+
+
 
 
         if (planMainRepository.getAllPlans().size() != 4) {
@@ -156,6 +184,15 @@ public class MainOverviewFragment extends Fragment{
         }
 
         subjectMainRepository.insertProject(project);
+        if (cal.get(Calendar.HOUR_OF_DAY) != subjectMainRepository.getProjectById(1).getHour()){
+            contentValues.put("hour",cal.get(Calendar.HOUR_OF_DAY));
+            subjectMainRepository.updateProject(1,contentValues);
+        }
+
+        if (cal.get(Calendar.MINUTE) != subjectMainRepository.getProjectById(1).getMinute()){
+            contentValues.put("minute",cal.get(Calendar.MINUTE));
+            subjectMainRepository.updateProject(1,contentValues);
+        }
 
 
 
@@ -252,7 +289,7 @@ public class MainOverviewFragment extends Fragment{
                 calendar.add(Calendar.DAY_OF_MONTH,1);
             }
 
-            //Toast.makeText(getActivity(), "Exam Notification nastavena od " + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Exam Notification nastavena od " + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
             Intent i = new Intent(getActivity(), ExamNotificationReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -270,7 +307,7 @@ public class MainOverviewFragment extends Fragment{
 
         //calendar.add(Calendar.DAY_OF_MONTH,1);
         calendar.set(Calendar.HOUR_OF_DAY, 4);
-        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.MINUTE,00);
         calendar.set(Calendar.SECOND,15);
         long time = calendar.getTimeInMillis();
 
@@ -280,7 +317,7 @@ public class MainOverviewFragment extends Fragment{
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        //Toast.makeText(getActivity(), "Database Record update o" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Database Record update o" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pendingIntent);
 
     }
