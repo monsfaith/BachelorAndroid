@@ -27,7 +27,7 @@
     <string name="pridat">Pridať</string>
     <string name="title_activity_main_vie">MainActivityVie</string>
     <string name="title_activity_navigation_main">NavigationMainActivity</string>
-    
+
     <string-array name="names">
         <item></item>
 
@@ -49,7 +49,7 @@
     <string name="settings_tabs">Upozornenia</string>
     <string name="interval">Interval upozornení</string>
     <string name="time">Doba upozorňovania</string>
-    <string name="infoAboutDailyPlan">Nahradiť jednotlivé plány celodenným plánom. Vhodné pre dni bez učenia.</string>
+    <string name="infoAboutDailyPlan">Nahradiť jednotlivé plány celodenným plánom. Vhodné pre dni bez učenia. Delený plán (ranný, obedný, večerný) sa Ti nastaví vtedy, keď si zvolíš skúšku, na ktorú sa ideš učiť. </string>
     <string name="infoAboutDailyPlanVisible">Nahradiť celodenný plán jednotlivými plánmi.</string>
     <string name="zrusit">Zrušiť</string>
     <string name="ano">Áno</string>
@@ -64,4 +64,6 @@
     <string name="ritual">Názov rituálu</string>
     <string name="description">Podrobnosti</string>
     <string name="paletka">Farba predmetu</string>
+    <string name="pridatS">Pridať</string>
+    <string name="pref_previously_started">previously</string>
 </resources>

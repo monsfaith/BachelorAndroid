@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center"
+        android:id="@+id/care"
+        android:background="@drawable/care1"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/care"
+        android:gravity="center_vertical"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:text="Exam Helper aplikácia"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/care"
+        android:gravity="center_vertical"
+        android:layout_gravity="center"
+        android:layout_marginTop="3dp"
+        android:textSize="14sp"
+        style="@style/TextAppearance.AppCompat.Subhead"
+        android:text="Verzia 1.0"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Autorom je študentka Mendelovej univerzity v Brne. "
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Aplikácia bola zhotovená ako praktická časť k bakalárskej práci. "
+        />
+
+    <Button
+        android:layout_width="135dp"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:id="@+id/usedIcons"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:background="@color/yellow_200"
+        android:shadowColor="@color/black"
+        android:textAlignment="center"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:gravity="center"
+        android:text="Použité ikony "
+        />
+
+</LinearLayout>

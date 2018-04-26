@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="25dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="25dp"
+        android:elevation="6dp"
+        card_view:cardCornerRadius="5dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/todayView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="O APLIKÁCII"
+                android:textSize="24sp"
+                android:textAppearance="@android:style/TextAppearance.Material.Title" />
+
+            <!--<ListView
+                android:id="@+id/examListView"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:layout_alignStart="@+id/todayView"
+                android:layout_below="@+id/todayView"
+                android:layout_marginTop="12dp" />-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_below="@id/todayView"
+                android:id="@+id/relativeLayout"
+                android:layout_height="wrap_content">
+
+
+
+            </RelativeLayout>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/book"
+                android:id="@+id/buttonApp"
+                android:layout_below="@id/relativeLayout"
+                android:background="@color/lime_700"
+                />
+
+            <!--<ListView
+                android:id="@+id/otherStudyListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/todayView"
+                android:layout_below="@+id/examListView"
+                android:layout_marginTop="12dp" />-->
+
+
+
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
+
+
+</LinearLayout>

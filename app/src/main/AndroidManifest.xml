@@ -2,106 +2,99 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="running.java.mendelu.cz.bakalarskapraca">
 
-    <uses-permission android:name="android.permission.SET_ALARM">
-
-    </uses-permission>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED">
-
-    </uses-permission>
+    <uses-permission android:name="android.permission.SET_ALARM"></uses-permission>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
-        <activity android:name=".MainViewActivity"
-            android:theme="@style/NoActionBar"
+        <activity
+            android:name=".MainViewActivity"
             android:screenOrientation="portrait"
-            >
-
+            android:theme="@style/NoActionBar">
             <intent-filter>
-
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="e3465835aad25874ab26b29d25472cb73030f612" />
 
         <activity
             android:name=".TasksDetailActivity"
-            android:theme="@style/AppTheme"
             android:label="Skúšky"
             android:screenOrientation="portrait"
-            />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".MyPlanTabsActivity"
-            android:theme="@style/AppTheme"
+            android:label="Plán"
             android:screenOrientation="portrait"
-            android:label="Plán" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".CreateExamActivity"
-            android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
-            />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".CreateSubjectActivity"
-            android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
-            />
-
-        <activity android:name=".OneExamDetailActivity"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".OneExamDetailActivity"
             android:screenOrientation="portrait"
-            />
-        <activity android:name=".CreateHabitActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".CreateHabitActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-        </activity>
-        <activity android:name=".notifications.HabitNotificationActivity"
-            android:theme="@style/NoActionBar"
-            android:excludeFromRecents="true">
-        </activity>
-        <activity android:name=".notifications.ExamNotificationStartActivity">
-
-        </activity>
-        <activity android:name=".notifications.ExamPostponeNotificationActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".notifications.HabitNotificationActivity"
             android:excludeFromRecents="true"
-            />
-        <activity android:name=".notifications.StartMainNotificationsActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            android:theme="@style/NoActionBar"></activity>
+        <activity android:name=".notifications.ExamNotificationStartActivity"></activity>
+        <activity
+            android:name=".notifications.ExamPostponeNotificationActivity"
             android:excludeFromRecents="true"
-            />
-        <activity android:name=".notifications.ExamTomorrowNotificationActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"
-            android:excludeFromRecents="true">
-        </activity>
-        <activity android:name=".notifications.SleepNotificationActivity">
-        </activity>
-        <receiver android:name=".notifications.receivers.DailyHabitNotificationReceiver"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".notifications.StartMainNotificationsActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".notifications.ExamTomorrowNotificationActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"></activity>
+        <activity android:name=".notifications.SleepNotificationActivity"></activity>
+
+        <receiver
+            android:name=".notifications.receivers.DailyHabitNotificationReceiver"
             android:enabled="true"
-            android:exported="true"
-            />
-        <receiver android:name=".notifications.receivers.ExamNotificationReceiver">
-        </receiver>
-        <receiver android:name=".notifications.receivers.DatabaseRecordReceiver"></receiver>
-        <receiver android:name=".notifications.receivers.EveningHabitNotificationReceiver">
-        </receiver>
-        <receiver android:name=".notifications.receivers.CancelEveningHabitNotificationReceiver">
-        </receiver>
-        <receiver android:name=".notifications.receivers.DatabaseTimeChangeReceiver">
-        </receiver>
-        <receiver android:name=".notifications.receivers.CancelExamReceiver">
-        </receiver>
-        <receiver android:name=".notifications.receivers.SleepReceiver">
-        </receiver>
+            android:exported="true" />
+        <receiver android:name=".notifications.receivers.ExamNotificationReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.DatabaseRecordReceiver" />
+        <receiver android:name=".notifications.receivers.EveningHabitNotificationReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.CancelEveningHabitNotificationReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.DatabaseTimeChangeReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.CancelExamReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.SleepReceiver"></receiver>
 
-
+        <activity
+            android:name=".IconsActivity"
+            android:label="O aplikácii"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".IntroActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:label="Exam Helper" >
+        </activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>

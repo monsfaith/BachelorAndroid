@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,6 +44,8 @@ public class TasksDetailActivity extends AppCompatActivity {
     private TextView tomorrowView;
     private TextView otherView;
 
+    private FloatingActionButton fab;
+
 
     //private CalendarView calendarView;
 
@@ -63,12 +66,21 @@ public class TasksDetailActivity extends AppCompatActivity {
         todayView = (TextView) findViewById(R.id.textDate);
         tomorrowView = (TextView) findViewById(R.id.textDateTomorrow);
         otherView = (TextView) findViewById(R.id.textDateOtherDays);
+        fab = (FloatingActionButton) findViewById(R.id.floatingA);
 
         examMainRepository = new ExamMainRepository(this);
 
         setViews();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),CreateExamActivity.class);
+                startActivity(i);
+            }
+        });
 
 
         /*calendarView = (CalendarView) findViewById(R.id.calendarView);

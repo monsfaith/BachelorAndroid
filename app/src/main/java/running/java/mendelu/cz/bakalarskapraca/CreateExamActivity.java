@@ -48,6 +48,8 @@ import running.java.mendelu.cz.bakalarskapraca.db.SubjectAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.SubjectMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.SleepReceiver;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class CreateExamActivity extends AppCompatActivity {
 
@@ -96,6 +98,13 @@ public class CreateExamActivity extends AppCompatActivity {
         examMainRepository = new ExamMainRepository(this);
         planMainRepository = new PlanMainRepository(this);
 
+        new MaterialShowcaseView.Builder(this)
+                .setTarget(seekbarDifficulty).setDismissText("Chápem").setTargetTouchable(true)
+                .setContentText("Po zvolení dátumu a času sa ti sprístupní tento indikátor náročnosti. Ten ti pomáha odhadnúť dni potrebné k príprave na skúšku.")
+                .setDelay(50) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse("2") // provide a unique ID used to ensure it is only shown once
+                .show();
+
 
         Toast.makeText(this, "Pocet subjektov: " + subjectMainRepository.findAllSubjects().size() + examMainRepository.findAllExams().size(), Toast.LENGTH_LONG).show();
 
@@ -126,6 +135,7 @@ public class CreateExamActivity extends AppCompatActivity {
 
             }
         });
+
 
         /*chosenDate.addTextChangedListener(new TextWatcher() {
             @Override
@@ -158,6 +168,11 @@ public class CreateExamActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (chosenTime.getText().toString().trim().length() != 0){
+                    seekbarDifficulty.setEnabled(true);
+                    chosenDays.setEnabled(true);
+                }
                 //if (days != 0){
                 /*if (chosenTime.getText().toString().trim().length() != 0){
                     if ((setMaxSeekBar() / 7) < 1) {

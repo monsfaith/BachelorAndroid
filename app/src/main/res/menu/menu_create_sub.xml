@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title="@string/pridatSub"
-        android:icon="@drawable/ic_add_black_24dp"
+        android:title="@string/pridatS"
         android:onClick="createSubject"
         app:showAsAction="always" />
 

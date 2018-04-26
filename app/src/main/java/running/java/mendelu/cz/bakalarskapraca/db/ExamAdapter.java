@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -110,7 +111,7 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
 
         holder.examIcon.getBackground().setColorFilter(new LightingColorFilter(colorSubject,0));
 
-        holder.examEdit.setOnClickListener(new View.OnClickListener() {
+        /*holder.examEdit.setOnClickListener(new View.OnClickListener() {
             //long examId = cursor.getLong(cursor.getColumnIndex(Exam.ID));
             long examId = currentExam.getId();
             @Override
@@ -121,7 +122,20 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
                         context.startActivity(i);
 
                     }
-                });
+                });*/
+
+        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+            //long examId = cursor.getLong(cursor.getColumnIndex(Exam.ID));
+            long examId = currentExam.getId();
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, examId + "fungzzuje?", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(context, OneExamDetailActivity.class);
+                i.putExtra("ID", examId);
+                context.startActivity(i);
+
+            }
+        });
     }
 
 
@@ -144,6 +158,7 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
         TextView examDate;
         Button examIcon;
         ImageButton examEdit;
+        RelativeLayout relativeLayout;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -152,6 +167,7 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
             examIcon = (Button) itemView.findViewById(id.iconExam);
             examEdit = (ImageButton) itemView.findViewById(id.examEdit);
             examDate = (TextView) itemView.findViewById(id.examDateTime);
+            relativeLayout = (RelativeLayout) itemView.findViewById(id.examLayout);
 
 
         }

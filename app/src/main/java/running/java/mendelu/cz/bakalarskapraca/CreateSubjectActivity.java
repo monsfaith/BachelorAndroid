@@ -128,7 +128,7 @@ public class CreateSubjectActivity extends AppCompatActivity implements SimpleDi
     public boolean onResult(@NonNull String dialogTag, int which, @NonNull Bundle extras) {
         if (which == BUTTON_POSITIVE && COLOR_DIALOG.equals(dialogTag)){;
             subjectColor = extras.getInt(SimpleColorDialog.COLOR);
-            subjectShortcutInput.setImageResource(R.drawable.ic_done_black_24dp);
+            subjectShortcutInput.setImageResource(R.drawable.ic_edit_white_24dp);
             subjectShortcutInput.setBackgroundTintList(ColorStateList.valueOf(subjectColor));
             //subjectShortcutInput.setBackgroundResource(R.drawable.ic_done_black_24dp);
             //Toast.makeText(this, subjectColor + "", Toast.LENGTH_LONG).show();

@@ -29,6 +29,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private android.support.v14.preference.SwitchPreference switchPreference;
     private PlanMainRepository planMainRepository;
+    private TimePickerPreference timePickerPreference;
 
     //SubjectMainRepository subjectMainRepository = new SubjectMainRepository(getActivity());
 
@@ -38,6 +39,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         addPreferencesFromResource(R.xml.fragment_settings);
 
         switchPreference = (android.support.v14.preference.SwitchPreference) findPreference("turn_notif"); //Preference Key
+        ((MainViewActivity) getActivity()).setActionBarTitle("Nastavenia");
+
+        switchPreference = (android.support.v14.preference.SwitchPreference) findPreference("turn_notif"); //Preference Key
+
+        timePickerPreference = (TimePickerPreference) findPreference("edit");
+        timePickerPreference.setOnPreferenceChangeListener();
+
+
+
+
 
 
 

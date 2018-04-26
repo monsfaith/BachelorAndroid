@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/firstAuthor"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content"
+                android:text="Ikony vytvorené používateľom Freepik z www.flaticon.com " />
+
+            <ImageView
+                android:id="@+id/firstA"
+                android:layout_width="wrap_content"
+                android:background="@drawable/freepik"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content">
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/secondAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="Ikony vytvorené používateľom Roundicons z www.flaticon.com" />
+
+            <ImageView
+                android:id="@+id/secondA"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:background="@drawable/roundicons"
+                android:layout_height="wrap_content" >
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/thirdAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="Ikony vytvorené používateľom Smashicons z www.flaticon.com" />
+
+            <ImageView
+                android:id="@+id/thirdA"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/smashicons"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/forthAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="Ikony vytvorené používateľom Vectors Market z www.flaticon.com" />
+
+            <ImageView
+                android:id="@+id/forthA"
+                android:layout_width="wrap_content"
+                android:background="@drawable/vectors"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/fifthAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="Ikony vytvorené používateľom Flat icons z www.flaticon.com" />
+
+            <ImageView
+                android:id="@+id/fifthA"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/flat"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/sixAuthor"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ikony vytvorené používateľom Icon Pond z www.flaticon.com" />
+
+            <ImageView
+                android:id="@+id/sixA"
+                android:layout_width="wrap_content"
+                android:background="@drawable/iconpond"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

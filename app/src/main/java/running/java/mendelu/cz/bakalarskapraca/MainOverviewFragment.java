@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,6 +31,8 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 
 import org.w3c.dom.Text;
 
@@ -57,6 +60,9 @@ import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DatabaseT
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.SleepReceiver;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 
 /**
@@ -89,7 +95,9 @@ public class MainOverviewFragment extends Fragment{
     private TextView textDate;
     private TextView noExamsToday;
     private SubjectMainRepository subjectMainRepository;
+    private ImageButton buttonApp;
 
+    private static final String SHOWCASE_ID = "7";
 
     public MainOverviewFragment() {
         // Required empty public constructor
@@ -119,6 +127,8 @@ public class MainOverviewFragment extends Fragment{
         textDate = (TextView) view.findViewById(R.id.textDateToday);
         noExamsToday = (TextView) view.findViewById(R.id.noExamsToday);
         subjectMainRepository = new SubjectMainRepository(getActivity());
+        buttonApp = (ImageButton) view.findViewById(R.id.buttonApp);
+
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         textDate.setText(sdf.format(System.currentTimeMillis()));
@@ -127,12 +137,7 @@ public class MainOverviewFragment extends Fragment{
         Log.i("Bakalarka", "onCreate");
         Project project = new Project(8,0,"",1);
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        int time = settings.getInt("edit", 0);
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(time*60000);
-        cal.add(Calendar.HOUR_OF_DAY,-1);
-        Toast.makeText(getActivity(), "time je " + new SimpleDateFormat("HH:mm").format(cal.getTimeInMillis()) + "" + time, Toast.LENGTH_SHORT).show();
+
 
         ContentValues contentValues = new ContentValues();
 
@@ -151,6 +156,54 @@ public class MainOverviewFragment extends Fragment{
 
 
          */
+
+
+
+        /*new ShowcaseView.Builder(getActivity())
+                .setTarget(new ActionViewTarget(getActivity(), floatingButton))
+                .setContentTitle("ShowcaseView")
+                .setContentText("This is highlighting the Home button")
+                .hideOnTouchOutside()
+                .build();*/
+
+        /*new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(floatingButton).setTargetTouchable(true)
+                .setContentText("Toto tlačidlo slúži na vytvorenie novej skúšky. Na základe toho ti potom aplikácia pošle upozornenie na potrebnú prípravu").setTitleText("Pridanie skúšky")
+                .setDelay(50) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse("1") // provide a unique ID used to ensure it is only shown once
+                .show();
+
+        new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(cardViewTwo).setDismissText("Chápem").setTargetTouchable(true)
+                .setContentText("Táto oblasť ťa informuje o aktuálne vykonávanom pláne a o jeho vybraných aktivitách s indikátorom splnenia").setTitleText("Aktuálny plán")
+                .setDelay(50) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse("3") // provide a unique ID used to ensure it is only shown once
+                .show();*/
+
+        /*new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(buttShow).setTargetTouchable(true)
+                .setContentText("Kliknutím na Zobraziť viac sa dostaneš do informácií a nastaveniach tvojich plánov. Skús to!").setTitleText("Zobraziť viac")
+                .setDelay(50) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse("5") // provide a unique ID used to ensure it is only shown once
+                .show();*/
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(300); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), SHOWCASE_ID);
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(floatingButton,
+                "Toto tlačidlo slúži na vytvorenie novej skúšky. Na základe toho ti potom aplikácia pošle upozornenie na potrebnú prípravu", "Chápem!");
+
+        sequence.addSequenceItem(buttShow,
+                "Kliknutím na Zobraziť viac sa dostaneš do informácií a nastavení tvojich plánov.", "Chápem!");
+
+
+        sequence.start();
+
+
 
 
 
@@ -183,15 +236,26 @@ public class MainOverviewFragment extends Fragment{
             noExamsToday.setVisibility(View.VISIBLE);
         }
 
-        subjectMainRepository.insertProject(project);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        int time = settings.getInt("edit", 0);
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time*60000);
+        cal.add(Calendar.HOUR_OF_DAY,-1);
+        Toast.makeText(getActivity(), "time je " + new SimpleDateFormat("HH:mm").format(cal.getTimeInMillis()) + "" + time, Toast.LENGTH_SHORT).show();
+
+        //subjectMainRepository.insertProject(project);
         if (cal.get(Calendar.HOUR_OF_DAY) != subjectMainRepository.getProjectById(1).getHour()){
-            contentValues.put("hour",cal.get(Calendar.HOUR_OF_DAY));
-            subjectMainRepository.updateProject(1,contentValues);
+            if (cal.get(Calendar.HOUR_OF_DAY) != 0) {
+                contentValues.put("hour", cal.get(Calendar.HOUR_OF_DAY));
+                subjectMainRepository.updateProject(1, contentValues);
+            }
         }
 
         if (cal.get(Calendar.MINUTE) != subjectMainRepository.getProjectById(1).getMinute()){
-            contentValues.put("minute",cal.get(Calendar.MINUTE));
-            subjectMainRepository.updateProject(1,contentValues);
+            if (cal.get(Calendar.MINUTE) != 0) {
+                contentValues.put("minute", cal.get(Calendar.MINUTE));
+                subjectMainRepository.updateProject(1, contentValues);
+            }
         }
 
 
@@ -211,7 +275,7 @@ public class MainOverviewFragment extends Fragment{
             editor.commit();
         }*/
 
-        setExamNotification();
+        //setExamNotification();
         setDatabaseNotification();
         setSleepNotification();
         loadListView();
@@ -236,6 +300,14 @@ public class MainOverviewFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getContext(),CreateExamActivity.class);
+                startActivity(i);
+            }
+        });
+
+        buttonApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(),IntroActivity.class);
                 startActivity(i);
             }
         });
@@ -361,7 +433,7 @@ public class MainOverviewFragment extends Fragment{
         List<PlanHabitAssociation> pha = setPlan();
 
         if (pha != null){
-            iconHabitAdapter = new IconHabitAdapter(getActivity(), pha);
+            iconHabitAdapter = new IconHabitAdapter(getActivity(), pha, this);
             recyclerViewHabits.setAdapter(iconHabitAdapter);
             recyclerViewHabits.setLayoutManager(new GridLayoutManager(getActivity(),4));
         } else {
@@ -382,21 +454,6 @@ public class MainOverviewFragment extends Fragment{
         return examMainRepository.getExamResultsList(date);
     }
 
-    public void altLoadListView(){
-        if (setPlan() != null){
-            iconHabitAdapter = new IconHabitAdapter(getActivity(), setPlan());
-            recyclerViewHabits.setAdapter(iconHabitAdapter);
-            recyclerViewHabits.setLayoutManager(new GridLayoutManager(getActivity(),4));
-        } else {
-            actualPlanTextView.setText("Plán neprebieha");
-            /*TextView tx = new TextView(getActivity());
-            tx.setText("Nie je momentálne zvolený žiadny plán. ");
-            tx.setPadding(50, 210, 0, 50);
-            tx.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-            cardViewTwo.addView(tx);*/
-        }
-
-    }
 
     //urcenie View na zaklade prebiehajuceho planu
     private List<PlanHabitAssociation> setPlan() {

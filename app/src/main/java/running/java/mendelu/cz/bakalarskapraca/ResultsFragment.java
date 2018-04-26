@@ -55,6 +55,8 @@ public class ResultsFragment extends Fragment {
 
         //resultAdapter = new ResultAdapter(getActivity(),getResults());
 
+        ((MainViewActivity) getActivity()).setActionBarTitle("Skúšky");
+
         if (getResults().size() == 0){
             noExams.setVisibility(View.VISIBLE);
             noExamsImage.setVisibility(View.VISIBLE);
@@ -64,6 +66,8 @@ public class ResultsFragment extends Fragment {
 
         recyclerView.setAdapter(resultAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
 
 
 

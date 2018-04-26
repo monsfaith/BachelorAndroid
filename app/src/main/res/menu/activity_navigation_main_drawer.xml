@@ -8,7 +8,7 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="Domov" />
+            android:title="Prehľad" />
         <item
             android:id="@+id/nav_exams"
             android:icon="@drawable/ic_library_books_black_24dp"
@@ -28,10 +28,6 @@
                 android:icon="@drawable/ic_info_black_24dp"
                 android:title="O aplikácii" />
 
-            <item
-                android:id="@+id/nav_icons"
-                android:icon="@drawable/ic_image_black_24dp"
-                android:title="Použité ikony" />
     </item>
     </group>
 

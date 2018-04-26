@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
 <ScrollView
@@ -45,6 +47,11 @@
         android:layout_marginRight="20dp"
         android:inputType="textPersonName"
         android:onClick="choseSubject"
+        android:focusable="false"
+        android:clickable="true"
+        android:longClickable="false"
+
+
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <View
@@ -77,6 +84,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="10dp"
         android:focusable="false"
+        android:longClickable="false"
         android:inputType="time"
         android:textAppearance="@android:style/TextAppearance.Material.Body1" />
 
@@ -239,6 +247,7 @@
         android:layout_marginRight="20dp"
         android:ems="10"
         android:inputType="textMultiLine"
+        android:layout_marginBottom="35dp"
         android:textAppearance="@android:style/TextAppearance.Material.Body1" />
 
 

@@ -2,6 +2,8 @@ package running.java.mendelu.cz.bakalarskapraca;
 
 import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,8 +17,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.widget.DrawerLayout;
@@ -24,7 +26,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,6 +73,15 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
                 .debuggable(true)
                 .build();
         Fabric.with(fabric);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        boolean previouslyStarted = prefs.getBoolean(getString(R.string.pref_previously_started), false);
+        if(!previouslyStarted) {
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.putBoolean(getString(R.string.pref_previously_started), Boolean.TRUE);
+            edit.commit();
+            startActivity(new Intent(MainViewActivity.this, IntroActivity.class));
+        }
 
         /*butt = (Button) findViewById(R.id.buttonMoreee);
         butt = (Button) findViewById(R.id.planShowMore);
@@ -243,6 +253,10 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         return super.onOptionsItemSelected(item);
     }*/
 
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -272,10 +286,8 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
             ft.commit();
 
         } else if (id == R.id.nav_info) {
-
-        } else if (id == R.id.nav_icons) {
             android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.mainFrameLayout, new IconsFragment());
+            ft.replace(R.id.mainFrameLayout, new AppFragment());
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             ft.commit();
         }

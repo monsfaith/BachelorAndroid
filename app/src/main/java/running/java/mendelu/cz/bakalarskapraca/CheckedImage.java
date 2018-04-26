@@ -44,7 +44,7 @@ public class CheckedImage extends android.support.v7.widget.AppCompatImageView{
                         getResources(), R.drawable.checked1);
                 int width = check.getWidth();
                 int height = check.getHeight();
-                int margin = 15;
+                int margin = 25;
                 int x = canvas.getWidth() - width - margin;
                 int y = canvas.getHeight() - height - margin;
                 canvas.drawBitmap(check, x, y, new Paint());

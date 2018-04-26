@@ -3,6 +3,7 @@ package running.java.mendelu.cz.bakalarskapraca;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.preference.DialogPreference;
+import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 
 /**
@@ -18,6 +19,16 @@ public class TimePickerPreference extends DialogPreference {
         this(context, null);
     }
 
+    public void setOnPreferenceChangeListener(){
+        new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                setSummary("Čas príchodu notifikácie týkajúcej sa príprav na skúšky nastavený na: " + time);
+                return true;
+            }
+        };
+    }
+
     public TimePickerPreference(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.dialogPreferenceStyle);
     }
@@ -31,6 +42,8 @@ public class TimePickerPreference extends DialogPreference {
                                 int defStyleAttr) {
         this(context, attrs, defStyleAttr, defStyleAttr);
     }
+
+
 
 
 

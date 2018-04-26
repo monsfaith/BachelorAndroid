@@ -85,12 +85,12 @@ public class MyPlanTabsActivity extends AppCompatActivity {
     private void setViewPager(ViewPager viewPager){
         TabsPageAdapter tabsPageAdapter = new TabsPageAdapter(getFragmentManager());
         MyPlanTab1Fragment myPlanTab = new MyPlanTab1Fragment();
-        tabsPageAdapter.addFragment(myPlanTab,"Môj plán");
+        tabsPageAdapter.addFragment(myPlanTab,"Moje plány");
 
         MyActivitiesTab2Fragment myActivitiesTab2Fragment = new MyActivitiesTab2Fragment();
         //myActivitiesTab2Fragment.setListeners(myPlanTab);
         myActivitiesTab2Fragment.setMyPlanTabFragment(myPlanTab);
-        tabsPageAdapter.addFragment(myActivitiesTab2Fragment, "Moje aktivity");
+        tabsPageAdapter.addFragment(myActivitiesTab2Fragment, "Aktivity");
 
         viewPager.setAdapter(tabsPageAdapter);
     }

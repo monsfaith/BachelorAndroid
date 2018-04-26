@@ -42,6 +42,8 @@ import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Created by Monika on 12.02.2018.
@@ -77,6 +79,8 @@ public class MyActivitiesTab2Fragment extends Fragment{
     private TextView timeTextViewMorning;
     private TextView timeTextViewLunch;
     private TextView timeTextViewEvening;
+
+    private RelativeLayout relativeLayout;
 
     private RelativeLayout morningRelativeLayout;
     private RelativeLayout eveningRelativeLayout;
@@ -116,9 +120,9 @@ public class MyActivitiesTab2Fragment extends Fragment{
         eveningRelativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayoutActivitiesEvening);
         lunchRelativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayoutActivitiesLunch);
         dailyRelativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayoutActivitiesDaily);
+        relativeLayout = (RelativeLayout) view.findViewById(R.id.fragmentActivitiesLayout);
 
 
-        //http://jakewharton.github.io/butterknife/
         timeButtonDaily = (ImageButton) view.findViewById(R.id.timeButtonDaily);
         timeButtonEvening = (ImageButton) view.findViewById(R.id.timeButtonEvening);
         timeButtonLunch = (ImageButton) view.findViewById(R.id.timeButtonLunch);
@@ -129,6 +133,49 @@ public class MyActivitiesTab2Fragment extends Fragment{
         timeTextViewLunch = (TextView) view.findViewById(R.id.timeTextViewLunch);
         timeTextViewEvening = (TextView) view.findViewById(R.id.timeTextViewEvening);
 
+        relativeLayout.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                ShowcaseConfig config = new ShowcaseConfig();
+                config.setDelay(300); // half second between each showcase view
+
+                MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), "15");
+
+                sequence.setConfig(config);
+
+                sequence.addSequenceItem(timeTextViewDaily, "Jednotlivé ikony zobrazujú všetky dostupné činnosti k vykonaniu, ktoré si môžeš pridať do plánu. V tejto časti si tvoríš plán a jeho aktivity podľa seba.","Chápem!");
+
+                sequence.addSequenceItem(timeButtonDaily,
+                        "Ikona budíka charakterizuje dobu upozorňovania na aktivity v pláne.", "Chápem!");
+
+                sequence.addSequenceItem(floatingActionButton,
+                        "Dokonca si môžeš vytvoriť i vlastnú aktivitu!", "Chápem!");
+
+
+                sequence.start();
+            }
+        });
+
+
+        //http://jakewharton.github.io/butterknife/
+
+
+
+        /*ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(300); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), "12");
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(dailyRecyclerView,
+                "Jednotlivé ikony Ti zobrazujú všetky dostupné činnosti k vykonaniu. Kliknutím na ne si zobrazíš informácie a môžeš si ich pridať do plánu.", "Chápem!");
+
+        sequence.addSequenceItem(floatingActionButton,
+                "Dokonca si môžeš vytvoriť i vlastnú aktivitu!", "Chápem!");
+
+
+        sequence.start();*/
 
 
         Toast.makeText(getActivity(), planMainRepository.getAllPlans().size() + " pocet planov", Toast.LENGTH_SHORT).show();

@@ -56,6 +56,8 @@ import running.java.mendelu.cz.bakalarskapraca.db.SubjectMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Created by Monika on 12.02.2018.
@@ -105,6 +107,7 @@ public class MyPlanTab1Fragment extends Fragment {
     private TextView txMorning;
     private TextView txLunch;
     private TextView txEvening;
+    private TextView focusText;
 
     private ImageButton settingsButtonDaily;
     private ImageButton settingsButtonMorning;
@@ -150,6 +153,7 @@ public class MyPlanTab1Fragment extends Fragment {
         lunchTextView = (TextView) view.findViewById(R.id.lunchTextViewMyPlan);
         eveningTextView = (TextView) view.findViewById(R.id.eveningTextViewMyPlan);
         infoAboutDailyPlan = (TextView) view.findViewById(R.id.infoAboutDailyPlan);
+        focusText = (TextView) view.findViewById(R.id.focusText);
 
 
         setAdapters();
@@ -171,6 +175,22 @@ public class MyPlanTab1Fragment extends Fragment {
 
 
         updateProgressBars();
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(300); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), "14");
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(focusText,
+                "Tento zoznam Ti indikuje aktivity, ktoré boli vložené do plánu. Nachádzajú sa tu niektoré, ktoré boli navrhnuté aplikáciou. Kliknutím na zaškrtávacie políčko udávaš, že si danú činnosť vykonal.", "Chápem!");
+
+        sequence.addSequenceItem(switchDaily,
+                "Toto tlačidlo slúži na prepínanie medzi plánmi. Primárne je zaškrtnuté. Jeho odškrtnutím si následne zvolíš skúšku, na ktorú sa chceš učiť.", "Chápem!");
+
+
+        sequence.start();
 
 
         switchDaily.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
