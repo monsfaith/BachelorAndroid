@@ -62,9 +62,15 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
             contentTitle = "Ranný plán";
             if (name.trim().length() != 0){
                 contentText = name + ", naštartuj sa do nového dňa! ";
+                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Študijná prestávka").addLine(contentText));
+                builder.setContentText("");
+
 
             } else {
                 contentText = "Naštartuj sa do nového dňa! ";
+                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Študijná prestávka").addLine(contentText));
+                builder.setContentText("");
+
 
             }
 
@@ -74,10 +80,15 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
             builder.setSmallIcon(R.drawable.ic_brightness_medium_black_24dp);
             contentTitle = "Obedný plán";
             if (name.trim().length() != 0){
-                contentText = name + ", nezabúdaj na svoje rituály ani v priebehu dňa";
+                contentText = name + ", nezabúdaj si oddýchnuť ani v priebehu dňa";
+                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Študijná prestávka").addLine(contentText));
+                builder.setContentText("");
+
 
             } else {
-                contentText = "Nezabúdaj na svoje rituály ani v priebehu dňa";
+                contentText = "Nezabúdaj si oddýchnuť ani v priebehu dňa";
+                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Študijná prestávka").addLine(contentText));
+                builder.setContentText("");
 
             }
         }
@@ -87,9 +98,13 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
             contentTitle = "Večerný plán";
             if (name.trim().length() != 0){
                 contentText = name + ", ostaň bez stresu i ku koncu dňa";
+                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Študijná prestávka").addLine(contentText));
+                builder.setContentText("");
 
             } else {
                 contentText = "Ostaň bez stresu i ku koncu dňa";
+                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Študijná prestávka").addLine(contentText));
+                builder.setContentText("");
 
             }
         }
@@ -99,16 +114,18 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
             contentTitle = "Denný plán";
             if (name.trim().length() != 0){
                 contentText = name + ", buď bližšie k svojím cieľom!";
+                builder.setContentText(contentText);
 
             } else {
                 contentText = "Buď bližšie k svojím cieľom!";
+                builder.setContentText(contentText);
+
 
             }
         }
 
 
-        builder.setContentTitle(contentTitle + requestCode);
-        builder.setContentText(contentText);
+        builder.setContentTitle(contentTitle);
 
         if (isBadDaily(requestCode, planMainRepository.getByType(1).getEnabled()) == false) {
             if (id != 0) {

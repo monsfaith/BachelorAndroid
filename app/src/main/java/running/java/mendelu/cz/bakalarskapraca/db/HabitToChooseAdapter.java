@@ -82,9 +82,9 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
         int resourceId = resources.getIdentifier(currentHabit.getIcon(), "drawable",
                 context.getPackageName());
 
-        Glide.with(context).load(resourceId).override(256,256).into(holder.habitImage);
+        //Glide.with(context).load(resourceId).override(256,256).into(holder.habitImage);
         //Picasso.get().load("R.drawable." + currentHabit.getIcon()).into(holder.habitImage);
-        //holder.habitImage.setImageDrawable(getResources(currentHabit.getIcon()));
+        holder.habitImage.setImageDrawable(getResources(currentHabit.getIcon()));
         final int opacityPicture = Color.argb(155, 255, 255, 255);
         if (!inPlan){
             holder.habitImage.setColorFilter(opacityPicture, PorterDuff.Mode.SRC_ATOP);

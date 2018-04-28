@@ -36,13 +36,20 @@
                 android:layout_marginRight="10dp"
                 android:text="Kliknutím na ikonu aktivity si ju vložíš do zvoleného plánu." />
 
+            <Button
+                android:layout_height="wrap_content"
+                android:id="@+id/hiddenButton"
+                android:visibility="gone"
+                android:layout_width="wrap_content">
+            </Button>
+
         </android.support.v7.widget.CardView>
 
         <RelativeLayout
                 android:id="@+id/relativeLayoutActivitiesDaily"
                 android:layout_width="match_parent"
             android:layout_below="@id/cardViewMain"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/dailyTextViewActivities"
@@ -78,6 +85,7 @@
                     android:layout_above="@+id/cardViewDailyActivities"
                     android:layout_toRightOf="@id/dailyTextViewActivities"
                     android:gravity="center_horizontal"
+                    android:layout_toLeftOf="@id/timeButtonDaily"
                     android:paddingBottom="5dp"
                     android:textAlignment="center"
                     android:textAppearance="@android:style/TextAppearance.Material.Title"
@@ -86,7 +94,7 @@
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/cardViewDailyActivities"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/dailyTextViewActivities"
                     android:layout_gravity="center"
                     android:layout_marginBottom="5dp"
@@ -96,7 +104,7 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recyclerViewDailyHabitToChoose"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_below="@id/dailyTextViewActivities" />
 
 

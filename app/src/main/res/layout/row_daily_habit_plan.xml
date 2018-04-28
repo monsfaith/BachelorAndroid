@@ -21,9 +21,10 @@
         android:layout_toRightOf="@id/habitImage"
         android:layout_weight="1"
         android:paddingLeft="10dp"
+        android:textColor="@color/black"
         android:paddingTop="10dp"
         android:text="TextView"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <TextView
         android:id="@+id/habitDescription"
@@ -32,13 +33,17 @@
         android:layout_below="@id/habitName"
         android:layout_toRightOf="@id/habitImage"
         android:paddingLeft="10dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
     <CheckBox
         android:id="@+id/habitCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:shadowColor="@color/blue_400"
+        android:buttonTint="@color/cyan_700"
         android:layout_marginRight="10dp"
         android:layout_alignParentRight="true"
         />

@@ -57,6 +57,7 @@ import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEve
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.ExamNotificationReceiver;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
@@ -163,6 +164,11 @@ public class MyPlanTab1Fragment extends Fragment {
         lunchPlanCardView = (CardView) view.findViewById(R.id.card_view_lunch_plan);
         eveningPlanCardView = (CardView) view.findViewById(R.id.card_view_evening_plan);
         createTextViews();
+
+        dailyRecyclerView.setNestedScrollingEnabled(false);
+        morningRecyclerView.setNestedScrollingEnabled(false);
+        lunchRecyclerView.setNestedScrollingEnabled(false);
+        eveningRecyclerView.setNestedScrollingEnabled(false);
         //tx.setVisibility(View.GONE);
 
         setHabitsSize();
@@ -184,10 +190,12 @@ public class MyPlanTab1Fragment extends Fragment {
         sequence.setConfig(config);
 
         sequence.addSequenceItem(focusText,
-                "Tento zoznam Ti indikuje aktivity, ktoré boli vložené do plánu. Nachádzajú sa tu niektoré, ktoré boli navrhnuté aplikáciou. Kliknutím na zaškrtávacie políčko udávaš, že si danú činnosť vykonal.", "Chápem!");
+                "Tento zoznam Ti indikuje aktivity, ktoré boli vložené do plánu. ", "Rozumiem!");
+
+        sequence.addSequenceItem(dailyPlanCardView, "Kliknutím na zaškrtávacie políčko udávaš, že si danú činnosť vykonal.","Rozumiem!");
 
         sequence.addSequenceItem(switchDaily,
-                "Toto tlačidlo slúži na prepínanie medzi plánmi. Primárne je zaškrtnuté. Jeho odškrtnutím si následne zvolíš skúšku, na ktorú sa chceš učiť.", "Chápem!");
+                "Toto tlačidlo slúži na prepínanie medzi plánmi. Primárne je zaškrtnuté. Jeho odškrtnutím si následne zvolíš skúšku, na ktorú sa chceš učiť.", "Rozumiem!");
 
 
         sequence.start();

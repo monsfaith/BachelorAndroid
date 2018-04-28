@@ -14,9 +14,12 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import running.java.mendelu.cz.bakalarskapraca.R;
+import running.java.mendelu.cz.bakalarskapraca.db.Exam;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.SleepNotificationActivity;
 
 /**
@@ -31,6 +34,15 @@ public class SleepReceiver extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent i = new Intent(context, SleepNotificationActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 50, i, 0);
+
+
+
+        if (intent.getExtras() != null){
+            long id = intent.getLongExtra("examSleepID",0);
+            i.putExtra("sleepExamID",id);
+        }
+
+        String content = "";
 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
@@ -77,5 +89,14 @@ public class SleepReceiver extends BroadcastReceiver {
             }
         }
 
+    }
+
+    private boolean sameDay(long date){
+        Calendar calendarCurrent = Calendar.getInstance();
+        Calendar calendarMy = Calendar.getInstance();
+        calendarMy.setTimeInMillis(date);
+        boolean sameDay = calendarCurrent.get(Calendar.YEAR) == calendarMy.get(Calendar.YEAR) &&
+                calendarCurrent.get(Calendar.DAY_OF_YEAR) == calendarMy.get(Calendar.DAY_OF_YEAR);
+        return sameDay;
     }
 }

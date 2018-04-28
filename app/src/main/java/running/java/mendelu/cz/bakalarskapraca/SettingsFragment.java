@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.SwitchPreference;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
@@ -25,11 +26,12 @@ import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHa
  * Created by Monika on 16.04.2018.
  */
 
-public class SettingsFragment extends PreferenceFragmentCompat {
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private android.support.v14.preference.SwitchPreference switchPreference;
     private PlanMainRepository planMainRepository;
     private TimePickerPreference timePickerPreference;
+    private EditTextPreference editTextPreference;
 
     //SubjectMainRepository subjectMainRepository = new SubjectMainRepository(getActivity());
 
@@ -38,13 +40,24 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.fragment_settings);
 
+        SharedPreferences sp = getPreferenceScreen().getSharedPreferences();
+
         switchPreference = (android.support.v14.preference.SwitchPreference) findPreference("turn_notif"); //Preference Key
         ((MainViewActivity) getActivity()).setActionBarTitle("Nastavenia");
 
         switchPreference = (android.support.v14.preference.SwitchPreference) findPreference("turn_notif"); //Preference Key
 
         timePickerPreference = (TimePickerPreference) findPreference("edit");
-        timePickerPreference.setOnPreferenceChangeListener();
+
+        editTextPreference = (EditTextPreference) findPreference("full_name");
+
+        //timePickerPreference.setSummary("Čas príchodu notifikácie týkajúcej sa príprav na skúšky");
+        sp.registerOnSharedPreferenceChangeListener(this);
+        setSummary();
+
+        if (editTextPreference.getText().equals("") == false){
+            setNameSummary();
+        }
 
 
 
@@ -62,6 +75,36 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 setDailyPlan(getActivity());
             }
         }
+
+        setSummary();
+        setNameSummary();
+    }
+
+    private void setSummary(){
+        Preference pref = findPreference("edit");
+        if (pref instanceof TimePickerPreference) {
+
+            TimePickerPreference tpp = (TimePickerPreference) pref;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(tpp.getTime()*60000);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY) - 1;
+            int minute = calendar.get(Calendar.MINUTE);
+            String minuteString = String.valueOf(minute);
+            if (minute == 0){
+                minuteString = "00";
+            }
+            pref.setSummary("Čas príchodu notifikácie týkajúcej sa príprav na skúšky: " + String.valueOf(hour) + ":" + minuteString + " hod.");
+        }
+    }
+
+    private void setNameSummary(){
+        Preference pref = findPreference("full_name");
+        if (pref instanceof EditTextPreference) {
+
+            EditTextPreference etp = (EditTextPreference) pref;
+            String name = etp.getText();
+            pref.setSummary("Aplikácia Ťa oslovuje menom: " + name);
+        }
     }
 
     @Override
@@ -69,11 +112,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         super.onResume();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
         boolean notif = preferences.getBoolean("turn_notif", false);
 
         if (notif) {
             setDailyPlan(getActivity());
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getPreferenceScreen().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override

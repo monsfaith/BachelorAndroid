@@ -9,13 +9,14 @@
 
         <SwitchPreference
             android:key="turn_notif"
-            android:summary="Zapnúť alebo vypnúť notifikácie denného plánu"
+            android:summary="Zapnúť alebo vypnúť notifikácie celodenného plánu"
             android:title="Zapnutie/vypnutie"
             android:defaultValue="true"/>
 
         <running.java.mendelu.cz.bakalarskapraca.TimePickerPreference
             android:key="edit"
             android:title="Študijná notifikácia"
+            android:defaultValue="480"
             android:summary="Čas príchodu notifikácie týkajúcej sa príprav na skúšky"
             />
 

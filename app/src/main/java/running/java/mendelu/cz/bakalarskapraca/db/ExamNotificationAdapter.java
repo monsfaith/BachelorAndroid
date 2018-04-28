@@ -88,6 +88,8 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
 
 
         holder.subjectName.setText(subjectName);
+        int colorSubject = subjectMainRepository.getById(currentExam.getSubjectId()).getColor();
+        holder.subjectName.setTextColor(colorSubject);
         holder.examDate.setText(android.text.format.DateFormat.format("dd.MM.yyyy HH:mm", new Date(examDate)));
 
         //int wantedDays = cursor.getInt(cursor.getColumnIndex(Exam.DAYS));
@@ -98,6 +100,7 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
 
         holder.examDays.setText(actualDays + "/" + wantedDays);
 
+        holder.examCheck.setHighlightColor(colorSubject);
         holder.examCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             //long idEx = cursor.getLong(cursor.getColumnIndex(Exam.ID));

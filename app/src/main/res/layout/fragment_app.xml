@@ -70,12 +70,18 @@
         android:layout_marginRight="15dp"
         android:layout_gravity="center"
         android:layout_marginTop="25dp"
-        android:background="@color/yellow_200"
+        android:background="@drawable/ovalbutton"
         android:shadowColor="@color/black"
         android:textAlignment="center"
         style="@style/TextAppearance.AppCompat.Title"
         android:gravity="center"
         android:text="Použité ikony "
         />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:text=""/>
 
 </LinearLayout>

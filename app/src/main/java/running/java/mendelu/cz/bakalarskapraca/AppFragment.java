@@ -29,6 +29,9 @@ public class AppFragment extends Fragment {
 
         icons = (Button) view.findViewById(R.id.usedIcons);
 
+        ((MainViewActivity) getActivity()).setActionBarTitle("O aplikácii");
+
+
         icons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

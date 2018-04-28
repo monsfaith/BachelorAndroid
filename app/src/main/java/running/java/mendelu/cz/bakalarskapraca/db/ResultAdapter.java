@@ -110,7 +110,10 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.MyViewHold
             });
         }
 
+        int colorSubject = subjectMainRepository.getById(currentExam.getSubjectId()).getColor();
         holder.examName.setText(subjectMainRepository.getById(currentExam.getSubjectId()).getName());
+        holder.examName.setTextColor(colorSubject);
+
         if (currentExam.getGrade().trim().length() == 0){
             holder.examGrade.setVisibility(View.GONE);
             holder.examAddGrade.setVisibility(View.VISIBLE);

@@ -9,24 +9,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
+        android:textStyle="bold"
         android:paddingLeft="10dp"
+        android:textColor="@color/black"
         android:paddingTop="5dp"
-        android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
     <CheckBox
         android:id="@+id/examCheckB"
         android:layout_width="wrap_content"
-        android:paddingRight="10dp"
-        android:paddingTop="5dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        />
+        android:shadowColor="@color/black"
+        android:paddingRight="10dp"
+        android:buttonTint="@color/cyan_700"
+        android:paddingTop="5dp"
+        android:textAppearance="@style/TextAppearance.AppCompat" />
 
     <TextView
         android:id="@+id/dateOfExam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/subjectExam"
+        android:textColor="@color/black"
         android:text="TextView"
         android:paddingLeft="10dp"
 

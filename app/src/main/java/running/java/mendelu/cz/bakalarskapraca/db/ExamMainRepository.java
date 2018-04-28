@@ -95,7 +95,7 @@ public class ExamMainRepository {
                     null,
                     null,
                     null,
-                    null); //dobra metoda pro vsetky selecty, ktore budem mat v appke
+                    Exam.DATE); //dobra metoda pro vsetky selecty, ktore budem mat v appke
 
             try {
 
@@ -349,6 +349,8 @@ public class ExamMainRepository {
         }
 
     }
+
+
 
 
 

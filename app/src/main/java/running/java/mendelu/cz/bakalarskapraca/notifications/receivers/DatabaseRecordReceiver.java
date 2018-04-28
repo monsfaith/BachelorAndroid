@@ -7,12 +7,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
@@ -37,9 +41,11 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
         cancelDividedNotification(4, context);
         setDailyPlan(context);
         setExamNotificationTomorrow(context);
-        MediaPlayer mediaPlayer;
-        mediaPlayer = MediaPlayer.create(context, Settings.System.DEFAULT_NOTIFICATION_URI);
-        mediaPlayer.start();
+        setDatabaseNotification(context);
+        setSleepNotification(context);
+        //MediaPlayer mediaPlayer;
+        //mediaPlayer = MediaPlayer.create(context, Settings.System.DEFAULT_NOTIFICATION_URI);
+        //mediaPlayer.start();
         Toast.makeText(context, "shit dabase", Toast.LENGTH_LONG).show();
 
 
@@ -105,5 +111,81 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(context, type*100, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), cancelPendingIntent);
 
+    }
+
+    private void setDatabaseNotification(Context context){
+        Intent i = new Intent(context, DatabaseRecordReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 700, i, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
+        Calendar calendar = Calendar.getInstance();
+
+        //calendar.add(Calendar.DAY_OF_MONTH,1);
+        calendar.set(Calendar.HOUR_OF_DAY, 4);
+        calendar.set(Calendar.MINUTE,00);
+        calendar.set(Calendar.SECOND,15);
+        calendar.add(Calendar.DAY_OF_MONTH,1);
+        long time = calendar.getTimeInMillis();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        Toast.makeText(context, "Database Record update o" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,time,pendingIntent);
+        } else {
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
+
+    }
+
+    private void setSleepNotification(Context context){
+        Intent i = new Intent(context, SleepReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 50, i, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+        Calendar threeHours = Calendar.getInstance();
+
+        ExamMainRepository examMainRepository = new ExamMainRepository(context);
+
+        if (examMainRepository.getClosestExam() != null) {
+            long date = examMainRepository.getClosestExam().getDate().getTime();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
+            calendar.setTimeInMillis(date);
+            calendar.add(Calendar.HOUR_OF_DAY, -8);
+
+            if (sameDay(date,calendar.getTimeInMillis()) == false){
+                calendar.add(Calendar.DAY_OF_MONTH,-1);
+                Log.d("Bakalarka",sdf.format(calendar.getTimeInMillis()));
+
+            }
+            threeHours.setTimeInMillis(date);
+            threeHours.set(Calendar.HOUR_OF_DAY, 2);
+            threeHours.set(Calendar.MINUTE, 0);
+
+            if (calendar.before(threeHours)) {
+                Log.d("Bakalarka",sdf.format(threeHours.getTimeInMillis()));
+
+
+                Log.d("Bakalarka","manazer");
+
+                if (System.currentTimeMillis() < calendar.getTimeInMillis()) {
+                    alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                }
+            }
+        }
+
+    }
+
+    private boolean sameDay(long date1, long date2){
+        Calendar calendarCurrent = Calendar.getInstance();
+        calendarCurrent.setTimeInMillis(date1);
+        Calendar calendarMy = Calendar.getInstance();
+        calendarMy.setTimeInMillis(date2);
+        boolean sameDay = calendarCurrent.get(Calendar.YEAR) == calendarMy.get(Calendar.YEAR) &&
+                calendarCurrent.get(Calendar.DAY_OF_YEAR) == calendarMy.get(Calendar.DAY_OF_YEAR);
+        return sameDay;
     }
 }

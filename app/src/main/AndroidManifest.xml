@@ -35,7 +35,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".MyPlanTabsActivity"
-            android:label="Plán"
+            android:label="Plány"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
@@ -71,7 +71,11 @@
             android:name=".notifications.ExamTomorrowNotificationActivity"
             android:excludeFromRecents="true"
             android:theme="@style/Theme.AppCompat.Light.Dialog"></activity>
-        <activity android:name=".notifications.SleepNotificationActivity"></activity>
+        <activity android:name=".notifications.SleepNotificationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:label="Skúšky">
+        </activity>
 
         <receiver
             android:name=".notifications.receivers.DailyHabitNotificationReceiver"
@@ -87,7 +91,7 @@
 
         <activity
             android:name=".IconsActivity"
-            android:label="O aplikácii"
+            android:label="Použité ikony"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"></activity>
         <activity android:name=".IntroActivity"

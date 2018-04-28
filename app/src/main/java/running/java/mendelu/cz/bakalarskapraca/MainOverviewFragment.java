@@ -1,6 +1,7 @@
 package running.java.mendelu.cz.bakalarskapraca;
 
 
+import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -137,6 +139,8 @@ public class MainOverviewFragment extends Fragment{
         Log.i("Bakalarka", "onCreate");
         Project project = new Project(8,0,"",1);
 
+        Toast.makeText(getActivity(), examMainRepository.findAllExams().size() + "", Toast.LENGTH_SHORT).show();
+
 
 
         ContentValues contentValues = new ContentValues();
@@ -189,29 +193,13 @@ public class MainOverviewFragment extends Fragment{
 
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(300); // half second between each showcase view
-
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), SHOWCASE_ID);
-
         sequence.setConfig(config);
-
         sequence.addSequenceItem(floatingButton,
                 "Toto tlačidlo slúži na vytvorenie novej skúšky. Na základe toho ti potom aplikácia pošle upozornenie na potrebnú prípravu", "Chápem!");
-
         sequence.addSequenceItem(buttShow,
                 "Kliknutím na Zobraziť viac sa dostaneš do informácií a nastavení tvojich plánov.", "Chápem!");
-
-
         sequence.start();
-
-
-
-
-
-
-
-
-
-
 
         if (planMainRepository.getAllPlans().size() != 4) {
             init();
@@ -236,12 +224,12 @@ public class MainOverviewFragment extends Fragment{
             noExamsToday.setVisibility(View.VISIBLE);
         }
 
+
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         int time = settings.getInt("edit", 0);
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(time*60000);
         cal.add(Calendar.HOUR_OF_DAY,-1);
-        Toast.makeText(getActivity(), "time je " + new SimpleDateFormat("HH:mm").format(cal.getTimeInMillis()) + "" + time, Toast.LENGTH_SHORT).show();
 
         //subjectMainRepository.insertProject(project);
         if (cal.get(Calendar.HOUR_OF_DAY) != subjectMainRepository.getProjectById(1).getHour()){
@@ -275,7 +263,7 @@ public class MainOverviewFragment extends Fragment{
             editor.commit();
         }*/
 
-        //setExamNotification();
+        setExamNotification();
         setDatabaseNotification();
         setSleepNotification();
         loadListView();
@@ -318,7 +306,6 @@ public class MainOverviewFragment extends Fragment{
         boolean isChecked = settings1.getBoolean("turn_notif", true);
 
         Toast.makeText(getActivity(), "Project info " + subjectMainRepository.getProjectById(1).getHour() + " " + subjectMainRepository.getProjectById(1).getTurnOn() + isChecked,Toast.LENGTH_SHORT).show();
-
 
         return view;
     }
@@ -370,6 +357,7 @@ public class MainOverviewFragment extends Fragment{
 
         }
 
+
     private void setDatabaseNotification(){
         Intent i = new Intent(getContext(), DatabaseRecordReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 700, i, 0);
@@ -390,11 +378,19 @@ public class MainOverviewFragment extends Fragment{
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         Toast.makeText(getActivity(), "Database Record update o" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,time,pendingIntent);
+        } else {
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
+
+
+
 
     }
 
-    public void setSleepNotification(){
+    private void setSleepNotification(){
         Intent i = new Intent(getContext(), SleepReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 50, i, 0);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -404,25 +400,39 @@ public class MainOverviewFragment extends Fragment{
 
         if (examMainRepository.getClosestExam() != null) {
             long date = examMainRepository.getClosestExam().getDate().getTime();
+            long id = examMainRepository.getClosestExam().getId();
+            i.putExtra("examSleepID",id);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
             calendar.setTimeInMillis(date);
             calendar.add(Calendar.HOUR_OF_DAY, -8);
+            Toast.makeText(getActivity(), "" + sdf.format(calendar.getTimeInMillis()) + "shit", Toast.LENGTH_SHORT).show();
+
+            if (sameDay(date,calendar.getTimeInMillis()) == false){
+                calendar.add(Calendar.DAY_OF_MONTH,-1);
+                Log.d("Bakalarka",sdf.format(calendar.getTimeInMillis()));
+
+            }
             threeHours.setTimeInMillis(date);
-            threeHours.set(Calendar.HOUR, 2);
+            threeHours.set(Calendar.HOUR_OF_DAY, 2);
             threeHours.set(Calendar.MINUTE, 0);
-            if (threeHours.after(calendar.getTimeInMillis())) {
+            Toast.makeText(getActivity(), "druhe shit " + sdf.format(threeHours.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+
+            if (calendar.before(threeHours)) {
+                Log.d("Bakalarka",sdf.format(threeHours.getTimeInMillis()));
 
 
-                if (alarmManager != null) {
-                    Toast.makeText(getActivity(), "Sleep notif o " + new SimpleDateFormat("dd.MM.yyyy HH:mm").format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+                    Log.d("Bakalarka","manazer");
+
+                    Toast.makeText(getActivity(), "Sleep notif o " + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
                     if (System.currentTimeMillis() < calendar.getTimeInMillis()) {
                         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
                     }
                 }
-            }
         }
 
     }
-
 
     public void loadListView(){
         //examAdapter = new ExamAdapter(getActivity(), getExamResults());
@@ -881,6 +891,17 @@ public class MainOverviewFragment extends Fragment{
     public void onStart(){
         super.onStart();
                 Log.i("Bakalarka", "onStart");
+    }
+
+    //skontrolovat ci ide o rovnaky den alebo nie
+    private boolean sameDay(long date1, long date2){
+        Calendar calendarCurrent = Calendar.getInstance();
+        calendarCurrent.setTimeInMillis(date1);
+        Calendar calendarMy = Calendar.getInstance();
+        calendarMy.setTimeInMillis(date2);
+        boolean sameDay = calendarCurrent.get(Calendar.YEAR) == calendarMy.get(Calendar.YEAR) &&
+                calendarCurrent.get(Calendar.DAY_OF_YEAR) == calendarMy.get(Calendar.DAY_OF_YEAR);
+        return sameDay;
     }
 
 }

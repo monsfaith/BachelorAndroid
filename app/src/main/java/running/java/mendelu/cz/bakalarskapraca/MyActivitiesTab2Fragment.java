@@ -97,6 +97,8 @@ public class MyActivitiesTab2Fragment extends Fragment{
     private AlertDialog.OnClickListener lunchListener;
     private AlertDialog.OnClickListener eveningListener;
 
+    private Button hiddenButton;
+
     private MyPlanTab1Fragment myPlanTabFragment;
 
     public void setMyPlanTabFragment(MyPlanTab1Fragment mptf){
@@ -133,6 +135,8 @@ public class MyActivitiesTab2Fragment extends Fragment{
         timeTextViewLunch = (TextView) view.findViewById(R.id.timeTextViewLunch);
         timeTextViewEvening = (TextView) view.findViewById(R.id.timeTextViewEvening);
 
+        hiddenButton = (Button) view.findViewById(R.id.hiddenButton);
+
         relativeLayout.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -143,13 +147,15 @@ public class MyActivitiesTab2Fragment extends Fragment{
 
                 sequence.setConfig(config);
 
-                sequence.addSequenceItem(timeTextViewDaily, "Jednotlivé ikony zobrazujú všetky dostupné činnosti k vykonaniu, ktoré si môžeš pridať do plánu. V tejto časti si tvoríš plán a jeho aktivity podľa seba.","Chápem!");
+                sequence.addSequenceItem(timeTextViewDaily, "Jednotlivé ikony zobrazujú všetky dostupné činnosti k vykonaniu, ktoré si môžeš pridať do plánu.","Rozumiem!");
+
+                sequence.addSequenceItem(hiddenButton, "V tejto časti si tvoríš plán a jeho aktivity podľa seba.","Rozumiem!");
 
                 sequence.addSequenceItem(timeButtonDaily,
-                        "Ikona budíka charakterizuje dobu upozorňovania na aktivity v pláne.", "Chápem!");
+                        "Ikona budíka charakterizuje dobu upozorňovania na aktivity v pláne.", "Rozumiem!");
 
                 sequence.addSequenceItem(floatingActionButton,
-                        "Dokonca si môžeš vytvoriť i vlastnú aktivitu!", "Chápem!");
+                        "Dokonca si môžeš vytvoriť i vlastnú aktivitu!", "Rozumiem!");
 
 
                 sequence.start();
@@ -303,7 +309,7 @@ public class MyActivitiesTab2Fragment extends Fragment{
                         Calendar cali = Calendar.getInstance();
                         //cali.add(Calendar.DAY_OF_MONTH,1);
                         cali.set(Calendar.HOUR_OF_DAY,3);
-                        cali.set(Calendar.MINUTE,20);
+                        cali.set(Calendar.MINUTE,30);
 
 
 
