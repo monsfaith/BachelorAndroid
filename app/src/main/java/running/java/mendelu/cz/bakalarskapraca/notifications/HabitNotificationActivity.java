@@ -27,6 +27,8 @@ import running.java.mendelu.cz.bakalarskapraca.db.HabitAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Created by Monika on 12.03.2018.
@@ -44,6 +46,7 @@ public class HabitNotificationActivity extends AppCompatActivity{
     private TextView infoAbout;
     private ImageButton startStudyButton;
     private TextView startStudy;
+    private TextView hiddenText;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -59,12 +62,15 @@ public class HabitNotificationActivity extends AppCompatActivity{
         infoAbout = (TextView) findViewById(R.id.infoAboutWhatToDo);
         startStudyButton = (ImageButton) findViewById(R.id.startStudyButton);
         startStudy = (TextView) findViewById(R.id.startStudy);
+        hiddenText = (TextView) findViewById(R.id.hiddenText);
 
         if (getIntent().getExtras() != null){
             int id = getIntent().getIntExtra("ID",0);
             Log.i("ID od lets do it","Prislo idcko taketo" + id);
             setAdapter(id);
         }
+
+        actualRecyclerView.setNestedScrollingEnabled(false);
 
         startStudyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +84,15 @@ public class HabitNotificationActivity extends AppCompatActivity{
                 .duration(700)
                 .repeat(3)
                 .playOn(fabAccept);
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(300); // half second between each showcase view
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "20");
+        config.setDismissTextColor(getResources().getColor(R.color.yellow_700));
+        sequence.setConfig(config);
+        sequence.addSequenceItem(hiddenText,
+                "Teraz je čas na študijnú prestávku. Označ aktivitu, ktorú ideš vykonať.", "Rozumiem!");
+        sequence.start();
 
         /*fabAccept.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -6,7 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,12 +38,19 @@ public class SleepNotificationActivity extends AppCompatActivity{
         gotIt = (Button) findViewById(R.id.gotItButton);
         examMainRepository = new ExamMainRepository(getApplicationContext());
 
+
+
         if (getIntent().getExtras() != null){
-            id = getIntent().getLongExtra("sleepExamID",0);
+            id = getIntent().getLongExtra("examSleepID",-25);
             Exam exam = examMainRepository.getById(id);
-            exams = examMainRepository.getExamResultsList(exam.getDate().getTime());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(exam.getDate().getTime());
+            calendar.set(Calendar.HOUR_OF_DAY,0);
+            exams = examMainRepository.getExamResultsList(calendar.getTimeInMillis());
 
         }
+
+        //Toast.makeText(getApplicationContext(),exams.size() + " id" + id  + "velkost",Toast.LENGTH_SHORT).show();
 
         if (exams.size() !=  0){
             examAdapter = new ExamAdapter(getApplicationContext(), exams);

@@ -2,15 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="running.java.mendelu.cz.bakalarskapraca">
 
-    <uses-permission android:name="android.permission.SET_ALARM"></uses-permission>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_icon"
+        android:icon="@mipmap/myicon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_icon"
+        android:roundIcon="@mipmap/myicon"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
         <activity
@@ -53,12 +53,12 @@
         <activity
             android:name=".CreateHabitActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".notifications.HabitNotificationActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/NoActionBar"></activity>
-        <activity android:name=".notifications.ExamNotificationStartActivity"></activity>
+            android:theme="@style/NoActionBar" />
+        <activity android:name=".notifications.ExamNotificationStartActivity" />
         <activity
             android:name=".notifications.ExamPostponeNotificationActivity"
             android:excludeFromRecents="true"
@@ -70,34 +70,43 @@
         <activity
             android:name=".notifications.ExamTomorrowNotificationActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"></activity>
-        <activity android:name=".notifications.SleepNotificationActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".notifications.SleepNotificationActivity"
+            android:label="Skúšky"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:label="Skúšky">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
 
         <receiver
             android:name=".notifications.receivers.DailyHabitNotificationReceiver"
             android:enabled="true"
             android:exported="true" />
-        <receiver android:name=".notifications.receivers.ExamNotificationReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.ExamNotificationReceiver" />
         <receiver android:name=".notifications.receivers.DatabaseRecordReceiver" />
-        <receiver android:name=".notifications.receivers.EveningHabitNotificationReceiver"></receiver>
-        <receiver android:name=".notifications.receivers.CancelEveningHabitNotificationReceiver"></receiver>
-        <receiver android:name=".notifications.receivers.DatabaseTimeChangeReceiver"></receiver>
-        <receiver android:name=".notifications.receivers.CancelExamReceiver"></receiver>
-        <receiver android:name=".notifications.receivers.SleepReceiver"></receiver>
+        <receiver android:name=".notifications.receivers.AfterBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".notifications.receivers.EveningHabitNotificationReceiver" />
+        <receiver android:name=".notifications.receivers.CancelEveningHabitNotificationReceiver" />
+        <receiver android:name=".notifications.receivers.DatabaseTimeChangeReceiver" />
+        <receiver android:name=".notifications.receivers.CancelExamReceiver" />
+        <receiver android:name=".notifications.receivers.SleepReceiver" />
 
         <activity
             android:name=".IconsActivity"
             android:label="Použité ikony"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
-        <activity android:name=".IntroActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".IntroActivity"
+            android:label="Exam Helper"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:label="Exam Helper" >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name=".InfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
         </activity>
     </application>
 

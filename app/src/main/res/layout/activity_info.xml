@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="running.java.mendelu.cz.bakalarskapraca.InfoActivity">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+        android:layout_marginBottom="10dp"
+        android:text="Plány" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/winner1"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_700"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Plánovanie predstavuje produktívny spôsob využívania času. Prítomnosť jednotlivých činností a aktivít umožňuje efektívne rozdeliť čas medzi študijné povinnosti a čas potrebný na oddych. Činnosti, postupy či odporúčania v tejto knihe vychádzajú z poznatkov zameraných na relaxáciu tela i mysle, podporu sústredenia a celkové zdravie organizmu. K dispozícii máš dva základné typy plánov. "
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/happy"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+        android:text="Celodenný plán "
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_700"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:text="Celodenný plán máš nastavený primárne. Pokrýva možnosť, ked sa v daný deň nechceš venovať učeniu na skúšky alebo sa nenachádzaš v skúškovom období, avšak uvítaš efektívnu organizáciu času. V tomto pláne nemáš aktivity viazané k časovému úseku dňa, ako je to v prípade ranného, obedného a večerného plánu."
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/inspired"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+        android:text="Čiastkové plány "
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_700"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:text="Ranný, obedný a večerný plán sa Ti spustia, ak si reakciou na notifikáciu alebo tlačítko prepnutia v predchádzajúcej obrazovke zvolíš skúšku (skúšky), na ktoré sa chceš učiť. Tento plán je narozdiel od celodenného plánu intenzívnejší a nachádzajú sa v ňom aktivity odporúčané vykonávať práve v určitom čase dňa."
+        />
+
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

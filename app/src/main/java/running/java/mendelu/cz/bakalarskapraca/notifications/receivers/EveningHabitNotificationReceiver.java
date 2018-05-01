@@ -127,7 +127,7 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
 
         builder.setContentTitle(contentTitle);
 
-        if (isBadDaily(requestCode, planMainRepository.getByType(1).getEnabled()) == false) {
+        if ((isBadDaily(requestCode, planMainRepository.getByType(1).getEnabled()) == false) && isBadOthers(requestCode, planMainRepository.getByType(1).getEnabled()) == false) {
             if (id != 0) {
                 if (!(isChecked == false && planMainRepository.getByType(1).getEnabled() == true))
                 notificationManager.notify(requestCode, builder.build());
@@ -137,5 +137,13 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
 
     private boolean isBadDaily(int requestCode, boolean enabled){
         return (requestCode == 100 && enabled == false);
+    }
+
+    private boolean isBadOthers(int requestCode, boolean enabled){
+        if (((requestCode == 200) || (requestCode == 300) || (requestCode == 400)) && enabled == true){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

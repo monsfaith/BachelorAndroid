@@ -28,6 +28,20 @@
         android:textAppearance="@android:style/TextAppearance.Material.Title"
         android:textSize="24sp" />
 
+    <ImageButton
+        android:id="@+id/infoAboutPlan"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:srcCompat="@drawable/ic_info_black_39dp"
+        android:background="@color/white"
+        android:layout_toRightOf="@id/dailyTextView"
+        android:layout_toLeftOf="@id/settingsButtonDaily"
+        >
+
+    </ImageButton>
+
+
+
 
     <TextView
         android:id="@+id/infoAboutDailyPlan"

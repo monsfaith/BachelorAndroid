@@ -60,6 +60,9 @@ public class ResultsFragment extends Fragment {
         if (getResults().size() == 0){
             noExams.setVisibility(View.VISIBLE);
             noExamsImage.setVisibility(View.VISIBLE);
+        } else {
+            noExams.setVisibility(View.GONE);
+            noExamsImage.setVisibility(View.GONE);
         }
 
         resultAdapter = new ResultAdapter(getActivity(), getResults());

@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.Image;
 import android.net.sip.SipAudioCall;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -35,6 +36,9 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import org.w3c.dom.Text;
 
@@ -115,6 +119,8 @@ public class MyPlanTab1Fragment extends Fragment {
     private ImageButton settingsButtonLunch;
     private ImageButton settingsButtonEvening;
 
+    private ImageButton infoPlan;
+
     private Switch switchDaily;
     private View myView;
     private SubjectMainRepository subjectMainRepository;
@@ -155,7 +161,7 @@ public class MyPlanTab1Fragment extends Fragment {
         eveningTextView = (TextView) view.findViewById(R.id.eveningTextViewMyPlan);
         infoAboutDailyPlan = (TextView) view.findViewById(R.id.infoAboutDailyPlan);
         focusText = (TextView) view.findViewById(R.id.focusText);
-
+        infoPlan = (ImageButton) view.findViewById(R.id.infoAboutPlan);
 
         setAdapters();
 
@@ -199,6 +205,19 @@ public class MyPlanTab1Fragment extends Fragment {
 
 
         sequence.start();
+
+        infoPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), InfoActivity.class);
+                startActivity(i);
+            }
+        });
+
+        YoYo.with(Techniques.Tada)
+                .duration(500)
+                .repeat(2)
+                .playOn(infoPlan);
 
 
         switchDaily.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

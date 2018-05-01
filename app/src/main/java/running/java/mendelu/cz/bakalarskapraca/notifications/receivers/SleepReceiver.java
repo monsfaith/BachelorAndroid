@@ -33,14 +33,16 @@ public class SleepReceiver extends BroadcastReceiver {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent i = new Intent(context, SleepNotificationActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 50, i, 0);
-
-
-
+        long id = -25;
         if (intent.getExtras() != null){
-            long id = intent.getLongExtra("examSleepID",0);
-            i.putExtra("sleepExamID",id);
+            id = intent.getLongExtra("examSleepID",0);
+            i.putExtra("examSleepID",id);
         }
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 50, i, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+
+
 
         String content = "";
 
@@ -53,11 +55,11 @@ public class SleepReceiver extends BroadcastReceiver {
                 .setContentTitle("Je čas ísť spať")
                 .setLights(0xf9cc00, 300, 3000)
                 .setPriority(Notification.PRIORITY_HIGH)
-                .setContentText("Spánok je dôležitým faktorom pre zvládnutie skúšky")
+                .setContentText("Spánok je dôležitým faktorom pre zvládnutie skúšky" + id)
                 .setAutoCancel(true);
 
         notificationManager.notify(50, builder.build());
-        setSleepNotification(context);
+        //setSleepNotification(context);
 
 
     }

@@ -156,11 +156,11 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
             calendar.setTimeInMillis(date);
             calendar.add(Calendar.HOUR_OF_DAY, -8);
 
-            if (sameDay(date,calendar.getTimeInMillis()) == false){
+            /*if (sameDay(date,calendar.getTimeInMillis()) == false){
                 calendar.add(Calendar.DAY_OF_MONTH,-1);
                 Log.d("Bakalarka",sdf.format(calendar.getTimeInMillis()));
 
-            }
+            }*/
             threeHours.setTimeInMillis(date);
             threeHours.set(Calendar.HOUR_OF_DAY, 2);
             threeHours.set(Calendar.MINUTE, 0);
@@ -172,7 +172,7 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
                 Log.d("Bakalarka","manazer");
 
                 if (System.currentTimeMillis() < calendar.getTimeInMillis()) {
-                    alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                 }
             }
         }

@@ -98,6 +98,7 @@ public class MainOverviewFragment extends Fragment{
     private TextView noExamsToday;
     private SubjectMainRepository subjectMainRepository;
     private ImageButton buttonApp;
+    private TextView altbutton;
 
     private static final String SHOWCASE_ID = "7";
 
@@ -130,6 +131,7 @@ public class MainOverviewFragment extends Fragment{
         noExamsToday = (TextView) view.findViewById(R.id.noExamsToday);
         subjectMainRepository = new SubjectMainRepository(getActivity());
         buttonApp = (ImageButton) view.findViewById(R.id.buttonApp);
+        altbutton = (TextView) view.findViewById(R.id.showButtonAlternative);
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -139,7 +141,7 @@ public class MainOverviewFragment extends Fragment{
         Log.i("Bakalarka", "onCreate");
         Project project = new Project(8,0,"",1);
 
-        Toast.makeText(getActivity(), examMainRepository.findAllExams().size() + "", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), examMainRepository.findAllExams().size() + " done", Toast.LENGTH_SHORT).show();
 
 
 
@@ -196,9 +198,9 @@ public class MainOverviewFragment extends Fragment{
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), SHOWCASE_ID);
         sequence.setConfig(config);
         sequence.addSequenceItem(floatingButton,
-                "Toto tlačidlo slúži na vytvorenie novej skúšky. Na základe toho ti potom aplikácia pošle upozornenie na potrebnú prípravu", "Chápem!");
-        sequence.addSequenceItem(buttShow,
-                "Kliknutím na Zobraziť viac sa dostaneš do informácií a nastavení tvojich plánov.", "Chápem!");
+                "Toto tlačidlo slúži na vytvorenie novej skúšky. Na základe toho ti potom aplikácia pošle upozornenie na potrebnú prípravu", "Rozumiem!");
+        sequence.addSequenceItem(altbutton,
+                "Kliknutím na Zobraziť viac sa dostaneš do informácií a nastavení tvojich plánov.", "Rozumiem!");
         sequence.start();
 
         if (planMainRepository.getAllPlans().size() != 4) {
@@ -305,7 +307,7 @@ public class MainOverviewFragment extends Fragment{
         SharedPreferences settings1 = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean isChecked = settings1.getBoolean("turn_notif", true);
 
-        Toast.makeText(getActivity(), "Project info " + subjectMainRepository.getProjectById(1).getHour() + " " + subjectMainRepository.getProjectById(1).getTurnOn() + isChecked,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Project info " + subjectMainRepository.getProjectById(1).getHour() + " " + subjectMainRepository.getProjectById(1).getTurnOn() + isChecked,Toast.LENGTH_SHORT).show();
 
         return view;
     }
@@ -348,7 +350,7 @@ public class MainOverviewFragment extends Fragment{
                 calendar.add(Calendar.DAY_OF_MONTH,1);
             }
 
-            Toast.makeText(getActivity(), "Exam Notification nastavena od " + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Exam Notification nastavena od " + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
             Intent i = new Intent(getActivity(), ExamNotificationReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -377,7 +379,7 @@ public class MainOverviewFragment extends Fragment{
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        Toast.makeText(getActivity(), "Database Record update o" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Database Record update o" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,time,pendingIntent);
@@ -391,17 +393,20 @@ public class MainOverviewFragment extends Fragment{
     }
 
     private void setSleepNotification(){
-        Intent i = new Intent(getContext(), SleepReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 50, i, 0);
-        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
-        Calendar calendar = Calendar.getInstance();
-        Calendar threeHours = Calendar.getInstance();
 
         if (examMainRepository.getClosestExam() != null) {
+            Intent i = new Intent(getContext(), SleepReceiver.class);
+            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+
+            Calendar calendar = Calendar.getInstance();
+            Calendar threeHours = Calendar.getInstance();
+
             long date = examMainRepository.getClosestExam().getDate().getTime();
             long id = examMainRepository.getClosestExam().getId();
             i.putExtra("examSleepID",id);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 50, i, PendingIntent.FLAG_UPDATE_CURRENT);
+
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
@@ -409,15 +414,15 @@ public class MainOverviewFragment extends Fragment{
             calendar.add(Calendar.HOUR_OF_DAY, -8);
             Toast.makeText(getActivity(), "" + sdf.format(calendar.getTimeInMillis()) + "shit", Toast.LENGTH_SHORT).show();
 
-            if (sameDay(date,calendar.getTimeInMillis()) == false){
+            /*if (sameDay(date,calendar.getTimeInMillis()) == false){
                 calendar.add(Calendar.DAY_OF_MONTH,-1);
                 Log.d("Bakalarka",sdf.format(calendar.getTimeInMillis()));
 
-            }
+            }*/
             threeHours.setTimeInMillis(date);
             threeHours.set(Calendar.HOUR_OF_DAY, 2);
             threeHours.set(Calendar.MINUTE, 0);
-            Toast.makeText(getActivity(), "druhe shit " + sdf.format(threeHours.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "druhe shit " + sdf.format(threeHours.getTimeInMillis()), Toast.LENGTH_SHORT).show();
 
             if (calendar.before(threeHours)) {
                 Log.d("Bakalarka",sdf.format(threeHours.getTimeInMillis()));
@@ -477,14 +482,21 @@ public class MainOverviewFragment extends Fragment{
         eveningCalFrom.set(Calendar.MINUTE,eveningPlan.getFromMinute());
         eveningCalTo.set(Calendar.HOUR_OF_DAY,eveningPlan.getToHour());
         eveningCalTo.set(Calendar.MINUTE,eveningPlan.getToMinute());
-        eveningCalTo.add(Calendar.DATE,1);
+
+        //tento if povodne nebol
+        if (eveningCalFrom.get(Calendar.HOUR_OF_DAY) > eveningCalTo.get(Calendar.HOUR_OF_DAY)){
+            eveningCalTo.add(Calendar.DATE,1);
+
+        }
+//        eveningCalTo.add(Calendar.DATE,1);
+
         long evFrom1 = eveningCalFrom.getTimeInMillis();
         long evTo1 = eveningCalTo.getTimeInMillis();
 
-        eveningCalFrom.add(Calendar.DATE,-1);
-        long evFrom2 = eveningCalFrom.getTimeInMillis();
-        eveningCalTo.add(Calendar.DATE,-1);
-        long evTo2 = eveningCalTo.getTimeInMillis();
+        //eveningCalFrom.add(Calendar.DATE,-1);
+        //long evFrom2 = eveningCalFrom.getTimeInMillis();
+        //eveningCalTo.add(Calendar.DATE,-1);
+        //long evTo2 = eveningCalTo.getTimeInMillis();
 
         if (dailyPlan.getEnabled() == false) {
             if ((setPlanDateToCalendar(morningPlan.getType()) > morningPlan.getFromTime().getTime() || setPlanDateToCalendar(morningPlan.getType()) == morningPlan.getFromTime().getTime()) && (setPlanDateToCalendar(morningPlan.getType()) < morningPlan.getToTime().getTime())){
@@ -536,7 +548,8 @@ public class MainOverviewFragment extends Fragment{
                 progressBarReview.setProgress(habitMainRepository.getDoneEveningPlanHabits());
                 return habitMainRepository.getEveningPlanHabits();
             }
-            else if ((System.currentTimeMillis() > evFrom2) && (System.currentTimeMillis() < evTo2)) {
+            //toto povodne zakomentovane nebolo
+            /*else if ((System.currentTimeMillis() > evFrom2) && (System.currentTimeMillis() < evTo2)) {
                 from.set(Calendar.HOUR_OF_DAY,eveningPlan.getFromHour());
                 from.set(Calendar.MINUTE,eveningPlan.getFromMinute());
                 to.set(Calendar.HOUR_OF_DAY,eveningPlan.getToHour());
@@ -548,7 +561,7 @@ public class MainOverviewFragment extends Fragment{
                 progressBarReview.setMax(habitMainRepository.getEveningPlanHabits().size());
                 progressBarReview.setProgress(habitMainRepository.getDoneEveningPlanHabits());
                 return habitMainRepository.getEveningPlanHabits();
-            }
+            }*/
             else {
                 actualPlan = 0;
                 actualPlanTextView.setText("Neprebieha plán");
@@ -735,6 +748,10 @@ public class MainOverviewFragment extends Fragment{
         long idTime = habitMainRepository.insert(timeForMe);
         planMainRepository.insertAssociaton(new PlanHabitAssociation(idTime,2));
 
+        Habit morningWater = new Habit("Ranný pohár vody", "Po prebudení sa odporúča vypiť aspoň dva poháre čistej vlažnej vody. Pitie vody vyplavuje nepotrebné toxíny von z tela, naštartuje metabolizmus, brzdí apetít, čo vedie k vhodnejšiemu výberu jedla na raňajky. Taktiež má priaznivý účinok na jasnejšie a bystrejšie vnímanie a sviežu myseľ v priebehu dňa.", "Po zobudení sa ako prvé napi vody. Budeš mať jasnejšie a bystrejšie vnímanie a vyplavíš toxíny von z tela.","waterroundicons",2,"Roundicons");
+        long idWaterMorning = habitMainRepository.insert(morningWater);
+        planMainRepository.insertAssociaton(new PlanHabitAssociation(idWaterMorning,2));
+
     }
 
     private void createLunchHabits(){
@@ -824,7 +841,7 @@ public class MainOverviewFragment extends Fragment{
         Habit yoga = new Habit("Jóga", "Jóga je skvelý prostriedok na uvoľnenie tela i duše. Pomáha odblokovať stuhnuté svalstvo a dostať sa do duševnej a telesnej rovnováhy.", "Uvoľní tvoje telo i dušu.", "yoga",1, "Roundicons");
         long idYoga = habitMainRepository.insert(yoga);
 
-        Habit water = new Habit("Pitný režim","Nedostatok prijímanej vody môže mať negatívny vplyv na funkčnosť poznávacích funkcií, ako sú koncentrácia, ostražitosť a problémy s pamäťou. Voda takisto pozitívne vplýva na elimináciu nervozity alebo úzkosti, a jej pravidelným pitím upokojuje myseľ. Je dôležité vypiť aspoň 2 litre vody.", "Ak cítiš smäd, dochádza k dehydratácii. Vypi aspoň 2 litre vody.", "drop",1,"Roundicons");
+        Habit water = new Habit("Pitný režim","Nedostatok prijímanej vody môže mať negatívny vplyv na funkčnosť poznávacích funkcií, ako sú koncentrácia, ostražitosť a problémy s pamäťou. Voda takisto pozitívne vplýva na elimináciu nervozity alebo úzkosti, a jej pravidelným pitím upokojuje myseľ. Je dôležité vypiť cez deň aspoň 2 litre vody.", "Snaž sa mať pohár alebo fľašu s vodou vždy blízko pri sebe.", "drop",1,"Roundicons");
         long idWater = habitMainRepository.insert(water);
         planMainRepository.insertAssociaton(new PlanHabitAssociation(idWater,1));
 
