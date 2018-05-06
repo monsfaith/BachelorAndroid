@@ -272,7 +272,7 @@ public class MyPlanTab1Fragment extends Fragment {
                                     setExamNotification();
                                 } else {
                                     switchDaily.setChecked(true);
-                                    Toast.makeText(getActivity(), "zostava to ako " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getActivity(), "zostava to ako " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -286,7 +286,7 @@ public class MyPlanTab1Fragment extends Fragment {
                                 dailyPlanCardView.setVisibility(View.VISIBLE);
                                 settingsButtonDaily.setVisibility(View.VISIBLE);
                                 tx.setVisibility(View.VISIBLE);
-                                Toast.makeText(getActivity(), "Je nastaveny denny plan " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getActivity(), "Je nastaveny denny plan " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
                                 setVisible(0);
 
                             }
@@ -325,7 +325,7 @@ public class MyPlanTab1Fragment extends Fragment {
             dailyPlanCardView.setVisibility(View.VISIBLE);
             settingsButtonDaily.setVisibility(View.VISIBLE);
             tx.setVisibility(View.VISIBLE);
-            Toast.makeText(getActivity(), "Je nastaveny denny plan spodna cast " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getActivity(), "Je nastaveny denny plan spodna cast " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
             setVisible(0);
 
         } else {
@@ -334,7 +334,7 @@ public class MyPlanTab1Fragment extends Fragment {
             dailyPlanCardView.setVisibility(View.GONE);
             settingsButtonDaily.setVisibility(View.GONE);
             tx.setVisibility(View.GONE);
-            Toast.makeText(getActivity(), "Je nastaveny deleny plan spodna cast " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Je nastaveny deleny plan spodna cast " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
             setVisible(1);
         }
 
@@ -500,14 +500,14 @@ public class MyPlanTab1Fragment extends Fragment {
 
         if (System.currentTimeMillis() < from.getTimeInMillis()) {
             setDividedNotifications(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
-            Toast.makeText(getActivity(), "Plan nastaveny do " + sdf.format(to.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Plan nastaveny do " + sdf.format(to.getTimeInMillis()), Toast.LENGTH_SHORT).show();
         } else if (System.currentTimeMillis() < to.getTimeInMillis()) {
             setDividedNotifications(System.currentTimeMillis(), idPlan, to.getTimeInMillis());
-            Toast.makeText(getActivity(), "Plan nastaveny do " + sdf.format(to.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getActivity(), "Plan nastaveny do " + sdf.format(to.getTimeInMillis()), Toast.LENGTH_SHORT).show();
         } else {
             from.add(Calendar.DAY_OF_MONTH,1);
             to.add(Calendar.DAY_OF_MONTH,1);
-            Toast.makeText(getActivity(), "Plan nastaveny do " + sdf.format(to.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Plan nastaveny do " + sdf.format(to.getTimeInMillis()), Toast.LENGTH_SHORT).show();
             setDividedNotifications(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
         }
     }

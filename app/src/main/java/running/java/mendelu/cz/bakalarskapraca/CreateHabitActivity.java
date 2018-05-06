@@ -47,12 +47,12 @@ public class CreateHabitActivity extends AppCompatActivity {
         if (addHabitName.getText().toString().trim().length() != 0){
             Habit habit = new Habit(addHabitName.getText().toString(), addHabitDescription.getText().toString(),"", "care128",1,"Freepik");
             Long id = habitMainRepository.insert(habit);
-            Toast.makeText(this, "Aktivita vytvorená" + id + habitMainRepository.getById(id).getDone(), Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "Aktivita vytvorená" + id + habitMainRepository.getById(id).getDone(), Toast.LENGTH_SHORT).show();
             finish();
 
         } else {
             addHabitName.setError("Vyplň názov");
-            Toast.makeText(this, "Aktivita nebola úspešne vytvorená", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Aktivita nebola úspešne vytvorená", Toast.LENGTH_SHORT).show();
         }
 
 

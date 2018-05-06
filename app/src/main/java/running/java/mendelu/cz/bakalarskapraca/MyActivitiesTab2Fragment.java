@@ -142,6 +142,7 @@ public class MyActivitiesTab2Fragment extends Fragment{
             public void onFocusChange(View v, boolean hasFocus) {
                 ShowcaseConfig config = new ShowcaseConfig();
                 config.setDelay(300); // half second between each showcase view
+                config.setDismissTextColor(getResources().getColor(R.color.yellow_700));
 
                 MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), "15");
 
@@ -184,7 +185,7 @@ public class MyActivitiesTab2Fragment extends Fragment{
         sequence.start();*/
 
 
-        Toast.makeText(getActivity(), planMainRepository.getAllPlans().size() + " pocet planov", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), planMainRepository.getAllPlans().size() + " pocet planov", Toast.LENGTH_SHORT).show();
 
         setAdapterView();
 
@@ -323,13 +324,13 @@ public class MyActivitiesTab2Fragment extends Fragment{
 
                                     if (System.currentTimeMillis() < from.getTimeInMillis()) {
                                             setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
-                                            Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                                            //Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
                                         } else if (System.currentTimeMillis() < to.getTimeInMillis()) {
                                             //if (getNotificationClass(idPlan) != null){
 
                                             setHabitNotification(System.currentTimeMillis(), idPlan, to.getTimeInMillis());
                                             //}
-                                            Toast.makeText(getActivity(), "Upozornenie do " + sdf.format(getCurrentTime()) + " " + sdf.format(to.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                                            //Toast.makeText(getActivity(), "Upozornenie do " + sdf.format(getCurrentTime()) + " " + sdf.format(to.getTimeInMillis()), Toast.LENGTH_LONG).show();
 
                                         } else {
                                             /*Calendar calendar = Calendar.getInstance();
@@ -342,7 +343,7 @@ public class MyActivitiesTab2Fragment extends Fragment{
                                             to.add(Calendar.DAY_OF_MONTH,1);
                                             setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
 
-                                            Toast.makeText(getActivity(), "Upozornenie od zajtra" + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                                            //Toast.makeText(getActivity(), "Upozornenie od zajtra" + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
 
                                         }
 
@@ -365,12 +366,12 @@ public class MyActivitiesTab2Fragment extends Fragment{
                                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
                                 if (System.currentTimeMillis() < from.getTimeInMillis()) {
                                     setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
-                                    Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
                                 } else if (System.currentTimeMillis() < to.getTimeInMillis()) {
                                     //if (getNotificationClass(idPlan) != null){
                                     setHabitNotification(System.currentTimeMillis(), idPlan, to.getTimeInMillis());
                                     //}
-                                    Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()) + " " + sdf.format(to.getTimeInMillis()) + " " , Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()) + " " + sdf.format(to.getTimeInMillis()) + " " , Toast.LENGTH_LONG).show();
 
                                 } else {
                                     /*Calendar calendar = Calendar.getInstance();
@@ -383,7 +384,7 @@ public class MyActivitiesTab2Fragment extends Fragment{
                                     to.add(Calendar.DAY_OF_MONTH,1);
                                     setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
 
-                                    Toast.makeText(getActivity(), "Upozornenie od zajtra" + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(getActivity(), "Upozornenie od zajtra" + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
 
                                 }
 

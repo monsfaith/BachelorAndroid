@@ -96,7 +96,7 @@ public class CreateSubjectActivity extends AppCompatActivity implements SimpleDi
             Subject sub = new Subject(subjectName, subjectColor);
             Long lastInsertedId = subjectMainRepository.insert(sub);
 
-            Toast.makeText(CreateSubjectActivity.this, "" + lastInsertedId + " id " + subjectColor, Toast.LENGTH_LONG).show();
+           // Toast.makeText(CreateSubjectActivity.this, "" + lastInsertedId + " id " + subjectColor, Toast.LENGTH_LONG).show();
 
             Intent i = new Intent();
             i.putExtra(SUB_ID, lastInsertedId);

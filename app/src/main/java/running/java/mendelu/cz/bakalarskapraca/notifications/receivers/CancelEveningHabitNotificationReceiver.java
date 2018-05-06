@@ -32,7 +32,7 @@ public class CancelEveningHabitNotificationReceiver extends BroadcastReceiver{
         int requestCode = id*100;
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, in,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-        Toast.makeText(context, "request code zrusenie " + requestCode, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "request code zrusenie " + requestCode, Toast.LENGTH_SHORT).show();
         notificationManager.cancel(requestCode);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

@@ -330,15 +330,17 @@ public class MainOverviewFragment extends Fragment{
     //zakomentovane veci, musim si to objasnit
     private void setExamNotification(){
         Calendar calendar = Calendar.getInstance();
-        ContentValues contentValues = new ContentValues();
+        //ContentValues contentValues = new ContentValues();
         //if (examMainRepository.findNextExams().size() != 0){
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            /*contentValues.put("enabled",false);
+
+        //*    //calendar.setTimeInMillis(System.currentTimeMillis());
+
+        /*contentValues.put("enabled",false);
             planMainRepository.update2(1, contentValues);*/
 
             //calendar.add(Calendar.MINUTE, 1);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        //SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         //nova cast, podla mna
             //calendar.set(Calendar.MINUTE,00);
             //calendar.set(Calendar.HOUR_OF_DAY,8);
@@ -412,7 +414,7 @@ public class MainOverviewFragment extends Fragment{
 
             calendar.setTimeInMillis(date);
             calendar.add(Calendar.HOUR_OF_DAY, -8);
-            Toast.makeText(getActivity(), "" + sdf.format(calendar.getTimeInMillis()) + "shit", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "" + sdf.format(calendar.getTimeInMillis()) + "shit", Toast.LENGTH_SHORT).show();
 
             /*if (sameDay(date,calendar.getTimeInMillis()) == false){
                 calendar.add(Calendar.DAY_OF_MONTH,-1);
@@ -430,7 +432,7 @@ public class MainOverviewFragment extends Fragment{
 
                     Log.d("Bakalarka","manazer");
 
-                    Toast.makeText(getActivity(), "Sleep notif o " + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Sleep notif o " + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
                     if (System.currentTimeMillis() < calendar.getTimeInMillis()) {
                         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
                     }
@@ -631,6 +633,7 @@ public class MainOverviewFragment extends Fragment{
         if (examMainRepository.getExamResultsList(System.currentTimeMillis()).size() != 0){
             noExamsToday.setVisibility(View.GONE);
         }
+        setSleepNotification();
 
     }
 

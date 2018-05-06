@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -55,11 +56,11 @@ public class SleepReceiver extends BroadcastReceiver {
                 .setContentTitle("Je čas ísť spať")
                 .setLights(0xf9cc00, 300, 3000)
                 .setPriority(Notification.PRIORITY_HIGH)
-                .setContentText("Spánok je dôležitým faktorom pre zvládnutie skúšky" + id)
+                .setContentText("Spánok je dôležitým faktorom pre zvládnutie skúšky")
                 .setAutoCancel(true);
 
         notificationManager.notify(50, builder.build());
-        //setSleepNotification(context);
+        setSleepNotification(context);
 
 
     }
@@ -75,22 +76,36 @@ public class SleepReceiver extends BroadcastReceiver {
 
         if (examMainRepository.getClosestExam() != null) {
             long date = examMainRepository.getClosestExam().getDate().getTime();
-            calendar.setTimeInMillis(date);
-            calendar.add(Calendar.HOUR_OF_DAY, -8);
-            threeHours.setTimeInMillis(date);
-            threeHours.set(Calendar.HOUR, 2);
-            threeHours.set(Calendar.MINUTE, 0);
-            if (threeHours.after(calendar.getTimeInMillis())) {
+            Exam exam = examMainRepository.getNextClosestExam(date);
+
+            if (exam != null){
+                long dateNext = exam.getDate().getTime();
+                calendar.setTimeInMillis(dateNext);
+                calendar.add(Calendar.HOUR_OF_DAY, -8);
+                threeHours.setTimeInMillis(dateNext);
+                threeHours.set(Calendar.HOUR, 2);
+                threeHours.set(Calendar.MINUTE, 0);
+                if (threeHours.after(calendar.getTimeInMillis())) {
 
 
-                if (alarmManager != null) {
-                    if (System.currentTimeMillis() < calendar.getTimeInMillis()) {
-                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                    if (alarmManager != null) {
+                        if (System.currentTimeMillis() < calendar.getTimeInMillis()) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+                            } else {
+                                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                            }
+
+
+
+
+
+                            //alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                        }
                     }
                 }
             }
         }
-
     }
 
     private boolean sameDay(long date){

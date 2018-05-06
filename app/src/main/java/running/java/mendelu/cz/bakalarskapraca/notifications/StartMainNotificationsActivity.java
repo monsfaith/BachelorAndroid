@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,8 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
     private SQLiteDatabase database;
     private RecyclerView recyclerView;
     private ExamMainRepository examMainRepository;
+    private ImageView noExamsImage;
+    private TextView enjoyDay;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,38 +70,106 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
 
         cancel = (Button) findViewById(R.id.letsCancelit);
         info = (TextView) findViewById(R.id.infoAboutStartingPlans);
-        planMainRepository = new PlanMainRepository(getApplicationContext());
-        examMainRepository = new ExamMainRepository(getApplicationContext());
+        noExamsImage = (ImageView) findViewById(R.id.noExamsImage);
+        enjoyDay = (TextView) findViewById(R.id.enjoyYourDay);
+
+        planMainRepository = new PlanMainRepository(this);
+        examMainRepository = new ExamMainRepository(this);
+        recyclerView = (RecyclerView) findViewById(R.id.availableExamsRecyclerVie);
+        examNotificationAdapter = new ExamNotificationAdapter(this, examMainRepository.getExamResultsListNotification());
+
+
+
 
         //examNotificationAdapter = new ExamNotificationAdapter(getApplicationContext(), getExamResults());
-        examNotificationAdapter = new ExamNotificationAdapter(getApplicationContext(), examMainRepository.getExamResultsListNotification());
-                recyclerView = (RecyclerView) findViewById(R.id.availableExamsRecyclerVie);
+
+        //if (examMainRepository.getExamResultsListNotification().size() == 0){
+          if (getIntent().getExtras() != null) {
+
+              if (getIntent().getIntExtra("ISZERO", -5) == 1) {
+                  enjoyDay.setVisibility(View.VISIBLE);
+                  noExamsImage.setVisibility(View.VISIBLE);
+                  letsDoIt.setText("Ok");
+                  cancel.setVisibility(View.GONE);
+                  info.setVisibility(View.GONE);
+                  recyclerView.setVisibility(View.GONE);
+                  letsDoIt.setOnClickListener(new View.OnClickListener() {
+                                                  @Override
+                                                  public void onClick(View v) {
+                                                      finish();
+                                                  }
+                                              }
+                  );
+              } else {
+                  setNoZero();
+                  /*recyclerView.setAdapter(examNotificationAdapter);
+                  recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                  info.setText("Zvoľ si skúšku, ktorej príprave sa chceš dnes venovať, a spustí sa Ti intenzívnejší učebný plán");
+
+                  letsDoIt.setOnClickListener(new View.OnClickListener() {
+                      @Override
+                      public void onClick(View v) {
+                          if (examNotificationAdapter.numberOfSelectedExams() > 0) {
+                              //NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                              //notificationManager.cancel(500);
+                              cancelDailyNotifications();
+                              setAllNotifications();
+                              cancelExam();
+                              setExamNotificationTomorrow();
+                              finish();
+                          } else {
+                              Toast.makeText(getApplicationContext(), "Nutné zvoliť skúšku, na ktorú sa ideš pripravovať", Toast.LENGTH_SHORT).show();
+                          }
+                      }
+                  });
+
+                  cancel.setOnClickListener(new View.OnClickListener() {
+                      @Override
+                      public void onClick(View v) {
+                          if (examNotificationAdapter.numberOfSelectedExams() > 0) {
+                              examNotificationAdapter.setZero(true);
+                          }
+                          finish();
+                      }
+                  });*/
+              }
+          } else {
+              setNoZero();
+          }
+
+
+
+
+
+
+    }
+
+    private void setNoZero(){
         recyclerView.setAdapter(examNotificationAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
-
+        info.setText("Zvoľ si skúšku, ktorej príprave sa chceš dnes venovať, a spustí sa Ti intenzívnejší učebný plán");
 
         letsDoIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (examNotificationAdapter.numberOfSelectedExams() > 0){
-                //NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                //notificationManager.cancel(500);
-                cancelDailyNotifications();
-                setAllNotifications();
-                cancelExam();
-                setExamNotificationTomorrow();
-                finish();
+                if (examNotificationAdapter.numberOfSelectedExams() > 0) {
+                    //NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    //notificationManager.cancel(500);
+                    cancelDailyNotifications();
+                    setAllNotifications();
+                    cancelExam();
+                    setExamNotificationTomorrow();
+                    finish();
                 } else {
-                Toast.makeText(getApplicationContext(), "Nutné zvoliť skúšku, na ktorú sa ideš pripravovať", Toast.LENGTH_SHORT).show();
-            }
+                    Toast.makeText(getApplicationContext(), "Nutné zvoliť skúšku, na ktorú sa ideš pripravovať", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (examNotificationAdapter.numberOfSelectedExams() > 0){
+                if (examNotificationAdapter.numberOfSelectedExams() > 0) {
                     examNotificationAdapter.setZero(true);
                 }
                 finish();

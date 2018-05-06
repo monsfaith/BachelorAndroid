@@ -23,6 +23,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/noExamsImage"
+                android:visibility="gone"
+                android:background="@drawable/winner1"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Uži si svoj deň!"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                android:layout_marginTop="5dp"
+                android:id="@+id/enjoyYourDay"
+                android:visibility="gone"
+                android:layout_marginBottom="15dp"
+                />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/availableExamsRecyclerVie"
                 android:layout_width="match_parent"

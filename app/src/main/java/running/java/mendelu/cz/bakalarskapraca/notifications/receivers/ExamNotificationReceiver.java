@@ -51,17 +51,30 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         //zacatie planu
         Intent doExamIntent = new Intent(context, StartMainNotificationsActivity.class);
 
+        ExamMainRepository examMainRepository = new ExamMainRepository(context);
+
+        exams = examMainRepository.findNextExams().size();
+
+        if (exams == 0){
+            int jedna = 1;
+            shownIntent.putExtra("ISZERO",jedna);
+
+        } else {
+            int nula = 0;
+            doExamIntent.putExtra("ISZERO",nula);
+        }
+
+
         //nie dnes
         Intent notToday = new Intent(context, ExamTomorrowReceiver.class);
         //Intent notToday = new Intent(context, ExamTomorrowNotificationActivity.class);
         notToday.putExtra("AFTER",500);
 
-        ExamMainRepository examMainRepository = new ExamMainRepository(context);
         SubjectMainRepository subjectMainRepository = new SubjectMainRepository(context);
         int size = examMainRepository.findAllExams().size();
 
-        PendingIntent pendingShowIntent = PendingIntent.getActivity(context, 500, shownIntent,0);
-        PendingIntent doIntent = PendingIntent.getActivity(context, 500, doExamIntent, 0);
+        PendingIntent pendingShowIntent = PendingIntent.getActivity(context, 500, shownIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent doIntent = PendingIntent.getActivity(context, 500, doExamIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //zrusit a odlozit, teda vymenit za novu
         //PendingIntent delayIntent = PendingIntent.getActivity(context,500, postponeIntent ,PendingIntent.FLAG_CANCEL_CURRENT);
@@ -91,12 +104,11 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         String contentTitle = "";
         String contentText = "";
 
-        exams = examMainRepository.findNextExams().size();
         if (exams == 0){
             contentTitle = "Uži si deň voľna";
             contentText = "Nečakajú ťa žiadne skúšky";
         } else {
-            contentTitle = "V blízkej dobe ťa čakajú skušky ";
+            contentTitle = "Čakajú Ťa skušky ";
             contentText = "Priprav sa na skúšky efektívne a bez stresov ";
             builder.addAction(action).addAction(actionNot);
         }

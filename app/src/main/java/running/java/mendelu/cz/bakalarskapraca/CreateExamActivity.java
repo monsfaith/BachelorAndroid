@@ -106,7 +106,7 @@ public class CreateExamActivity extends AppCompatActivity {
                 .show();
 
 
-        Toast.makeText(this, "Pocet subjektov: " + subjectMainRepository.findAllSubjects().size() + examMainRepository.findAllExams().size(), Toast.LENGTH_LONG).show();
+       // Toast.makeText(this, "Pocet subjektov: " + subjectMainRepository.findAllSubjects().size() + examMainRepository.findAllExams().size(), Toast.LENGTH_LONG).show();
 
         seekbarDifficulty.setEnabled(false);
         chosenDays.setEnabled(false);
@@ -257,7 +257,7 @@ public class CreateExamActivity extends AppCompatActivity {
         if (isUpdateMode()) {
             Intent i = getIntent();
             intentExam = examMainRepository.getById(i.getExtras().getLong("UPDATE_ID"));
-            Toast.makeText(this, "Id: " + getIntent(), Toast.LENGTH_LONG).show();
+           // Toast.makeText(this, "Id: " + getIntent(), Toast.LENGTH_LONG).show();
             chosenSubject.setText(subjectMainRepository.getById(intentExam.getSubjectId()).getName());
             milliseconds = intentExam.getDate().getTime();
             timeMilliseconds = intentExam.getTime().getTime();
@@ -396,7 +396,11 @@ public class CreateExamActivity extends AppCompatActivity {
 
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                chosenTime.setText(selectedHour + ":" + selectedMinute);
+                if (selectedMinute == 0){
+                    chosenTime.setText(selectedHour + ":" + selectedMinute + "0");
+                } else {
+                    chosenTime.setText(selectedHour + ":" + selectedMinute);
+                }
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.HOUR_OF_DAY, selectedHour);
                 cal.set(Calendar.MINUTE, selectedMinute);
@@ -514,9 +518,9 @@ public class CreateExamActivity extends AppCompatActivity {
                             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
                         }
 
-                Toast.makeText(CreateExamActivity.this,
-                        "vydarilo sa " + finalSubject + "predmet" + lastid + subjectMainRepository.getById(finalSubject).getName() + " mainrep" + planMainRepository.getByType(1).getEnabled(),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(CreateExamActivity.this,
+   //                     "vydarilo sa " + finalSubject + "predmet" + lastid + subjectMainRepository.getById(finalSubject).getName() + " mainrep" //+ planMainRepository.getByType(1).getEnabled(),
+  //                      Toast.LENGTH_SHORT).show();
 
             } else {
                 Toast.makeText(CreateExamActivity.this,
@@ -563,7 +567,7 @@ public class CreateExamActivity extends AppCompatActivity {
             if (control.after(new Date(notification))){
 
             if (alarmManager != null) {
-                Toast.makeText(getApplicationContext(), "Sleep notif o " + new SimpleDateFormat("dd.MM.yyyy HH:mm").format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), "Sleep notif o " + new SimpleDateFormat("dd.MM.yyyy HH:mm").format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
                 alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, notification, AlarmManager.INTERVAL_DAY, pendingIntent);
             }
             }

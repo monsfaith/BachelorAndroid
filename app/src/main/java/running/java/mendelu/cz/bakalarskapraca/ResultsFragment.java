@@ -51,7 +51,7 @@ public class ResultsFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewResults);
         noExams = (TextView) view.findViewById(R.id.noExams);
         noExamsImage = (ImageView) view.findViewById(R.id.noExamImage);
-        Toast.makeText(getActivity(), "ja som skuska", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getActivity(), "ja som skuska", Toast.LENGTH_SHORT).show();
 
         //resultAdapter = new ResultAdapter(getActivity(),getResults());
 

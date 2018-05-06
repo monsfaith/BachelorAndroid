@@ -123,7 +123,7 @@ public class TimePickerPreferenceDialog extends PreferenceDialogFragmentCompat {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        Toast.makeText(getContext(),"prestavene na " + subjectMainRepository.getProjectById(1).getHour() + " " + subjectMainRepository.getProjectById(1).getMinute(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(),"Nastavené na " + subjectMainRepository.getProjectById(1).getHour() + ":" + subjectMainRepository.getProjectById(1).getMinute() + " hod", Toast.LENGTH_SHORT).show();
 
     }
 }

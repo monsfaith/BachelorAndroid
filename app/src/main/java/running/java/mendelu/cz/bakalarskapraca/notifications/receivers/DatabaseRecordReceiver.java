@@ -43,10 +43,11 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
         setExamNotificationTomorrow(context);
         setDatabaseNotification(context);
         setSleepNotification(context);
+
         //MediaPlayer mediaPlayer;
         //mediaPlayer = MediaPlayer.create(context, Settings.System.DEFAULT_NOTIFICATION_URI);
         //mediaPlayer.start();
-        Toast.makeText(context, "shit dabase", Toast.LENGTH_LONG).show();
+      //  Toast.makeText(context, "shit dabase", Toast.LENGTH_LONG).show();
 
 
     }
@@ -128,7 +129,7 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
         long time = calendar.getTimeInMillis();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        Toast.makeText(context, "Database Record update o" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(context, "Database Record update o" + sdf.format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,time,pendingIntent);
@@ -148,8 +149,8 @@ public class DatabaseRecordReceiver extends BroadcastReceiver{
 
         ExamMainRepository examMainRepository = new ExamMainRepository(context);
 
-        if (examMainRepository.getClosestExam() != null) {
-            long date = examMainRepository.getClosestExam().getDate().getTime();
+        if (examMainRepository.getClosestExamWithDate() != null) {
+            long date = examMainRepository.getClosestExamWithDate().getDate().getTime();
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 

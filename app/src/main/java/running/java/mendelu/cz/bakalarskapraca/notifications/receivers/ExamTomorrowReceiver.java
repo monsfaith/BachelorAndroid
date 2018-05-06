@@ -21,8 +21,11 @@ public class ExamTomorrowReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         //Toast.makeText(context, "rusim exam receiver", Toast.LENGTH_SHORT).show();
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
         notificationManager.cancel(500);
+
         cancelExam(context);
+        cancelIntent(context);
         setExamNotificationTomorrow(context);
 
     }
@@ -32,6 +35,15 @@ public class ExamTomorrowReceiver extends BroadcastReceiver {
         Intent cancelIntent = new Intent(context, CancelExamReceiver.class);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(context, 500, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), cancelPendingIntent);
+    }
+
+    private void cancelIntent(Context context){
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent cancelIntent = new Intent(context, ExamTomorrowReceiver.class);
+        PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(context, 500, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        cancelPendingIntent.cancel();
+        alarmManager.cancel(cancelPendingIntent);
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), cancelPendingIntent);
     }
 
     private void setExamNotificationTomorrow(Context context){

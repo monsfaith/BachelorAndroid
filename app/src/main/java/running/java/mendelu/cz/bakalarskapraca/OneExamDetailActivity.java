@@ -82,7 +82,7 @@ public class OneExamDetailActivity extends AppCompatActivity {
         Intent i = getIntent();
         intentExam = examMainRepository.getById(i.getExtras().getLong("ID"));
         examId = intentExam.getId();
-        Toast.makeText(this, "Id: " + examId, Toast.LENGTH_LONG).show();
+      //  Toast.makeText(this, "Id: " + examId, Toast.LENGTH_LONG).show();
         subjectTextView.setText(subjectMainRepository.getById(intentExam.getSubjectId()).getName());
         subjectTextView.setTextColor(subjectMainRepository.getById(intentExam.getSubjectId()).getColor());
         dateTextView.setText(android.text.format.DateFormat.format("dd.MM.yyyy", intentExam.getDate()).toString() + ", " + android.text.format.DateFormat.format("HH:mm", intentExam.getTime()).toString() + " hod. ");
