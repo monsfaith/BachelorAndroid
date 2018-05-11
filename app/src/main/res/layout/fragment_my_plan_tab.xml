@@ -26,7 +26,7 @@
         android:text="@string/celodenny"
         android:layout_marginBottom="10dp"
         android:textAppearance="@android:style/TextAppearance.Material.Title"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
     <ImageButton
         android:id="@+id/infoAboutPlan"
@@ -154,7 +154,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="5dp"
         android:text="@string/ranny"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
     <ProgressBar
@@ -233,7 +233,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="5dp"
         android:text="@string/obedny"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
     <ProgressBar
@@ -304,7 +304,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="5dp"
         android:text="@string/vecerny"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
     <ProgressBar

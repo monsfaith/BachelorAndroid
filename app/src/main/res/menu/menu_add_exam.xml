@@ -4,7 +4,6 @@
 
     <item
         android:title="@string/pridatExam"
-        android:icon="@drawable/ic_done_black_24dp"
         android:onClick="createExam"
         app:showAsAction="always" />
 

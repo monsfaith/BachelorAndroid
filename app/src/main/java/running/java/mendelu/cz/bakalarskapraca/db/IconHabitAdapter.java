@@ -73,10 +73,15 @@ public class IconHabitAdapter extends RecyclerView.Adapter<IconHabitAdapter.MyVi
 
        if (pha.getDone() == true){
             //holder.habitImage.setColorFilter(greyPicture, PorterDuff.Mode.SRC_ATOP);
+
             holder.habitImage.setChecked(true);
 
         } else {
            holder.habitImage.setChecked(false);
+
+           //doplnene
+           holder.habitImage.setImageDrawable(getResources(habit.getIcon()));
+
        }
 
         holder.habitImage.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +115,7 @@ public class IconHabitAdapter extends RecyclerView.Adapter<IconHabitAdapter.MyVi
                             contentValues.put("done",true);
                             contentValues.put("date",System.currentTimeMillis());
                             planMainRepository.updateAssociation(idPha,contentValues);
-                            Toast.makeText(context,"vzkonane" + pha.getDone(),Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context,"vzkonane" + pha.getDone(),Toast.LENGTH_SHORT).show();
                             mainOverviewFragment.loadListView();
                         }
                     }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -37,8 +38,9 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
     private Context context;
     //spocitava pocet fajok pri skuske
     private int count;
-    private boolean zero = false;
+    private boolean zero;
     private List<Exam> exams = Collections.emptyList();
+    private List<Exam> checkedExams = new ArrayList<>();
 
     public ExamNotificationAdapter(Context context, Cursor cursor){
         layoutInflater = LayoutInflater.from(context);
@@ -52,6 +54,7 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
         layoutInflater = LayoutInflater.from(context);
         this.exams = exams;
         this.context = context;
+        this.zero = false;
 
 
     }
@@ -129,6 +132,8 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
                             contentValues.put("studying", studying + 1);
                             contentValues.put("study_date", System.currentTimeMillis());
                             examMainRepository.update2(idEx, contentValues);
+                            checkedExams.add(currentExam);
+                            //Toast.makeText(context, "idex " + idEx + "curr " + currentExam.getId() , Toast.LENGTH_SHORT).show();
                         }
 
 
@@ -155,6 +160,19 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
             }
         });
 
+        /*if (zero == true){
+            if (holder.examCheck.isChecked() == true){
+                long idE = currentExam.getId();
+                //holder.examCheck.setChecked(false);
+                ExamMainRepository examMainRepository = new ExamMainRepository(context);
+                ContentValues contentValues = new ContentValues();
+                int studying = examMainRepository.getById(idE).getStudying();
+                contentValues.put("studying", studying - 1);
+                contentValues.put("study_date",0);
+
+            }
+        }*/
+
 
 
     }
@@ -164,8 +182,26 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
 
     }
 
+
     public void setZero(boolean gotZero){
         this.zero = gotZero;
+    }
+
+    public void setNoExams(){
+        for (int i = 0; i < checkedExams.size(); i++){
+            Exam e = checkedExams.get(i);
+            long studyDate = e.getStudyDate();
+            ExamMainRepository examMainRepository = new ExamMainRepository(context);
+            ContentValues contentValues = new ContentValues();
+            int studying = e.getStudying();
+            contentValues.put("studying", studying - 1);
+            contentValues.put("study_date",0);
+            if (studying > 0) {
+                examMainRepository.update2(e.getId(), contentValues);
+            }
+
+
+        }
     }
 
     public int numberOfSelectedExams(){

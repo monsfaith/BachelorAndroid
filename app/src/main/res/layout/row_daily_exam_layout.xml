@@ -54,6 +54,7 @@
         android:layout_alignParentRight="true"
         android:contentDescription="examEdit"
         android:layout_alignBottom="@id/subjectName"
+        android:clickable="false"
         android:layout_marginRight="10dp"
         android:background="@drawable/ic_keyboard_arrow_right_black_24dp"
         />

@@ -218,6 +218,79 @@ public class ExamMainRepository {
 
     }
 
+    public Exam getClosestExamWithDate(){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH,1);
+        calendar.set(Calendar.HOUR_OF_DAY,00);
+        calendar.set(Calendar.MINUTE,05);
+
+        try {
+            Exam result = null;
+            Cursor c = db.query(Exam.TABLE,
+                    null,
+                    Exam.DATE + " > " + calendar.getTimeInMillis(),
+                    null,
+                    null,
+                    null,
+                    Exam.DATE + " DESC");
+
+            try {
+
+                while (c.moveToNext()) {
+                    result = new Exam(c);
+
+                }
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+
+
+
+    }
+
+    public Exam getNextClosestExam(long date){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+
+        try {
+            Exam result = null;
+            Cursor c = db.query(Exam.TABLE,
+                    null,
+                    Exam.DATE + " > " + date,
+                    null,
+                    null,
+                    null,
+                    Exam.DATE + " DESC");
+
+            try {
+
+                while (c.moveToNext()) {
+                    result = new Exam(c);
+
+                }
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+
+
+
+    }
+
+
 
 
     public int update1(Exam exam, ContentValues cv){
@@ -271,7 +344,7 @@ public class ExamMainRepository {
 
     }
 
-    public Cursor getExamResults(Date date){
+    /*public Cursor getExamResults(Date date){
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(date);
         cal1.set(Calendar.HOUR_OF_DAY,23);
@@ -281,13 +354,49 @@ public class ExamMainRepository {
         SQLiteDatabase db = mainOpenHelper.getWritableDatabase();
 
             return db.rawQuery("SELECT e.*, s.name, s.color FROM exam e left join subject s on e.subject_id = s._id where e.date > ? and e.date < ?",new String[]{String.valueOf(date.getTime()), String.valueOf(cal1.getTimeInMillis())});
-        }
+        }*/
 
 
     public List<Exam> getExamResultsList(long date){
         SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
         Calendar cal1 = Calendar.getInstance();
         cal1.setTimeInMillis(date);
+        cal1.set(Calendar.HOUR_OF_DAY,23);
+        cal1.set(Calendar.MINUTE,59);
+
+        try {
+            List<Exam> result = new LinkedList<>();
+            Cursor c = db.query(Exam.TABLE,
+                    null,
+                    Exam.DATE + " > " + date + " AND " + Exam.DATE + " < " + cal1.getTimeInMillis(),
+                    null,
+                    null,
+                    null,
+                    Exam.DATE);
+
+            try {
+
+                while (c.moveToNext()) {
+                    result.add(new Exam(c));
+
+                }
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+    }
+
+    public List<Exam> getExamResultsListTwoDays(long date){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTimeInMillis(date);
+        cal1.add(Calendar.DAY_OF_MONTH,1);
         cal1.set(Calendar.HOUR_OF_DAY,23);
         cal1.set(Calendar.MINUTE,59);
 
@@ -393,6 +502,7 @@ public class ExamMainRepository {
         }
 
     }
+
 
 
 }

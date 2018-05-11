@@ -81,6 +81,7 @@ public class CreateExamActivity extends AppCompatActivity {
     private int days;
     private PlanMainRepository planMainRepository;
     private int barDays;
+    private int difficult;
 
 
     @Override
@@ -97,23 +98,24 @@ public class CreateExamActivity extends AppCompatActivity {
         subjectMainRepository = new SubjectMainRepository(CreateExamActivity.this);
         examMainRepository = new ExamMainRepository(this);
         planMainRepository = new PlanMainRepository(this);
+        difficult = 0;
+        days = 0;
+        choseDate();
+
 
         new MaterialShowcaseView.Builder(this)
                 .setTarget(seekbarDifficulty).setDismissText("Rozumiem!").setTargetTouchable(true)
-                .setContentText("Tento indikátor náročnosti Ti pomáha odhadnúť dni potrebné k príprave na skúšku.")
+                .setDismissTextColor(getResources().getColor(R.color.yellow_700))
+                .setContentText("Tento prvok Ti pomáha odhadnúť dni potrebné k príprave na skúšku.")
                 .setDelay(50) // optional but starting animations immediately in onCreate can make them choppy
                 .singleUse("2") // provide a unique ID used to ensure it is only shown once
                 .show();
-
-
-       // Toast.makeText(this, "Pocet subjektov: " + subjectMainRepository.findAllSubjects().size() + examMainRepository.findAllExams().size(), Toast.LENGTH_LONG).show();
 
         seekbarDifficulty.setEnabled(false);
         chosenDays.setEnabled(false);
         chosenDate.setFocusable(false);
         chosenDate.setKeyListener(null);
         chosenDate.requestFocus();
-        choseDate();
         chosenTime.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -136,29 +138,6 @@ public class CreateExamActivity extends AppCompatActivity {
             }
         });
 
-
-        /*chosenDate.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if ((setMaxSeekBar() / 7) * progressSeekbar < 1) {
-                    seekbarDifficulty.setMax(setMaxSeekBar());
-                    barDays = progressSeekbar;
-                } else {
-                    barDays = (setMaxSeekBar() / 7) * progressSeekbar;
-                }
-                chosenDays.setText("" + barDays);
-            }
-        });*/
 
         chosenDate.addTextChangedListener(new TextWatcher() {
             @Override
@@ -203,6 +182,7 @@ public class CreateExamActivity extends AppCompatActivity {
                         //seekBarUpdate();
                         seekbarDifficulty.setMax(7);
                         chosenDays.setText(seekbarDifficulty.getProgress() * setMaxSeekBar() / 7 + " ");
+                        //difficult = seekbarDifficulty.getProgress();
                     }
                 }
 
@@ -239,6 +219,7 @@ public class CreateExamActivity extends AppCompatActivity {
                     days = barDays;
                 }
                 chosenDays.setText("" + days);
+                difficult = progress;
             }
 
             @Override
@@ -262,15 +243,21 @@ public class CreateExamActivity extends AppCompatActivity {
             milliseconds = intentExam.getDate().getTime();
             timeMilliseconds = intentExam.getTime().getTime();
             days = intentExam.getDays();
+
             finalSubject = intentExam.getSubjectId();
             chosenDate.setText(android.text.format.DateFormat.format("dd/MM/yyyy", intentExam.getDate()).toString());
             chosenTime.setText(android.text.format.DateFormat.format("HH:mm", intentExam.getTime()).toString());
             //chosenDifficulty.setText(String.valueOf(intentExam.getDifficulty()));
+
+            difficult = intentExam.getDifficulty();
+            //setSeekBarMaxOnUpdate();
+            //Toast.makeText(this, "difficulty " + difficult + ";" + setMaxSeekBar(), Toast.LENGTH_SHORT).show();
+
+            seekbarDifficulty.setProgress(difficult);
+
             chosenDays.setText(String.valueOf(intentExam.getDays()));
             classroomInput.setText(String.valueOf(intentExam.getClassroom()));
             noteInput.setText(String.valueOf(intentExam.getNote()));
-
-
         }
     }
 
@@ -434,6 +421,8 @@ public class CreateExamActivity extends AppCompatActivity {
                         //android.R.style.Theme_Holo_Light_Dialog_MinWidth
                 );
 
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 35000);
+
                 /*datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
                 if (chosenDate.getText().toString().trim().length() != 0){
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -492,16 +481,17 @@ public class CreateExamActivity extends AppCompatActivity {
             // {
             //int difficulty = Integer.valueOf(chosenDays.getText().toString());
             {
-                int days = Integer.valueOf(chosenDays.getText().toString());
+//                int days = Integer.valueOf(chosenDays.getText().toString());
                 String chosenDatefromTF = chosenDate.getText().toString();
                 String classroom = classroomInput.getText().toString();
                 String note = noteInput.getText().toString();
                 DateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
+                int diff = seekbarDifficulty.getProgress();
 
                 SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
                 formatter.setLenient(false);
 
-                Exam exam = new Exam(new Date(milliseconds), new Time(timeMilliseconds), days, 4, classroom, finalSubject, note);
+                Exam exam = new Exam(new Date(milliseconds), new Time(timeMilliseconds), days, diff, classroom, finalSubject, note);
                 Long lastid = examMainRepository.insert(exam);
                 if (examMainRepository.findNextExams().size() > 0 && planMainRepository.getByType(1).getEnabled() == true){
                         Calendar calendar = Calendar.getInstance();
@@ -517,10 +507,6 @@ public class CreateExamActivity extends AppCompatActivity {
                             AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
                             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
                         }
-
-//                Toast.makeText(CreateExamActivity.this,
-   //                     "vydarilo sa " + finalSubject + "predmet" + lastid + subjectMainRepository.getById(finalSubject).getName() + " mainrep" //+ planMainRepository.getByType(1).getEnabled(),
-  //                      Toast.LENGTH_SHORT).show();
 
             } else {
                 Toast.makeText(CreateExamActivity.this,
@@ -547,31 +533,6 @@ public class CreateExamActivity extends AppCompatActivity {
         super.onResume();
         setMaxSeekBar();
         //seekBarUpdate();
-
-    }
-
-    public void setSleepNotification(){
-        Intent i = new Intent(getApplicationContext(), SleepReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 50, i, 0);
-        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-
-        Calendar calendar = Calendar.getInstance();
-
-        if (examMainRepository.getClosestExam() != null) {
-            long date = examMainRepository.getClosestExam().getDate().getTime();
-            calendar.setTimeInMillis(date);
-            Calendar control = calendar;
-            control.set(Calendar.HOUR,3);
-            calendar.add(Calendar.HOUR_OF_DAY, -8);
-            long notification = calendar.getTimeInMillis();
-            if (control.after(new Date(notification))){
-
-            if (alarmManager != null) {
-               // Toast.makeText(getApplicationContext(), "Sleep notif o " + new SimpleDateFormat("dd.MM.yyyy HH:mm").format(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
-                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, notification, AlarmManager.INTERVAL_DAY, pendingIntent);
-            }
-            }
-        }
 
     }
 
@@ -621,14 +582,39 @@ public class CreateExamActivity extends AppCompatActivity {
 
     public void updateExam(MenuItem item) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("date",milliseconds);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliseconds);
+
+        Calendar time = Calendar.getInstance();
+        time.setTimeInMillis(timeMilliseconds);
+
+        calendar.set(Calendar.HOUR_OF_DAY,time.get(Calendar.HOUR_OF_DAY));
+        calendar.set(Calendar.MINUTE,time.get(Calendar.MINUTE));
+
+        long dateTim = calendar.getTimeInMillis();
+
+        contentValues.put("date",dateTim);
         contentValues.put("time",timeMilliseconds);
         contentValues.put("subject_id",finalSubject);
-        contentValues.put("days",Integer.valueOf(chosenDays.getText().toString()));
+        contentValues.put("days",days);
         contentValues.put("classroom",classroomInput.getText().toString());
         contentValues.put("note",noteInput.getText().toString());
+        contentValues.put("difficulty",seekbarDifficulty.getProgress());
         examMainRepository.update2(intentExam.getId(),contentValues);
         finish();
+    }
+
+    private void setSeekBarMaxOnUpdate(){
+        if ((setMaxSeekBar() / 7) < 1) {
+            if (setMaxSeekBar() == 0){
+                seekbarDifficulty.setMax(1);
+            } else {
+                seekbarDifficulty.setMax(setMaxSeekBar());
+            }
+        } else {
+            seekbarDifficulty.setMax(7);
+        }
+
     }
 
 }

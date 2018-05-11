@@ -46,7 +46,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_width="wrap_content"
-                android:background="@drawable/roundicons"
+                android:background="@drawable/round"
                 android:layout_height="wrap_content" >
 
             </ImageView>
@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/smashicons"
+                android:background="@drawable/smash"
                 android:layout_height="wrap_content" />
 
             <TextView
@@ -78,7 +78,7 @@
             <ImageView
                 android:id="@+id/forthA"
                 android:layout_width="wrap_content"
-                android:background="@drawable/vectors"
+                android:background="@drawable/vectors4"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_height="wrap_content" />
@@ -113,6 +113,7 @@
                 android:background="@drawable/iconpond"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_marginBottom="25dp"
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>

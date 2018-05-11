@@ -15,7 +15,7 @@ import java.util.Date;
 public class MainOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "main.db";
-    private static final int DATABASE_VERSION = 73;
+    private static final int DATABASE_VERSION = 74;
 
     public MainOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,12 +35,10 @@ public class MainOpenHelper extends SQLiteOpenHelper {
                 Exam.SUBJECT_ID + " INTEGER NOT NULL, " +
                 Exam.GRADE + " TEXT, " +
                 Exam.STUDY_DATE + " INTEGER, " +
-                Exam.NOTE + " TEXT, " +
-                Exam.REALIZATION + " INTEGER NOT NULL " + ")");
+                Exam.NOTE + " TEXT " + ")");
         db.execSQL("CREATE TABLE " + Subject.TABLE_SUBJECTS + " (" +
                 Subject.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 Subject.COLOR + " INTEGER NOT NULL, " +
-                Subject.HIDDEN + " INTEGER NOT NULL, " +
                 Subject.NAME + " TEXT NOT NULL" + ")");
         db.execSQL("CREATE TABLE " + Habit.TABLE_HABITS + " (" +
                 Habit.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -49,11 +47,11 @@ public class MainOpenHelper extends SQLiteOpenHelper {
                 Habit.SHORT_DESCRIPTION + " TEXT, " +
                 //Habit.CANCEL + " INTEGER, " +
                 Habit.DONE + " INTEGER NOT NULL, " +
-                Habit.ASSOCIATON_TABLE_ID + " INTEGER, " +
+                //Habit.ASSOCIATON_TABLE_ID + " INTEGER, " +
                 Habit.AUTHOR + " TEXT, " +
                 //Habit.DATE + " INTEGER, " +
                 //Habit.REMIND + " INTEGER, " +
-                Habit.REPETITION_ID + " INTEGER NOT NULL, " +
+                //Habit.REPETITION_ID + " INTEGER NOT NULL, " +
                 Habit.ICON + " TEXT NOT NULL, " +
                 Habit.PLAN + " INTEGER NOT NULL" + ")");
         db.execSQL("CREATE TABLE " + Plan.TABLE_PLANS + " (" +

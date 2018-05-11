@@ -125,6 +125,8 @@ public class MyPlanTab1Fragment extends Fragment {
     private View myView;
     private SubjectMainRepository subjectMainRepository;
 
+    private ExamNotificationAdapter examNotificationAdapter;
+
 
     /*list.clear
     list.addAll
@@ -163,6 +165,9 @@ public class MyPlanTab1Fragment extends Fragment {
         focusText = (TextView) view.findViewById(R.id.focusText);
         infoPlan = (ImageButton) view.findViewById(R.id.infoAboutPlan);
 
+        examNotificationAdapter = new ExamNotificationAdapter(getActivity(), getExamResults());
+
+
         setAdapters();
 
         dailyPlanCardView = (CardView) view.findViewById(R.id.card_view_daily_plan);
@@ -196,12 +201,15 @@ public class MyPlanTab1Fragment extends Fragment {
         sequence.setConfig(config);
 
         sequence.addSequenceItem(focusText,
-                "Tento zoznam Ti indikuje aktivity, ktoré boli vložené do plánu. ", "Rozumiem!");
+                "Tento zoznam Ti zobrazuje aktivity, ktoré boli vložené do plánu. ", "Rozumiem!");
 
         sequence.addSequenceItem(dailyPlanCardView, "Kliknutím na zaškrtávacie políčko udávaš, že si danú činnosť vykonal.","Rozumiem!");
 
         sequence.addSequenceItem(switchDaily,
                 "Toto tlačidlo slúži na prepínanie medzi plánmi. Primárne je zaškrtnuté. Jeho odškrtnutím si následne zvolíš skúšku, na ktorú sa chceš učiť.", "Rozumiem!");
+
+        sequence.addSequenceItem(settingsButtonDaily,
+                "Upozornenia na celodenný plán sú každých 90 minút, na čiastkové plány 50 minút. Interval si môžeš nastaviť", "Rozumiem!");
 
 
         sequence.start();
@@ -234,7 +242,6 @@ public class MyPlanTab1Fragment extends Fragment {
                     fab.setVisibility(View.GONE);
                     doIt.setVisibility(View.GONE);
                     RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.availableExamsRecyclerVie);
-                    final ExamNotificationAdapter examNotificationAdapter = new ExamNotificationAdapter(getActivity(), getExamResults());
                     recyclerView.setAdapter(examNotificationAdapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                     if (examMainRepository.findNextExams().size() < 1) {
@@ -281,6 +288,7 @@ public class MyPlanTab1Fragment extends Fragment {
                         dialogBuilder.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                examNotificationAdapter.setNoExams();
                                 switchDaily.setChecked(true);
                                 progressDailyBar.setVisibility(View.VISIBLE);
                                 dailyPlanCardView.setVisibility(View.VISIBLE);
@@ -642,9 +650,17 @@ public class MyPlanTab1Fragment extends Fragment {
     private void setPlanNotification(int minute, int idPlan){
         PlanMainRepository planMainRepository = new PlanMainRepository(getActivity());
         ContentValues contentValues = new ContentValues();
-        contentValues.put("repetition_id",minute*60000);
+        int min = 50;
+        if (minute == 25){
+            min = 30;
+        } else if (minute == 50){
+            min = 60;
+        } else if (minute == 90){
+            min = 100;
+        }
+        contentValues.put("repetition_id",min*60000);
         planMainRepository.update2(idPlan, contentValues);
-        Toast.makeText(getActivity(), "Upozornenie nastavené každých " + minute + " min. ", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Upozornenie nastavené každých " + minute +" min. ", Toast.LENGTH_SHORT).show();
 
     }
 

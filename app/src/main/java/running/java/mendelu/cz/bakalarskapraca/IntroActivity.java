@@ -37,9 +37,9 @@ public class IntroActivity extends AppIntro {
         // Just set a title, description, background and image. AppIntro will do the rest.
         addSlide(AppIntroFragment.newInstance("Cieľ", "Cieľom aplikácie Exam Helper je vytvoriť Ti vhodné podmienky pre učenie, ktoré Ti umožnia efektívnu prípravu na skúšky.", R.drawable.book1, getResources().getColor(R.color.red_400)));
         addSlide(AppIntroFragment.newInstance("Skúšky", "Pridaj si skúšky, ktoré Ťa čakajú a aplikácia Ťa upozorní na potrebnú prípravu.", R.drawable.tasks1, getResources().getColor(R.color.cyan_600)));
-        addSlide(AppIntroFragment.newInstance("Študijné prestávky", "Učenie je efektívne, keď máš pravidelné študijné prestávky. Ich intenzitu upozornenia si môžeš nastaviť. Máš k dispozícii aktivity odporúčané vykonávať počas prestávok.", R.drawable.mind1, getResources().getColor(R.color.yellow_800)));
+        addSlide(AppIntroFragment.newInstance("Študijné prestávky", "Učenie je efektívne, keď máš pravidelné študijné prestávky. Máš k dispozícii aktivity odporúčané vykonávať počas prestávok.", R.drawable.mind1, getResources().getColor(R.color.yellow_800)));
         addSlide(AppIntroFragment.newInstance("Sústredenie", "Prestávky medzi učením Ti pomáhajú zlepšiť sústredenie, znížiť stres a celkovo vplývajú dobre na tvoje zdravie.", R.drawable.target1, getResources().getColor(R.color.lime_700)));
-        addSlide(AppIntroFragment.newInstance("Plány", "Primárne máš nastavený celodenný plán. Čiastkové plány sa Ti aktivujú, ak si v aplikácii vyberieš skúšku, na ktorú sa chceš pripraviť.", R.drawable.happy, getResources().getColor(R.color.yellow_800)));
+        addSlide(AppIntroFragment.newInstance("Plány", "Primárne máš nastavený celodenný plán. Čiastkové plány sa Ti aktivujú, ak si v aplikácii vyberieš skúšku, na ktorú sa chceš pripraviť.", R.drawable.happy1, getResources().getColor(R.color.yellow_800)));
         addSlide(AppIntroFragment.newInstance("Si pripravený?", "Pridaj si skúšky, zvoľ si aktivity počas plánov a začni so svojím efektívnym plánom!", R.drawable.winner1, getResources().getColor(R.color.cyan_700)));
 
 

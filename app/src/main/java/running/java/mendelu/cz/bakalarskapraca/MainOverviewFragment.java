@@ -195,6 +195,7 @@ public class MainOverviewFragment extends Fragment{
 
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(300); // half second between each showcase view
+        config.setDismissTextColor(getResources().getColor(R.color.yellow_700));
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), SHOWCASE_ID);
         sequence.setConfig(config);
         sequence.addSequenceItem(floatingButton,
@@ -215,6 +216,7 @@ public class MainOverviewFragment extends Fragment{
             //DAVAM len docasne prec
             setExamNotification();
             setDatabaseNotification();
+            setDailyPlan();
         } else {
             dailyPlan = planMainRepository.getByType(1);
             morningPlan = planMainRepository.getByType(2);
@@ -270,6 +272,9 @@ public class MainOverviewFragment extends Fragment{
         setSleepNotification();
         loadListView();
 
+        recyclerViewHabits.setNestedScrollingEnabled(false);
+        recyclerView.setNestedScrollingEnabled(false);
+
         butt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -304,10 +309,11 @@ public class MainOverviewFragment extends Fragment{
 
 
 
-        SharedPreferences settings1 = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean isChecked = settings1.getBoolean("turn_notif", true);
+        //SharedPreferences settings1 = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        //boolean isChecked = settings1.getBoolean("turn_notif", true);
 
-        //Toast.makeText(getActivity(), "Project info " + subjectMainRepository.getProjectById(1).getHour() + " " + subjectMainRepository.getProjectById(1).getTurnOn() + isChecked,Toast.LENGTH_SHORT).show();
+        sharedPreferencesControl();
+
 
         return view;
     }
@@ -357,7 +363,7 @@ public class MainOverviewFragment extends Fragment{
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        setDailyPlan();
+        //setDailyPlan();
 
         }
 
@@ -606,6 +612,17 @@ public class MainOverviewFragment extends Fragment{
         return time;
     }
 
+    private void sharedPreferencesControl(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean previouslyStarted = prefs.getBoolean(getString(R.string.pref_previously_started), false);
+        if(!previouslyStarted) {
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.putBoolean(getString(R.string.pref_previously_started), Boolean.TRUE);
+            edit.commit();
+            setDailyPlan();
+        }
+    }
+
     private long setPlanDateToCalendar(int idPlan){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -662,28 +679,28 @@ public class MainOverviewFragment extends Fragment{
         dailyCalendar.set(Calendar.HOUR_OF_DAY, 20);
         long dailyToTime = dailyCalendar.getTimeInMillis();
 
-        dailyPlan = new Plan(dailyFromTime, dailyToTime, 1, true, 8, 20, 0, 0, 3600000 );
+        dailyPlan = new Plan(dailyFromTime, dailyToTime, 1, true, 8, 20, 0, 0, 6000000 );
         planMainRepository.insert(dailyPlan);
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,8);
         long morningFromTime = dailyCalendar.getTimeInMillis();
         dailyCalendar.set(Calendar.HOUR_OF_DAY,12);
         long morningToTime = dailyCalendar.getTimeInMillis();
-        morningPlan = new Plan(morningFromTime, morningToTime, 2, true, 8, 12, 0, 15, 1500000 );
+        morningPlan = new Plan(morningFromTime, morningToTime, 2, true, 8, 12, 0, 0, 3600000 );
         planMainRepository.insert(morningPlan);
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,12);
         long lunchFromTime = dailyCalendar.getTimeInMillis();
         dailyCalendar.set(Calendar.HOUR_OF_DAY,17);
         long lunchToTime = dailyCalendar.getTimeInMillis();
-        lunchPlan = new Plan(lunchFromTime, lunchToTime, 3, true, 12, 17, 0, 0,1500000);
+        lunchPlan = new Plan(lunchFromTime, lunchToTime, 3, true, 12, 17, 0, 0,3600000);
         planMainRepository.insert(lunchPlan);
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,17);
         long eveningFromTime = dailyCalendar.getTimeInMillis();
         dailyCalendar.set(Calendar.HOUR_OF_DAY,22);
         long eveningToTime = dailyCalendar.getTimeInMillis();
-        eveningPlan = new Plan(eveningFromTime, eveningToTime,4, true, 17, 22, 0, 0, 1500000);
+        eveningPlan = new Plan(eveningFromTime, eveningToTime,4, true, 17, 22, 0, 0, 3600000);
         planMainRepository.insert(eveningPlan);
     }
 
@@ -751,7 +768,7 @@ public class MainOverviewFragment extends Fragment{
         long idTime = habitMainRepository.insert(timeForMe);
         planMainRepository.insertAssociaton(new PlanHabitAssociation(idTime,2));
 
-        Habit morningWater = new Habit("Ranný pohár vody", "Po prebudení sa odporúča vypiť aspoň dva poháre čistej vlažnej vody. Pitie vody vyplavuje nepotrebné toxíny von z tela, naštartuje metabolizmus, brzdí apetít, čo vedie k vhodnejšiemu výberu jedla na raňajky. Taktiež má priaznivý účinok na jasnejšie a bystrejšie vnímanie a sviežu myseľ v priebehu dňa.", "Po zobudení sa ako prvé napi vody. Budeš mať jasnejšie a bystrejšie vnímanie a vyplavíš toxíny von z tela.","waterroundicons",2,"Roundicons");
+        Habit morningWater = new Habit("Ranný pohár vody", "Po prebudení sa odporúča vypiť aspoň dva poháre čistej vlažnej vody. Pitie vody vyplavuje nepotrebné toxíny von z tela, naštartuje metabolizmus, brzdí apetít, čo vedie k vhodnejšiemu výberu jedla na raňajky. Taktiež má priaznivý účinok na jasnejšie a bystrejšie vnímanie a sviežu myseľ v priebehu dňa.", "Po zobudení sa ako prvé napi vody. Budeš mať jasnejšie a bystrejšie vnímanie.","bottlebig",2,"Roundicons");
         long idWaterMorning = habitMainRepository.insert(morningWater);
         planMainRepository.insertAssociaton(new PlanHabitAssociation(idWaterMorning,2));
 

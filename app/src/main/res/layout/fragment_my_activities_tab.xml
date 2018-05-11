@@ -32,9 +32,9 @@
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginRight="10dp"
-                android:text="Kliknutím na ikonu aktivity si ju vložíš do zvoleného plánu." />
+                android:text="Kliknutím na ikonu aktivity si ju vložíš do zvoleného plánu. Intenzita farby ikony naznačuje príslušnosť aktivity do plánu." />
 
             <Button
                 android:layout_height="wrap_content"
@@ -57,12 +57,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="15dp"
                     android:text="@string/celodenny"
-                    android:paddingRight="15dp"
-                    android:textAppearance="@android:style/TextAppearance.Material.Title"
-                    android:textSize="24sp" />
+                    android:layout_marginLeft="15dp"
+
+                    android:paddingRight="5dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textSize="20sp" />
 
                 <ImageButton
                     android:id="@+id/timeButtonDaily"
@@ -86,10 +87,18 @@
                     android:layout_toRightOf="@id/dailyTextViewActivities"
                     android:gravity="center_horizontal"
                     android:layout_toLeftOf="@id/timeButtonDaily"
-                    android:paddingBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="1dp"
+
+
                     android:textAlignment="center"
-                    android:textAppearance="@android:style/TextAppearance.Material.Title"
-                    android:textSize="14sp" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                    android:layout_alignBottom="@id/dailyTextViewActivities"
+                    />
+
+
+                    <!-- -android:paddingBottom="5dp"-->
 
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/cardViewDailyActivities"
@@ -126,11 +135,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:paddingRight="15dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="15dp"
+
+                    android:paddingRight="5dp"
+                    android:layout_marginTop="15dp"
                     android:text="@string/ranny"
-                    android:textAppearance="@android:style/TextAppearance.Material.Title"
-                    android:textSize="24sp" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textSize="20sp" />
 
                 <ImageButton
                     android:id="@+id/timeButtonMorning"
@@ -150,11 +161,16 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/cardViewMorningActivities"
                     android:gravity="center_horizontal"
-                    android:paddingBottom="5dp"
                     android:textAlignment="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="1dp"
+
                     android:layout_toRightOf="@id/morningTextViewActivities"
-                    android:textAppearance="@android:style/TextAppearance.Material.Title"
-                    android:textSize="14sp" />
+                    android:layout_toLeftOf="@id/timeButtonMorning"
+                    android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                    android:layout_alignBottom="@id/morningTextViewActivities"
+                     />
 
 
                 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -191,12 +207,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="15dp"
                 android:text="@string/obedny"
-                android:paddingRight="15dp"
-                android:textAppearance="@android:style/TextAppearance.Material.Title"
-                android:textSize="24sp" />
+                android:layout_marginLeft="15dp"
+
+                android:paddingRight="5dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textSize="20sp" />
 
             <ImageButton
                 android:id="@+id/timeButtonLunch"
@@ -217,11 +234,16 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/cardViewLunchActivities"
                 android:layout_toRightOf="@id/lunchTextViewActivities"
+                android:layout_toLeftOf="@id/timeButtonLunch"
                 android:gravity="center_horizontal"
-                android:paddingBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="1dp"
+
                 android:textAlignment="center"
-                android:textAppearance="@android:style/TextAppearance.Material.Title"
-                android:textSize="14sp" />
+                android:layout_alignBottom="@id/lunchTextViewActivities"
+                android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                />
 
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -257,13 +279,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="10dp"
-                android:paddingRight="15dp"
+                android:paddingRight="5dp"
+                android:layout_marginLeft="15dp"
 
-                android:layout_marginTop="8dp"
+
+                android:layout_marginTop="15dp"
                 android:text="@string/vecerny"
-                android:textAppearance="@android:style/TextAppearance.Material.Title"
-                android:textSize="24sp" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textSize="20sp" />
 
             <ImageButton
                 android:id="@+id/timeButtonEvening"
@@ -282,13 +305,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:paddingBottom="5dp"
+
+
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="1dp"
+
                 android:textAlignment="center"
                 android:layout_above="@+id/cardViewEveningActivities"
                 android:layout_alignBottom="@id/eveningTextViewActivities"
                 android:layout_toRightOf="@id/eveningTextViewActivities"
-                android:textAppearance="@android:style/TextAppearance.Material.Title"
-                android:textSize="14sp" />
+                android:layout_toLeftOf="@id/timeButtonEvening"
+                android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                 />
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/cardViewEveningActivities"

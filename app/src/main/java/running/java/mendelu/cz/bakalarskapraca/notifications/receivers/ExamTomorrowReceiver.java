@@ -22,10 +22,12 @@ public class ExamTomorrowReceiver extends BroadcastReceiver {
         //Toast.makeText(context, "rusim exam receiver", Toast.LENGTH_SHORT).show();
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.cancel(500);
+        //notificationManager.cancel(500);
 
+        Toast.makeText(context,"Odložené na zajtra", Toast.LENGTH_SHORT).show();
         cancelExam(context);
-        cancelIntent(context);
+
+        //cancelIntent(context);
         setExamNotificationTomorrow(context);
 
     }

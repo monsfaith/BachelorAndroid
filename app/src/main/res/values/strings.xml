@@ -40,7 +40,7 @@
     <string name="znamka">Známka</string>
     <string name="pridatHabit">addHabit</string>
     <string name="backButton">back</string>
-    <string name="pridatExam">addEx</string>
+    <string name="pridatExam">Pridať</string>
     <string name="ostatnedni">OSTATNÉ</string>
     <string name="planaktualny">AKTUÁLNY PLÁN</string>
     <string name="upravitExam">updateEx</string>
@@ -53,11 +53,11 @@
     <string name="infoAboutDailyPlanVisible">Nahradiť celodenný plán jednotlivými plánmi.</string>
     <string name="zrusit">Zrušiť</string>
     <string name="ano">Áno</string>
-    <string name="whatHabit">Z uvedených aktivít si zvoľ tú, ktorá ti teraz vyhovuje. Voľ si väčšinou kratšie prestávky (5 - 15 minút), po niekoľkých kratších si urob i dlhšiu (15 - 30 minút). </string>
+    <string name="whatHabit">Z uvedených aktivít si zvoľ tú, ktorá ti teraz vyhovuje ako forma oddychu. Voľ si väčšinou kratšie prestávky (5 - 10 minút), po niekoľkých kratších si urob i dlhšiu (15 - 30 minút). </string>
     <string name="habitActivity">Každodenné rituály sú hnacím motorom, ktorý ťa poháňa vpred. Je dôležité sústrediť sa na spôsob a systém dosiahnutia, nie na samotné ciele. Jediné, čo musíš, je naštartovať svoje dni s pravidelnými rituálmi a ver, že ciele budú na dosah.</string>
     <string name="dateResult">Dátum</string>
     <string name="startStudy">Chceš začať učebný plán?</string>
-    <string name="chooseExam">Vyber si skúšku, ktorej príprave sa chceš dnes venovať.</string>
+    <string name="chooseExam">Vyber si skúšku, ktorej príprave sa chceš dnes venovať a spustí sa Ti intenzívnejší učebný plán.</string>
     <string name="subjectTitle">Názov predmetu</string>
     <string name="skratka">Skratka</string>
     <string name="pridatSub">Pridať predmet</string>

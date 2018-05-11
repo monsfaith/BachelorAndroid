@@ -68,6 +68,9 @@ public class TasksDetailActivity extends AppCompatActivity {
         otherView = (TextView) findViewById(R.id.textDateOtherDays);
         fab = (FloatingActionButton) findViewById(R.id.floatingA);
 
+        recyclerViewTomorrow.setNestedScrollingEnabled(false);
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerViewOther.setNestedScrollingEnabled(false);
         examMainRepository = new ExamMainRepository(this);
 
         setViews();

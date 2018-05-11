@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -91,12 +92,20 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
         String subjectName = subjectMainRepository.getById(currentExam.getSubjectId()).getName();
         String examClassroom = currentExam.getClassroom();
         long examDate = currentExam.getDate().getTime();
+        long examTime = currentExam.getTime().getTime();
         String examNote = currentExam.getNote();
         int colorSubject = subjectMainRepository.getById(currentExam.getSubjectId()).getColor();
 
         holder.subjectName.setText(subjectName);
         holder.subjectName.setTextColor(colorSubject);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String date = sdf.format(new Date(examDate));
+        SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
+        String time = sdfTime.format(examTime);
+
         holder.examDate.setText(android.text.format.DateFormat.format("dd.MM.yyyy HH:mm", new Date(examDate)));
+        //holder.examDate.setText(date + " " + time);
+
         if (examClassroom.trim().length() == 0){
             if (examNote.trim().length() == 0){
                 holder.examDetails.setText("");
@@ -129,7 +138,7 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.MyViewHolder>{
             long examId = currentExam.getId();
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, examId + "fungzzuje?", Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, examId + "fungzzuje?", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(context, OneExamDetailActivity.class);
                 i.putExtra("ID", examId);
                 context.startActivity(i);

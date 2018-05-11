@@ -92,6 +92,7 @@
         <receiver android:name=".notifications.receivers.CancelEveningHabitNotificationReceiver" />
         <receiver android:name=".notifications.receivers.DatabaseTimeChangeReceiver" />
         <receiver android:name=".notifications.receivers.CancelExamReceiver" />
+        <receiver android:name=".notifications.receivers.ExamTomorrowReceiver"></receiver>
         <receiver android:name=".notifications.receivers.SleepReceiver" />
 
         <activity

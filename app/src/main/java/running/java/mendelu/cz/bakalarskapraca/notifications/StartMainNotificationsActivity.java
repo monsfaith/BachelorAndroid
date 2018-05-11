@@ -86,7 +86,7 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         //if (examMainRepository.getExamResultsListNotification().size() == 0){
           if (getIntent().getExtras() != null) {
 
-              if (getIntent().getIntExtra("ISZERO", -5) == 1) {
+              if (getIntent().getBooleanExtra("ISZERO", false) == true) {
                   enjoyDay.setVisibility(View.VISIBLE);
                   noExamsImage.setVisibility(View.VISIBLE);
                   letsDoIt.setText("Ok");
@@ -171,6 +171,7 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (examNotificationAdapter.numberOfSelectedExams() > 0) {
                     examNotificationAdapter.setZero(true);
+                    examNotificationAdapter.setNoExams();
                 }
                 finish();
             }

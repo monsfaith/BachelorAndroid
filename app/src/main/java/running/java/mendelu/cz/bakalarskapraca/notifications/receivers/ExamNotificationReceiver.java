@@ -57,11 +57,11 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
 
         if (exams == 0){
             int jedna = 1;
-            shownIntent.putExtra("ISZERO",jedna);
+            shownIntent.putExtra("ISZERO",true);
 
         } else {
             int nula = 0;
-            doExamIntent.putExtra("ISZERO",nula);
+            shownIntent.putExtra("ISZERO",false);
         }
 
 
@@ -83,14 +83,13 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
         alarmManager.cancel(delayIntent);*/
 
         //zrusit na dnes a vytvorit novu na dalsi den
-        PendingIntent notTodayIntent = PendingIntent.getActivity(context, 500, notToday,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent notTodayIntent = PendingIntent.getBroadcast(context, 500, notToday, PendingIntent.FLAG_CANCEL_CURRENT);
         //alarmManager.cancel(notTodayIntent);
 
         //long closestExamId = intent.getIntExtra("EXAMID",0);
 
         NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_done_black_24dp, "Začať", doIntent);
-        NotificationCompat.Action actionNot = new NotificationCompat.Action(R.drawable.ic_menu_share, "Odložiť na zajtra", notTodayIntent);
+        NotificationCompat.Action actionNot = new NotificationCompat.Action(R.drawable.ic_class_black_24dp, "Odložiť na zajtra", notTodayIntent);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
@@ -129,7 +128,9 @@ public class ExamNotificationReceiver extends BroadcastReceiver{
 
         PlanMainRepository planMainRepository = new PlanMainRepository(context);
         if (planMainRepository.getByType(1).getEnabled() == true) {
-            notificationManager.notify(500, builder.build());
+            if (exams > 0) {
+                notificationManager.notify(500, builder.build());
+            }
         }
     }
 

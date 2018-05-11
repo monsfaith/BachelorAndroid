@@ -47,7 +47,7 @@
         android:layout_marginTop="5dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="Autorom je študentka Mendelovej univerzity v Brne. "
+        android:text="Autorkou aplikácie je Monika Čanigová, študentka Mendelovej univerzity v Brne. "
         />
 
     <TextView

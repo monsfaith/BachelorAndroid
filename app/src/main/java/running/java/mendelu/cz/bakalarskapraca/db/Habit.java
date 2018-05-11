@@ -20,7 +20,7 @@ public class Habit {
     static final String ID = BaseColumns._ID;
     static final String NAME = "name";
     static final String DESCRIPTION = "description";
-    static final String REPETITION_ID = "repetition_id";
+    //static final String REPETITION_ID = "repetition_id";
     static final String SHORT_DESCRIPTION = "short_description";
     //static final String REMIND = "remind"; //neurobit to, ale odlozit, boolean
     //static final String CANCEL = "cancel"; //dnes uz nepripominat
@@ -29,7 +29,7 @@ public class Habit {
     //static final String TIME = "time";
     static final String ICON = "icon";
     static final String PLAN = "plan";
-    static final String ASSOCIATON_TABLE_ID = "associaton_table_id";
+    //static final String ASSOCIATON_TABLE_ID = "associaton_table_id";
     static final String AUTHOR = "author";
 
     protected ContentValues values;
@@ -73,8 +73,8 @@ public class Habit {
         this.setDone(false);
         //this.setRemind(true);
         //this.setCancel(false);
-        this.setAssociationTableId(0);
-        this.setRepetitionId(2);
+        //this.setAssociationTableId(0);
+        //this.setRepetitionId(2);
         this.setIcon(icon);
         this.setPlan(plan);
         this.setShortDescription(shortDescription);
@@ -127,9 +127,9 @@ public class Habit {
         values.put(DESCRIPTION,description);
     }
 
-    public void setRepetitionId(int repetitionId){
-        values.put(REPETITION_ID,repetitionId);
-    }
+    //public void setRepetitionId(int repetitionId){
+        //values.put(REPETITION_ID,repetitionId);
+    //}
 
     /*public void setRemind(boolean remind){
         int bool = (remind)? 1 : 0;
@@ -147,9 +147,9 @@ public class Habit {
     }
 
 
-    public void setAssociationTableId(int association){
-        values.put(ASSOCIATON_TABLE_ID,association);
-    }
+    //public void setAssociationTableId(int association){
+    //    values.put(ASSOCIATON_TABLE_ID,association);
+    //}
 
     /*public Date getDate(){
         long millisecond = values.getAsLong(DATE);
@@ -176,9 +176,9 @@ public class Habit {
         return values.getAsString(DESCRIPTION);
     }
 
-    public int getRepetitionId(){
-        return values.getAsInteger(REPETITION_ID);
-    }
+    //public int getRepetitionId(){
+        //return values.getAsInteger(REPETITION_ID);
+    //}
 
     /*public boolean getRemind(){
         return (values.getAsInteger(REMIND) == 1);
@@ -192,9 +192,9 @@ public class Habit {
         return (values.getAsInteger(DONE) == 1);
     }
 
-    public int getAssociationTableId() {
-        return values.getAsInteger(ASSOCIATON_TABLE_ID);
-    }
+    //public int getAssociationTableId() {
+        //return values.getAsInteger(ASSOCIATON_TABLE_ID);
+    //}
 
     public long getId() {
         return values.getAsLong(ID);

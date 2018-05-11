@@ -25,7 +25,7 @@ public class Exam {
     //static final String TRYON = "tryon";
     static final String DIFFICULTY = "difficulty";
     static final String DAYS = "days";
-    static final String REALIZATION = "realization";
+    //static final String REALIZATION = "realization";
     static final String GRADE = "grade";
     //static final String RATING = "rating";
     static final String NOTE = "note";
@@ -43,7 +43,7 @@ public class Exam {
         this.setTime(time);
         this.setDateTime(date, time);
         this.setDays(days);
-        this.setRealization(false);
+        //this.setRealization(false);
         //this.setSuccess(false);
         //this.setTry(1);
         this.setDifficulty(difficulty);
@@ -109,11 +109,11 @@ public class Exam {
         values.put(DAYS, days);
     }
 
-    public void setRealization(boolean realization)
+    /*public void setRealization(boolean realization)
     {
         int bool = (realization)? 1 : 0;
         values.put(REALIZATION, bool);
-    }
+    }*/
 
     public void setGrade(String grade){
         values.put(GRADE,grade);
@@ -137,9 +137,9 @@ public class Exam {
     }
 
 
-    public boolean getRealization(){
+    /*public boolean getRealization(){
         return (values.getAsInteger(REALIZATION) == 1);
-    }
+    }*/
 
     public String getClassroom(){
         return values.getAsString(CLASSROOM);
@@ -169,16 +169,6 @@ public class Exam {
 
     public int getStudying(){
         return values.getAsInteger(STUDYING);
-    }
-
-    public void increaseStudying(){
-        int i = values.getAsInteger(STUDYING);
-        values.put(STUDYING,i++);
-    }
-
-    public void decreaseStudying(){
-        int i = values.getAsInteger(STUDYING);
-        values.put(STUDYING,i--);
     }
 
     public long getStudyDate(){

@@ -11,7 +11,7 @@
     <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -26,7 +26,7 @@
 
 
             </LinearLayout>
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingA"

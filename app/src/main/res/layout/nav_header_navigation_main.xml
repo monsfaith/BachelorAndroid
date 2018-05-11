@@ -48,6 +48,7 @@
         android:layout_alignLeft="@id/strut"
         android:layout_alignParentRight="true"
         android:layout_alignRight="@id/textView"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
 
     android:text="Uver, že to dokážeš a máš polovicu cesty za sebou. " />
 
