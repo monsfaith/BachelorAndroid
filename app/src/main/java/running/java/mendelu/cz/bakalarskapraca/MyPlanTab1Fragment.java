@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
@@ -43,6 +44,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -167,7 +169,6 @@ public class MyPlanTab1Fragment extends Fragment {
 
         examNotificationAdapter = new ExamNotificationAdapter(getActivity(), getExamResults());
 
-
         setAdapters();
 
         dailyPlanCardView = (CardView) view.findViewById(R.id.card_view_daily_plan);
@@ -190,26 +191,26 @@ public class MyPlanTab1Fragment extends Fragment {
         setListeners(settingsButtonEvening, 4);
         setListeners(settingsButtonMorning, 2);
 
-
         updateProgressBars();
 
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(300); // half second between each showcase view
+        config.setDismissTextColor(getResources().getColor(R.color.yellow_700));
 
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), "14");
 
         sequence.setConfig(config);
 
         sequence.addSequenceItem(focusText,
-                "Tento zoznam Ti zobrazuje aktivity, ktoré boli vložené do plánu. ", "Rozumiem!");
+                "Tento zoznam ti zobrazuje aktivity, ktoré boli vložené do plánu. ", "Rozumiem!");
 
         sequence.addSequenceItem(dailyPlanCardView, "Kliknutím na zaškrtávacie políčko udávaš, že si danú činnosť vykonal.","Rozumiem!");
 
         sequence.addSequenceItem(switchDaily,
-                "Toto tlačidlo slúži na prepínanie medzi plánmi. Primárne je zaškrtnuté. Jeho odškrtnutím si následne zvolíš skúšku, na ktorú sa chceš učiť.", "Rozumiem!");
+                "Toto tlačidlo slúži na prepínanie medzi plánmi. Jeho prepnutím si zvolíš skúšku, na ktorú sa chceš učiť.", "Rozumiem!");
 
         sequence.addSequenceItem(settingsButtonDaily,
-                "Upozornenia na celodenný plán sú každých 90 minút, na čiastkové plány 50 minút. Interval si môžeš nastaviť", "Rozumiem!");
+                "Môžeš si nastaviť interval upozornení.", "Rozumiem!");
 
 
         sequence.start();
@@ -222,10 +223,10 @@ public class MyPlanTab1Fragment extends Fragment {
             }
         });
 
-        YoYo.with(Techniques.Tada)
+        /*YoYo.with(Techniques.Tada)
                 .duration(500)
                 .repeat(2)
-                .playOn(infoPlan);
+                .playOn(infoPlan);*/
 
 
         switchDaily.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -237,6 +238,7 @@ public class MyPlanTab1Fragment extends Fragment {
                     View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_start_exam_plan, null);
                     Button doIt = (Button) view.findViewById(R.id.letsDoIt);
                     Button fab = (Button) view.findViewById(R.id.letsCancelit);
+                    ImageView noExams = (ImageView) view.findViewById(R.id.noExamsImage);
                     TextView infoAboutPlan = (TextView) view.findViewById(R.id.infoAboutStartingPlans);
 
                     fab.setVisibility(View.GONE);
@@ -247,6 +249,7 @@ public class MyPlanTab1Fragment extends Fragment {
                     if (examMainRepository.findNextExams().size() < 1) {
                         infoAboutPlan.setText("V najbližšej dobe ťa nečakajú žiadne skúšky.");
                         dialogBuilder.setPositiveButton("Ok", null);
+                        noExams.setVisibility(View.VISIBLE);
                         switchDaily.setChecked(true);
 
                     } else {
@@ -254,11 +257,15 @@ public class MyPlanTab1Fragment extends Fragment {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (examNotificationAdapter.numberOfSelectedExams() > 0) {
+                                //if (examNotificationAdapter.numberOfSelectedExams() > 0) {
+                                    if (examNotificationAdapter.numberOfSelectedExams() > 0) {
+
+                                        updateCheckedExams(examNotificationAdapter.getCheckedExams());
                                     switchDaily.setChecked(false);
                                     progressDailyBar.setVisibility(View.GONE);
                                     dailyPlanCardView.setVisibility(View.GONE);
                                     settingsButtonDaily.setVisibility(View.GONE);
+
                                     tx.setVisibility(View.GONE);
                                     ContentValues contentValues = new ContentValues();
                                     contentValues.put("enabled", false);
@@ -277,8 +284,13 @@ public class MyPlanTab1Fragment extends Fragment {
                                     setNotificationTime(4);
                                     setVisible(1);
                                     setExamNotification();
-                                } else {
+                                        examNotificationAdapter.deleteCheckedExams();
+                                        examNotificationAdapter.clearCount();
+
+                                    } else {
                                     switchDaily.setChecked(true);
+                                        examNotificationAdapter.deleteCheckedExams();
+                                        examNotificationAdapter.clearCount();
                                     //Toast.makeText(getActivity(), "zostava to ako " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -288,7 +300,16 @@ public class MyPlanTab1Fragment extends Fragment {
                         dialogBuilder.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                examNotificationAdapter.setNoExams();
+
+                                int size = examNotificationAdapter.getCheckedExams().size();
+                                //int id = examNotificationAdapter.getCheckedExams().get(0)
+                                //clearCheckedExams(examNotificationAdapter.getCheckedExams());
+                                examNotificationAdapter.deleteCheckedExams();
+                                examNotificationAdapter.clearCount();
+
+                                int sizevymaz = examNotificationAdapter.getCheckedExams().size();
+                                //Toast.makeText(getActivity(),size + " velkost " + sizevymaz,Toast.LENGTH_LONG).show();
+
                                 switchDaily.setChecked(true);
                                 progressDailyBar.setVisibility(View.VISIBLE);
                                 dailyPlanCardView.setVisibility(View.VISIBLE);
@@ -351,135 +372,6 @@ public class MyPlanTab1Fragment extends Fragment {
 
     }
 
-
-
-    /*
-    skoro povodna horna metoda
-    if (!isChecked){
-
-                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-                    View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_start_exam_plan, null);
-                    RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.availableExamsRecyclerVie);
-                    ExamNotificationAdapter examNotificationAdapter = new ExamNotificationAdapter(getActivity(), getExamResults());
-                    recyclerView.setAdapter(examNotificationAdapter);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    dialogBuilder.setPositiveButton("Potvrdit", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            progressDailyBar.setVisibility(View.GONE);
-                            dailyPlanCardView.setVisibility(View.GONE);
-                            settingsButtonDaily.setVisibility(View.GONE);
-                            tx.setVisibility(View.GONE);
-                            ContentValues contentValues = new ContentValues();
-                            contentValues.put("ENABLED",false);
-                            planMainRepository.update2(1,contentValues);
-                            cancelDividedNotification(1);
-                            setNotificationTime(2);
-                            setNotificationTime(3);
-                            setNotificationTime(4);
-                            setVisible(1);
-                        }
-                    });
-
-                    dialogBuilder.setNegativeButton("Zrusit", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switchDaily.setChecked(true);
-                            progressMorningBar.setVisibility(View.VISIBLE);
-                            dailyPlanCardView.setVisibility(View.VISIBLE);
-                            settingsButtonDaily.setVisibility(View.VISIBLE);
-                            tx.setVisibility(View.VISIBLE);
-                            Toast.makeText(getActivity(), "Je nastaveny denny plan " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
-                            setVisible(0);
-                        }
-                    });
-
-
-
-
-
-                    Toast.makeText(getActivity(), "Denný plán je vhodné zapínať pri neprebiehajúcom učiacom móde. ", Toast.LENGTH_LONG).show();
-
-                    progressDailyBar.setVisibility(View.VISIBLE);
-                    dailyPlanCardView.setVisibility(View.VISIBLE);
-                    settingsButtonDaily.setVisibility(View.VISIBLE);
-                    tx.setVisibility(View.VISIBLE);
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put("ENABLED",true);
-                    planMainRepository.update2(1,contentValues);
-                    setVisible(0);
-
-                    cancelDividedNotification(2);
-                    cancelDividedNotification(3);
-                    cancelDividedNotification(4);
-
-                    Plan dailyPlan = planMainRepository.getByType(1);
-                    if (getCurrentTime() < dailyPlan.getFromTime().getTime() || getCurrentTime() == dailyPlan.getFromTime().getTime()) {
-                        setDailyNotification(dailyPlan.getFromTime().getTime(), 1);
-                    } else if (getCurrentTime() < dailyPlan.getToTime().getTime() || getCurrentTime() == dailyPlan.getToTime().getTime()) {
-                        setDailyNotification(getCurrentTime(), 1);
-                    } else {
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(dailyPlan.getFromTime());
-                        cal.add(Calendar.DAY_OF_MONTH, 1);
-                        setDailyNotification(cal.getTimeInMillis(), 1);
-                    }
-
-
-                } else {
-                    Toast.makeText(getActivity(), "Denný plán je vhodné zapínať pri neprebiehajúcom učiacom móde. ", Toast.LENGTH_LONG).show();
-                    progressDailyBar.setVisibility(View.GONE);
-                    dailyPlanCardView.setVisibility(View.GONE);
-                    settingsButtonDaily.setVisibility(View.GONE);
-                    tx.setVisibility(View.GONE);
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put("ENABLED",false);
-                    planMainRepository.update2(1,contentValues);
-                    cancelDividedNotification(1);
-                    setNotificationTime(2);
-                    setNotificationTime(3);
-                    setNotificationTime(4);
-                    setVisible(1);
-
-                }
-            }
-        });
-
-        if (planMainRepository.getByType(1).getEnabled() == true){
-            switchDaily.setChecked(true);
-            progressMorningBar.setVisibility(View.VISIBLE);
-            dailyPlanCardView.setVisibility(View.VISIBLE);
-            settingsButtonDaily.setVisibility(View.VISIBLE);
-            tx.setVisibility(View.VISIBLE);
-            Toast.makeText(getActivity(), "Je nastaveny denny plan " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
-            setVisible(0);
-
-        } else {
-            switchDaily.setChecked(false);
-            progressDailyBar.setVisibility(View.GONE);
-            dailyPlanCardView.setVisibility(View.GONE);
-            settingsButtonDaily.setVisibility(View.GONE);
-            tx.setVisibility(View.GONE);
-            Toast.makeText(getActivity(), "Je nastaveny deleny plan " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
-            setVisible(1);
-        }
-
-        return view;
-
-    }
-
-    */
-
-
-    //aktualny cas
-    private long getCurrentTime(){
-        long time = System.currentTimeMillis();
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(time);
-        cal.set(Calendar.SECOND,0);
-        cal.set(Calendar.MILLISECOND,0);
-        return cal.getTimeInMillis();
-    }
 
     //nastavenie jednotlivych upozorneni na zaklade aktualneho casu a casu upozorneni v databaze
     private void setNotificationTime(int idPlan) {
@@ -751,6 +643,57 @@ public class MyPlanTab1Fragment extends Fragment {
         setAdapterMorning();
         setAdapterDaily();
     }
+
+    private void clearCheckedExams(List<Exam> exams){
+        if (exams.size() != 0) {
+            for (int i = 0; i < exams.size(); i++) {
+                Exam e = exams.get(i);
+                long studyDate = e.getStudyDate();
+                ExamMainRepository examMainRepository = new ExamMainRepository(getActivity());
+                ContentValues contentValues = new ContentValues();
+                int studying = e.getStudying();
+                contentValues.put("studying", studying - 1);
+                contentValues.put("study_date", 0);
+                if (studying != 0) {
+                    examMainRepository.update2(e.getId(), contentValues);
+                    Toast.makeText(getActivity(), " id exam " + e.getId(), Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        }
+
+    }
+
+    private void updateCheckedExams(List<Exam> exams){
+        if (exams.size() != 0) {
+            for (int i = 0; i < exams.size(); i++) {
+                Exam e = exams.get(i);
+                ContentValues contentValues = new ContentValues();
+                int studying = e.getStudying();
+                if (sameDay(e.getStudyDate()) == false) {
+                    contentValues.put("studying", studying + 1);
+                }
+                contentValues.put("study_date", System.currentTimeMillis());
+                examMainRepository.update2(e.getId(), contentValues);
+                //Toast.makeText(getActivity(), " id exam " + e.getId(), Toast.LENGTH_SHORT).show();
+
+
+
+            }
+        }
+    }
+
+    private boolean sameDay(long time){
+        Calendar calendarCurrent = Calendar.getInstance();
+        Calendar calendarMy = Calendar.getInstance();
+        calendarMy.setTimeInMillis(time);
+        boolean sameDay = calendarCurrent.get(Calendar.YEAR) == calendarMy.get(Calendar.YEAR) &&
+                calendarCurrent.get(Calendar.DAY_OF_YEAR) == calendarMy.get(Calendar.DAY_OF_YEAR);
+        return sameDay;
+    }
+
+
 
 
     private void createTextViews(){

@@ -86,22 +86,6 @@ public class TasksDetailActivity extends AppCompatActivity {
         });
 
 
-        /*calendarView = (CalendarView) findViewById(R.id.calendarView);
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                    Toast.makeText(view.getContext(), "Year=" + year + " Month=" + month + " Day=" + dayOfMonth, Toast.LENGTH_LONG).show();
-                    Calendar cal = Calendar.getInstance();
-                    cal.set(Calendar.YEAR,year);
-                    cal.set(Calendar.MONTH,month);
-                    cal.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-                    Date date = zeroTime(cal.getTime());
-                    setExamAdaper(date);
-                Toast.makeText(view.getContext(), date.getTime() + "", Toast.LENGTH_LONG).show();
-
-            }
-        });*/
-
     }
 
     @Override

@@ -20,9 +20,18 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_height="90dp">
+        android:orientation="vertical">
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
 
 
 
@@ -36,8 +45,22 @@
         android:textColor="@color/yellow_700"
         android:textStyle="bold"
         android:textSize="30dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/roundbutton"
     />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+5 min. prestávka  "/>
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/setNotification40"
@@ -48,11 +71,23 @@
         android:textColor="@color/lime_500"
         android:text="50"
         android:textStyle="bold"
-
+        android:layout_marginBottom="5dp"
         android:textSize="30dp"
 
         android:background="@drawable/roundbutton"
          />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+10 min. prestávka"/>
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/setNotification60"
@@ -62,11 +97,19 @@
         android:textColor="@color/cyan_700"
         android:textSize="30dp"
         android:textStyle="bold"
+        android:layout_marginBottom="5dp"
 
         android:text="90"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="10dp"
         android:background="@drawable/roundbutton"
         />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+10 min. prestávka"/>
+
+    </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

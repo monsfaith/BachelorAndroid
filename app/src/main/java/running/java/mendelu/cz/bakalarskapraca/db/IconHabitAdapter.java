@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class IconHabitAdapter extends RecyclerView.Adapter<IconHabitAdapter.MyVi
 
         //final int greyPicture = Color.argb(175, 204, 204, 0);
 
-       if (pha.getDone() == true){
+       if ((pha.getDone() == true) && (sameDay(pha.getDate().getTime()))) {
             //holder.habitImage.setColorFilter(greyPicture, PorterDuff.Mode.SRC_ATOP);
 
             holder.habitImage.setChecked(true);
@@ -105,25 +106,28 @@ public class IconHabitAdapter extends RecyclerView.Adapter<IconHabitAdapter.MyVi
                 if (pha.getDone()){
                     check.setVisibility(View.GONE);
                     done.setVisibility(View.GONE);
-                }
-
-                myBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (check.isChecked()){
-                            ContentValues contentValues = new ContentValues();
-                            contentValues.put("done",true);
-                            contentValues.put("date",System.currentTimeMillis());
-                            planMainRepository.updateAssociation(idPha,contentValues);
-                            //Toast.makeText(context,"vzkonane" + pha.getDone(),Toast.LENGTH_SHORT).show();
-                            mainOverviewFragment.loadListView();
+                    myBuilder.setPositiveButton("Ok",null);
+                } else {
+                    check.setVisibility(View.GONE);
+                    myBuilder.setPositiveButton("Áno", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //if (check.isChecked()) {
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put("done", true);
+                                contentValues.put("date", System.currentTimeMillis());
+                                planMainRepository.updateAssociation(idPha, contentValues);
+                                //Toast.makeText(context,"vzkonane" + pha.getDone(),Toast.LENGTH_SHORT).show();
+                                mainOverviewFragment.loadListView();
+                            //}
                         }
-                    }
-                });
+                    });
+                    myBuilder.setNegativeButton("Zrušiť", null);
+
+                }
 
 
                 myBuilder.setView(view);
-                myBuilder.setNegativeButton("Zrušiť", null);
                 habitDialog = myBuilder.create();
                 habitDialog.show();
 
@@ -133,6 +137,15 @@ public class IconHabitAdapter extends RecyclerView.Adapter<IconHabitAdapter.MyVi
 
 
 
+    }
+
+    private boolean sameDay(long habitDate){
+        Calendar calendarCurrent = Calendar.getInstance();
+        Calendar calendarMy = Calendar.getInstance();
+        calendarMy.setTimeInMillis(habitDate);
+        boolean sameDay = calendarCurrent.get(Calendar.YEAR) == calendarMy.get(Calendar.YEAR) &&
+                calendarCurrent.get(Calendar.DAY_OF_YEAR) == calendarMy.get(Calendar.DAY_OF_YEAR);
+        return sameDay;
     }
 
     @Override

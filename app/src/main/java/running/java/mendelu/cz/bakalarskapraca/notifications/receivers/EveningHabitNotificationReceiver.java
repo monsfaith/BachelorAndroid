@@ -51,7 +51,7 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
         @SuppressLint("ResourceAsColor") NotificationCompat.Builder builder = new NotificationCompat
                 .Builder(context)
                 .setContentIntent(pendingIntent)
-                .setSmallIcon(R.drawable.ic_menu_gallery)
+                .setSmallIcon(R.drawable.ic_lens_black_24dp)
                 .setColor(ContextCompat.getColor(context, R.color.lime_700))
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setLights(0xf9cc00, 300, 3000)

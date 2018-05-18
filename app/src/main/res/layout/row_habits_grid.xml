@@ -33,6 +33,7 @@
                 android:gravity="center"
                 android:paddingLeft="3dp"
                 android:text="TextView"
+                android:paddingBottom="7dp"
                 android:textAppearance="@android:style/TextAppearance.Material.Caption" />
         </LinearLayout>
 

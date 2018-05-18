@@ -103,13 +103,14 @@ public class CreateExamActivity extends AppCompatActivity {
         choseDate();
 
 
-        new MaterialShowcaseView.Builder(this)
+        /*new MaterialShowcaseView.Builder(this)
                 .setTarget(seekbarDifficulty).setDismissText("Rozumiem!").setTargetTouchable(true)
                 .setDismissTextColor(getResources().getColor(R.color.yellow_700))
                 .setContentText("Tento prvok Ti pomáha odhadnúť dni potrebné k príprave na skúšku.")
                 .setDelay(50) // optional but starting animations immediately in onCreate can make them choppy
                 .singleUse("2") // provide a unique ID used to ensure it is only shown once
                 .show();
+                */
 
         seekbarDifficulty.setEnabled(false);
         chosenDays.setEnabled(false);
@@ -499,7 +500,7 @@ public class CreateExamActivity extends AppCompatActivity {
                             calendar.setTimeInMillis(System.currentTimeMillis());
                             /*contentValues.put("enabled",false);
                             planMainRepository.update2(1, contentValues);*/
-                            calendar.add(Calendar.MINUTE, 15);
+                            calendar.add(Calendar.MINUTE, 5);
 
                             Intent i = new Intent(getApplicationContext(), ExamNotificationReceiver.class);
                             i.putExtra("NOEXAMS",1);

@@ -30,6 +30,7 @@
         android:ems="10"
         android:layout_gravity="center_horizontal"
         android:inputType="textPersonName"
+        android:hint="Krížovky"
         />
 
     <TextView
@@ -46,8 +47,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Vylúštiť aspoň jednu krížovku denne."
         android:paddingBottom="10dp"
         android:layout_gravity="center_horizontal"
-        android:inputType="textPersonName" />
+        android:inputType="textMultiLine" />
 
 </LinearLayout>

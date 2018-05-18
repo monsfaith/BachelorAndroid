@@ -10,15 +10,19 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:id="@+id/resultRelative"
+
             android:layout_height="wrap_content">
 
-            <ImageView
+            <Button
                 android:id="@+id/subjectColoricon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
-                app:srcCompat="@drawable/cirl" />
+                android:clickable="false"
+                android:background="@drawable/roundbutton"
+                 />
 
             <TextView
                 android:id="@+id/examName"
@@ -58,16 +62,19 @@
                 android:textAppearance="@android:style/TextAppearance.Material.Title"
                 android:textSize="14sp" />
 
-            <TextView
+            <Button
                 android:id="@+id/concreteGrade"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:textSize="15dp"
                 android:layout_alignBottom="@id/examDateResult"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/examGrade"
                 android:layout_marginRight="10dp"
                 android:visibility="gone"
-                android:textAppearance="@android:style/TextAppearance.Material.Title" />
+                android:textColor="@color/white"
+                android:background="@drawable/roundbuttonorange"
+                 />
 
             <ImageButton
                 android:id="@+id/addExamResult"

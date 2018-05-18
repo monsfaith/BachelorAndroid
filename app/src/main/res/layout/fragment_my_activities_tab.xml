@@ -71,10 +71,11 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/dailyTextViewActivities"
                     android:layout_alignTop="@id/dailyTextViewActivities"
-                    android:background="@color/grey_50"
+                    android:background="?android:selectableItemBackground"
 
                     android:layout_alignParentRight="true"
                     android:paddingEnd="10dp"
+
 
                     app:srcCompat="@drawable/ic_access_alarm_black_24dp">
                 </ImageButton>
@@ -149,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/morningTextViewActivities"
                     android:layout_alignTop="@id/morningTextViewActivities"
-                    android:background="@color/grey_50"
+                    android:background="?android:selectableItemBackground"
                     android:paddingEnd="10dp"
                     android:layout_alignParentRight="true"
                     app:srcCompat="@drawable/ic_access_alarm_black_24dp"
@@ -219,7 +220,7 @@
                 android:id="@+id/timeButtonLunch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/grey_50"
+                android:background="?android:selectableItemBackground"
                 android:layout_alignBottom="@id/lunchTextViewActivities"
                 android:layout_alignParentRight="true"
                 android:paddingEnd="10dp"
@@ -292,7 +293,7 @@
                 android:id="@+id/timeButtonEvening"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/grey_50"
+                android:background="?android:selectableItemBackground"
                 android:layout_alignBottom="@id/eveningTextViewActivities"
                 android:layout_alignTop="@id/eveningTextViewActivities"
                 android:layout_alignParentRight="true"

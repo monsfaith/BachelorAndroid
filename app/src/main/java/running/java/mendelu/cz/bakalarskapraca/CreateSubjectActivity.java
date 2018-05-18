@@ -134,7 +134,7 @@ public class CreateSubjectActivity extends AppCompatActivity implements SimpleDi
             //Toast.makeText(this, subjectColor + "", Toast.LENGTH_LONG).show();
             return true;
         } else {
-            subjectColor = 0;
+            //subjectColor = 0;
             return false;
         }
     }

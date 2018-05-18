@@ -47,6 +47,7 @@ public class HabitNotificationActivity extends AppCompatActivity{
     private ImageButton startStudyButton;
     private TextView startStudy;
     private TextView hiddenText;
+    private TextView hiddenText2;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -63,6 +64,7 @@ public class HabitNotificationActivity extends AppCompatActivity{
         startStudyButton = (ImageButton) findViewById(R.id.startStudyButton);
         startStudy = (TextView) findViewById(R.id.startStudy);
         hiddenText = (TextView) findViewById(R.id.hiddenText);
+        hiddenText2 = (TextView) findViewById(R.id.hiddenText2);
 
         if (getIntent().getExtras() != null){
             int id = getIntent().getIntExtra("ID",0);
@@ -80,10 +82,10 @@ public class HabitNotificationActivity extends AppCompatActivity{
             }
         });
 
-        YoYo.with(Techniques.Swing)
+        /*YoYo.with(Techniques.Swing)
                 .duration(700)
                 .repeat(3)
-                .playOn(fabAccept);
+                .playOn(fabAccept);*/
 
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(300); // half second between each showcase view
@@ -92,6 +94,7 @@ public class HabitNotificationActivity extends AppCompatActivity{
         sequence.setConfig(config);
         sequence.addSequenceItem(hiddenText,
                 "Teraz je čas na študijnú prestávku. Označ aktivitu, ktorú ideš vykonať.", "Rozumiem!");
+        sequence.addSequenceItem(hiddenText2, "Máš k dispozícii vždy celý zoznam aktivít pre voľnosť realizácie.", "Rozumiem!");
         sequence.start();
 
         /*fabAccept.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +147,7 @@ public class HabitNotificationActivity extends AppCompatActivity{
     }
 
     private void noRituals(){
-        infoAbout.setText("Nie sú vybraté žiadne rituály. ");
+        infoAbout.setText("Nie sú vybraté žiadne činnosti. ");
         fabAccept.setBackgroundResource(R.drawable.ic_add_circle_black_24dp);
         fabAccept.setOnClickListener(new View.OnClickListener() {
             @Override

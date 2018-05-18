@@ -117,9 +117,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 .registerOnSharedPreferenceChangeListener(this);
         boolean notif = preferences.getBoolean("turn_notif", false);
 
-        if (notif) {
+        /*if (notif) {
             setDailyPlan(getActivity());
-        }
+        }*/
     }
 
     @Override

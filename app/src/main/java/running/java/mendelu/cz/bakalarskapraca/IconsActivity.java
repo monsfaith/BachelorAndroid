@@ -56,12 +56,7 @@ public class IconsActivity extends AppCompatActivity {
         habitMainRepository = new HabitMainRepository(getApplicationContext());
         /*((MainViewActivity) getActivity()).setActionBarTitle("Použité ikony");
 
-        author1 = (RecyclerView) view.findViewById(R.id.firstA);
-        author2 = (RecyclerView) view.findViewById(R.id.secondA);
-        author3 = (RecyclerView) view.findViewById(R.id.thirdA);
-        author4 = (RecyclerView) view.findViewById(R.id.forthA);
-        author5 = (RecyclerView) view.findViewById(R.id.fifthA);
-        author6 = (RecyclerView) view.findViewById(R.id.sixA);
+
 
 */
         author1Text = (TextView) findViewById(R.id.firstAuthor);
@@ -81,37 +76,6 @@ public class IconsActivity extends AppCompatActivity {
         //return view;
     }
 
-    /*public void loadRecyclerViews(){
-        iconAuthorAdapter1 = new IconAuthorAdapter(getContext(),getList("Freepik"));
-        author1.setAdapter(iconAuthorAdapter1);
-        author1.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.HORIZONTAL));
-
-        iconAuthorAdapter2 = new IconAuthorAdapter(getContext(),getList("Roundicons"));
-        author2.setAdapter(iconAuthorAdapter2);
-        author2.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.HORIZONTAL));
-
-        iconAuthorAdapter3 = new IconAuthorAdapter(getContext(),getList("Smashicons"));
-        author3.setAdapter(iconAuthorAdapter3);
-        author3.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.HORIZONTAL));
-
-        iconAuthorAdapter4 = new IconAuthorAdapter(getContext(),getList("VectorsM"));
-        author4.setAdapter(iconAuthorAdapter4);
-        author4.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.HORIZONTAL));
-
-        iconAuthorAdapter5 = new IconAuthorAdapter(getContext(),getList("Pond"));
-        author5.setAdapter(iconAuthorAdapter5);
-        author5.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.HORIZONTAL));
-
-        iconAuthorAdapter6 = new IconAuthorAdapter(getContext(),getList("Flat"));
-        author6.setAdapter(iconAuthorAdapter6);
-        author6.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.HORIZONTAL));
-
-
-    }*/
-
-    private List<Habit> getList(String author){
-        return habitMainRepository.getAuthorHabits(author);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

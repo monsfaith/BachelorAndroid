@@ -47,7 +47,7 @@ public class ResultsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_results, container, false);
-        examMainRepository = new ExamMainRepository(getContext());
+        examMainRepository = new ExamMainRepository(getActivity().getApplicationContext());
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewResults);
         noExams = (TextView) view.findViewById(R.id.noExams);
         noExamsImage = (ImageView) view.findViewById(R.id.noExamImage);

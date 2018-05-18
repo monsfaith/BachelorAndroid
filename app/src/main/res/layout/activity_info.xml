@@ -113,7 +113,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="25dp"
-        android:text="Ranný, obedný a večerný plán sa Ti spustia, ak si reakciou na notifikáciu alebo tlačítko prepnutia v predchádzajúcej obrazovke zvolíš skúšku (skúšky), na ktoré sa chceš učiť. Tento plán je narozdiel od celodenného plánu intenzívnejší a nachádzajú sa v ňom aktivity odporúčané vykonávať práve v určitom čase dňa."
+        android:text="Ranný, obedný a večerný plán sa Ti spustia, ak si reakciou na notifikáciu alebo tlačidlo prepnutia v predchádzajúcej obrazovke zvolíš skúšku (skúšky), na ktoré sa chceš učiť. Tento plán je narozdiel od celodenného plánu intenzívnejší a nachádzajú sa v ňom aktivity vykonávané v určitom časovom úseku dňa."
         />
 
 

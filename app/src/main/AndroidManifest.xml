@@ -57,6 +57,7 @@
         <activity
             android:name=".notifications.HabitNotificationActivity"
             android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
             android:theme="@style/NoActionBar" />
         <activity android:name=".notifications.ExamNotificationStartActivity" />
         <activity
@@ -66,6 +67,7 @@
         <activity
             android:name=".notifications.StartMainNotificationsActivity"
             android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".notifications.ExamTomorrowNotificationActivity"

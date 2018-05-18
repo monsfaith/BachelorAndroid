@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -40,7 +41,8 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
     private int count;
     private boolean zero;
     private List<Exam> exams = Collections.emptyList();
-    private List<Exam> checkedExams = new ArrayList<>();
+    private List<Exam> checkedExams;
+    private List<Integer> examIds;
 
     public ExamNotificationAdapter(Context context, Cursor cursor){
         layoutInflater = LayoutInflater.from(context);
@@ -54,6 +56,7 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
         layoutInflater = LayoutInflater.from(context);
         this.exams = exams;
         this.context = context;
+        this.checkedExams = new ArrayList<>();
         this.zero = false;
 
 
@@ -104,6 +107,7 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
         holder.examDays.setText(actualDays + "/" + wantedDays);
 
         holder.examCheck.setHighlightColor(colorSubject);
+
         holder.examCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             //long idEx = cursor.getLong(cursor.getColumnIndex(Exam.ID));
@@ -128,33 +132,59 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
                     if ((sameDay(studyDate) == false)) {
                         count = count + 1;
                         int studying = examMainRepository.getById(idEx).getStudying();
-                        if (zero == false) {
-                            contentValues.put("studying", studying + 1);
+                        //if (zero == false) {
+
+                            /*contentValues.put("studying", studying + 1);
                             contentValues.put("study_date", System.currentTimeMillis());
-                            examMainRepository.update2(idEx, contentValues);
-                            checkedExams.add(currentExam);
+                            examMainRepository.update2(idEx, contentValues);*/
+
+                            if (isInArray(idEx) == false) {
+                                checkedExams.add(currentExam);
+
+                            }
+                            //Toast.makeText(context,"count " + count,Toast.LENGTH_LONG).show();
+
                             //Toast.makeText(context, "idex " + idEx + "curr " + currentExam.getId() , Toast.LENGTH_SHORT).show();
-                        }
+                        //}
 
 
                         holder.examDays.setText(actualDays + "/" + wantedDays);
 
                         //Toast.makeText(context, "checknute" + count, Toast.LENGTH_SHORT).show();
                     } else {
+                        if (isInArray(idEx) == false) {
+                            checkedExams.add(currentExam);
+
+                        }
                         count = count + 1;
+                        //Toast.makeText(context,"count dva " + count,Toast.LENGTH_LONG).show();
+
                     }
                 } else {
                     int studying = examMainRepository.getById(idEx).getStudying();
-                    if (studying > 0) {
+                    /*if (studying > 0) {
                         contentValues.put("studying", studying - 1);
                     }
                     contentValues.put("study_date",0);
-                    examMainRepository.update2(idEx, contentValues);
+                    examMainRepository.update2(idEx, contentValues);*/
+
+                    if (isInArray(idEx)){
+                        if (getExamIndex(idEx) != -10){
+                            checkedExams.remove(getExamIndex(idEx));
+                            //checkedExams.get(getExamIndex(idEx))
+                            //checkedExams.indexAt.get(i).intValue()
+                            Exam exam = examMainRepository.getById(idEx);
+                            checkedExams.remove(exam);
+                            //Toast.makeText(context,"vymaz " + idEx +" " + getExamIndex(idEx) + " " + checkedExams.size(),Toast.LENGTH_LONG).show();
+                        }
+                    }
+
                     holder.examDays.setText(actualDays + "/" + wantedDays);
                     if (count > 0) {
                         count = count - 1;
+                        //Toast.makeText(context, "nechecknute" + count, Toast.LENGTH_SHORT).show();
+
                     }
-                    //Toast.makeText(context, "nechecknute" + count, Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -182,6 +212,39 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
 
     }
 
+    public void clearCount(){
+        this.count = 0;
+    }
+
+    public List<Exam> getCheckedExams(){
+        return checkedExams;
+    }
+
+    public void deleteCheckedExams(){
+        this.checkedExams.clear();
+    }
+
+    private boolean isInArray(long id){
+        boolean contains = false;
+        for (int i = 0; i< checkedExams.size(); i++){
+            long idExam = checkedExams.get(i).getId();
+            contains = id == idExam;
+            //Toast.makeText(context,"boolean " + contains,Toast.LENGTH_LONG).show();
+        }
+
+        return contains;
+    }
+
+    private long getExamIndex(long id){
+        long index = -10;
+        for (int i = 0; i < checkedExams.size(); i++){
+            if (checkedExams.get(i).getId() == id){
+                index = i;
+            }
+        }
+        return index;
+    }
+
 
     public void setZero(boolean gotZero){
         this.zero = gotZero;
@@ -198,6 +261,7 @@ public class ExamNotificationAdapter extends RecyclerView.Adapter<ExamNotificati
             contentValues.put("study_date",0);
             if (studying > 0) {
                 examMainRepository.update2(e.getId(), contentValues);
+                //Toast.makeText(context, " id exam " + e.getId(), Toast.LENGTH_SHORT).show();
             }
 
 

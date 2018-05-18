@@ -22,8 +22,10 @@ import android.widget.Toast;
 import org.apache.http.conn.scheme.HostNameResolver;
 
 import java.util.Calendar;
+import java.util.List;
 
 import running.java.mendelu.cz.bakalarskapraca.R;
+import running.java.mendelu.cz.bakalarskapraca.db.Exam;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamNotificationAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.MainOpenHelper;
@@ -147,7 +149,7 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
     private void setNoZero(){
         recyclerView.setAdapter(examNotificationAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        info.setText("Zvoľ si skúšku, ktorej príprave sa chceš dnes venovať, a spustí sa Ti intenzívnejší učebný plán");
+        info.setText("Zvoľ si skúšku, ktorej príprave sa chceš dnes venovať, a spustí sa Ti intenzívnejší učebný plán.");
 
         letsDoIt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,10 +157,12 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
                 if (examNotificationAdapter.numberOfSelectedExams() > 0) {
                     //NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     //notificationManager.cancel(500);
+                    updateCheckedExams(examNotificationAdapter.getCheckedExams());
                     cancelDailyNotifications();
                     setAllNotifications();
                     cancelExam();
                     setExamNotificationTomorrow();
+                    examNotificationAdapter.deleteCheckedExams();
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Nutné zvoliť skúšku, na ktorú sa ideš pripravovať", Toast.LENGTH_SHORT).show();
@@ -171,7 +175,8 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (examNotificationAdapter.numberOfSelectedExams() > 0) {
                     examNotificationAdapter.setZero(true);
-                    examNotificationAdapter.setNoExams();
+                    //dala som to prec
+                    //examNotificationAdapter.setNoExams();
                 }
                 finish();
             }
@@ -269,5 +274,20 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         Intent cancelIntent = new Intent(getApplicationContext(), CancelExamReceiver.class);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 500, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), cancelPendingIntent);
+    }
+
+    private void updateCheckedExams(List<Exam> exams){
+        if (exams.size() != 0) {
+            for (int i = 0; i < exams.size(); i++) {
+                Exam e = exams.get(i);
+                ContentValues contentValues = new ContentValues();
+                int studying = e.getStudying();
+                contentValues.put("studying", studying + 1);
+                contentValues.put("study_date", System.currentTimeMillis());
+                examMainRepository.update2(e.getId(), contentValues);
+                //Toast.makeText(, " id exam " + e.getId(), Toast.LENGTH_SHORT).show();
+
+            }
+        }
     }
 }

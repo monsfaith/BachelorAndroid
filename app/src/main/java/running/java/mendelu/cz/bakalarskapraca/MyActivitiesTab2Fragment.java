@@ -522,23 +522,6 @@ public class MyActivitiesTab2Fragment extends Fragment{
     }
 
 
-    /*@Override
-    public void fragmentSwitchToVisible() {
-        if (planMainRepository.getByType(1).getEnabled() == true){
-            lunchRelativeLayout.setVisibility(View.GONE);
-            morningRelativeLayout.setVisibility(View.GONE);
-            eveningRelativeLayout.setVisibility(View.GONE);
-            dailyRelativeLayout.setVisibility(View.VISIBLE);
-        } else {
-            lunchRelativeLayout.setVisibility(View.VISIBLE);
-            morningRelativeLayout.setVisibility(View.VISIBLE);
-            eveningRelativeLayout.setVisibility(View.VISIBLE);
-            dailyRelativeLayout.setVisibility(View.GONE);
-        }
-
-    }*/
-
-
     private void setHabitNotification(long fromTime, int type, long toTime){
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(getActivity(), EveningHabitNotificationReceiver.class);

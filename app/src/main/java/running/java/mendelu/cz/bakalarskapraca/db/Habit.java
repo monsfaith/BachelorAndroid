@@ -30,7 +30,7 @@ public class Habit {
     static final String ICON = "icon";
     static final String PLAN = "plan";
     //static final String ASSOCIATON_TABLE_ID = "associaton_table_id";
-    static final String AUTHOR = "author";
+    //static final String AUTHOR = "author";
 
     protected ContentValues values;
 
@@ -66,7 +66,7 @@ public class Habit {
 
     }
 
-    public Habit(String name, String description, String shortDescription, String icon, int plan, String author){
+    public Habit(String name, String description, String shortDescription, String icon, int plan){
         this.values = new ContentValues();
         this.setName(name);
         this.setDescription(description);
@@ -78,7 +78,7 @@ public class Habit {
         this.setIcon(icon);
         this.setPlan(plan);
         this.setShortDescription(shortDescription);
-        this.setAuthor(author);
+        //this.setAuthor(author);
     }
 
     public void setIcon(String icon) {
@@ -118,10 +118,10 @@ public class Habit {
         values.put(NAME,name);
     }
 
-    public void setAuthor(String name){
+    /*public void setAuthor(String name){
         values.put(AUTHOR,name);
     }
-
+*/
 
     public void setDescription(String description){
         values.put(DESCRIPTION,description);
@@ -167,9 +167,9 @@ public class Habit {
         return values.getAsString(NAME);
     }
 
-    public String getAuthor(){
+    /*public String getAuthor(){
         return values.getAsString(AUTHOR);
-    }
+    }*/
 
 
     public String getDescription(){
