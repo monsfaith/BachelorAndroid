@@ -46,7 +46,7 @@ public class SleepNotificationActivity extends AppCompatActivity{
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(exam.getDate().getTime());
             calendar.set(Calendar.HOUR_OF_DAY,0);
-            exams = examMainRepository.getExamResultsList(calendar.getTimeInMillis());
+            exams = examMainRepository.getExamResultsListTwoDays(calendar.getTimeInMillis());
 
         }
 

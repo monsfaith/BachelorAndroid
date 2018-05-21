@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -57,7 +58,6 @@ import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.Project;
 import running.java.mendelu.cz.bakalarskapraca.db.SubjectMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
-import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DailyHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DatabaseRecordReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DatabaseTimeChangeReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
@@ -149,17 +149,23 @@ public class MainOverviewFragment extends Fragment{
         ContentValues contentValues = new ContentValues();
 
         ShowcaseConfig config = new ShowcaseConfig();
-        config.setDelay(300); // half second between each showcase view
-        config.setDismissTextColor(getResources().getColor(R.color.yellow_700));
+        //config.setDelay(300); // half second between each showcase view
+        //config.setDismissTextColor(getResources().getColor(R.color.yellow_700));
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), SHOWCASE_ID);
         sequence.setConfig(config);
-        sequence.addSequenceItem(floatingButton,
-                "Toto tlačidlo slúži na vytvorenie novej skúšky. Na prípravu na skúšky ťa aplikácia upozorní.", "Rozumiem!");
+        sequence.addSequenceItem(create(floatingButton,"Toto tlačidlo slúži na vytvorenie skúšky. Na prípravu ťa aplikácia upozorní."));
+        sequence.addSequenceItem(create(examsButtonClick,"Kliknutím na toto tlačidlo sa ti zobrazí prehľad skúšok."));
+        sequence.addSequenceItem(create(plansButtonClick,"Týmto tlačidlom sa dostaneš k informáciám a nastaveniam tvojich plánov."));
+        sequence.start();
+
+
+        /*sequence.addSequenceItem(floatingButton,
+                "Toto tlačidlo slúži na vytvorenie novej skúšky (klikni na Rozumiem).", "Rozumiem!");
         sequence.addSequenceItem(examsButtonClick,
                 "Kliknutím na toto tlačidlo sa ti zobrazí prehľad skúšok.", "Rozumiem!");
         sequence.addSequenceItem(plansButtonClick,
                 "Týmto tlačidlom sa dostaneš k informáciám a nastaveniam tvojich plánov.", "Rozumiem!");
-        sequence.start();
+        sequence.start();*/
 
         if (planMainRepository.getAllPlans().size() != 4) {
             init();
@@ -385,12 +391,7 @@ public class MainOverviewFragment extends Fragment{
             actualPlanTextView.setText("Plán neprebieha");
             recyclerViewHabits.setAdapter(null);
             progressBarReview.setProgress(0);
-
-            /*progressBarReview.setVisibility(View.GONE);
-            TextView tx = new TextView(getActivity());
-            tx.setPadding(50, 210, 0, 50);
-            tx.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-            cardViewTwo.addView(tx);*/
+            
         }
 
 
@@ -400,6 +401,20 @@ public class MainOverviewFragment extends Fragment{
 
     private List<Exam> getExamResults(long date){
         return examMainRepository.getExamResultsList(date);
+    }
+
+    private MaterialShowcaseView create(View view, String content){
+        MaterialShowcaseView.Builder builder = new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(view)
+                .setDismissText("Rozumiem!")
+                .setDismissTextColor(getResources().getColor(R.color.yellow_700))
+                //.setMaskColour(Color.argb(195, 0, 0, 0))
+                .setContentText(content)
+                .setDelay(300)
+                .setDismissOnTouch(true);
+
+        MaterialShowcaseView showcaseView = builder.build();
+        return showcaseView;
     }
 
 
@@ -417,10 +432,25 @@ public class MainOverviewFragment extends Fragment{
         eveningCalTo.set(Calendar.MINUTE,eveningPlan.getToMinute());
 
         //tento if povodne nebol
-        if (eveningCalFrom.get(Calendar.HOUR_OF_DAY) > eveningCalTo.get(Calendar.HOUR_OF_DAY)){
-            eveningCalTo.add(Calendar.DATE,1);
+        //tooto som zakomentovala 20.05.2018
+        //if (eveningCalFrom.get(Calendar.HOUR_OF_DAY) > eveningCalTo.get(Calendar.HOUR_OF_DAY)){
+         //   eveningCalTo.add(Calendar.DATE,1);
 
-        }
+        //}
+
+            if (eveningPlan.getFromHour() > eveningPlan.getToHour()) {
+                eveningCalTo.add(Calendar.DATE, 1);
+                if (System.currentTimeMillis() < eveningCalFrom.getTimeInMillis()){
+                    eveningCalFrom.add(Calendar.DATE,-1);
+                    eveningCalTo.add(Calendar.DATE,-1);
+                }
+            }
+
+
+
+
+
+
 //        eveningCalTo.add(Calendar.DATE,1);
 
         long evFrom1 = eveningCalFrom.getTimeInMillis();
@@ -470,7 +500,7 @@ public class MainOverviewFragment extends Fragment{
                 to.set(Calendar.HOUR_OF_DAY,eveningPlan.getToHour());
                 to.set(Calendar.MINUTE,eveningPlan.getToMinute());
 
-                //Toast.makeText(getActivity(), "evening " + actualPlan + " aktu " + sdf.format(setPlanDateToCalendar(eveningPlan.getType())) + " " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "evening " + actualPlan + " aktu " + sdf.format(evFrom1) + " " + sdf.format(evTo1), Toast.LENGTH_LONG).show();
                 actualPlan = 4;
                 actualPlanTextView.setText(R.string.vecerny);
                 progressBarReview.setMax(habitMainRepository.getEveningPlanHabits().size());
@@ -494,6 +524,7 @@ public class MainOverviewFragment extends Fragment{
             else {
                 actualPlan = 0;
                 actualPlanTextView.setText("Neprebieha plán");
+                //Toast.makeText(getActivity(), "evening " + actualPlan + " aktu " + sdf.format(evFrom1) + " " + sdf.format(evTo1), Toast.LENGTH_LONG).show();
                 //Toast.makeText(getActivity(), "nic" + sdf.format(setPlanDateToCalendar(dailyPlan.getType())) + "", Toast.LENGTH_LONG).show();
                 return null;
             }
@@ -591,9 +622,9 @@ public class MainOverviewFragment extends Fragment{
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,8);
         long morningFromTime = dailyCalendar.getTimeInMillis();
-        dailyCalendar.set(Calendar.HOUR_OF_DAY,12);
+        dailyCalendar.set(Calendar.HOUR_OF_DAY,11);
         long morningToTime = dailyCalendar.getTimeInMillis();
-        morningPlan = new Plan(morningFromTime, morningToTime, 2, true, 8, 12, 0, 0, 3600000 );
+        morningPlan = new Plan(morningFromTime, morningToTime, 2, true, 8, 11, 0, 0, 3600000 );
         planMainRepository.insert(morningPlan);
 
         dailyCalendar.set(Calendar.HOUR_OF_DAY,12);
@@ -603,11 +634,11 @@ public class MainOverviewFragment extends Fragment{
         lunchPlan = new Plan(lunchFromTime, lunchToTime, 3, true, 12, 17, 0, 0,3600000);
         planMainRepository.insert(lunchPlan);
 
-        dailyCalendar.set(Calendar.HOUR_OF_DAY,17);
+        dailyCalendar.set(Calendar.HOUR_OF_DAY,18);
         long eveningFromTime = dailyCalendar.getTimeInMillis();
         dailyCalendar.set(Calendar.HOUR_OF_DAY,22);
         long eveningToTime = dailyCalendar.getTimeInMillis();
-        eveningPlan = new Plan(eveningFromTime, eveningToTime,4, true, 17, 22, 0, 0, 3600000);
+        eveningPlan = new Plan(eveningFromTime, eveningToTime,4, true, 18, 22, 0, 0, 3600000);
         planMainRepository.insert(eveningPlan);
     }
 
@@ -646,7 +677,7 @@ public class MainOverviewFragment extends Fragment{
         planMainRepository.insertAssociaton(new PlanHabitAssociation(idTidy,2));
 
 
-        Habit morningGratefulness = new Habit("Byť vďačný", "Keď naplníš svoju myseľ vďačnosťou a pozitívnosťou, chemické látky v mozgu ti umožnia, aby sa z týchto pocitov stal tvoj návyk. Vyhraď si čas na definovanie vecí, za ktoré si vďačný. Či už tvoja rodina, zdravie, tie nohavice, ktoré tak rád nosíš. Dôvodov je veľa, stačí ich len nájsť. Skús nájsť aspoň 3 ", "Dôvodov je veľa, stačí ich len nájsť.", "pray",2);
+        Habit morningGratefulness = new Habit("Byť vďačný", "Keď naplníš svoju myseľ vďačnosťou a pozitívnosťou, chemické látky v mozgu ti umožnia, aby sa z týchto pocitov stal tvoj návyk. Vyhraď si čas na definovanie vecí, za ktoré si vďačný. Či už tvoja rodina, zdravie, tie nohavice, ktoré tak rád nosíš. Dôvodov je veľa, stačí ich len nájsť. Skús nájsť aspoň 3.", "Dôvodov je veľa, stačí ich len nájsť.", "pray",2);
         long idGrate = habitMainRepository.insert(morningGratefulness);
         planMainRepository.insertAssociaton(new PlanHabitAssociation(idGrate,2));
 
@@ -723,7 +754,7 @@ public class MainOverviewFragment extends Fragment{
         long idForgive = habitMainRepository.insert(forgive);
         planMainRepository.insertAssociaton(new PlanHabitAssociation(idForgive,4));
 
-        Habit sleep = new Habit("Spánok", "Americká organizácia National Sleep Foundation vo výskume zaoberajúcom sa odporúčanou dĺžkou spánku zistila, že mladých dospelých je najvhodnejšia doba trvania spánku 7 - 8 hodín, pričom nedostatok spánku má negatívny vplyv na imunitu, pamäť, premýšľanie či koncentráciu.", "Odporúčaná doba spánku je 7 - 8 hodín. Ak to nie je možné, magnézium a vitamín D3 umožnia ľahšie vstávanie.", "sleep", 4);
+        Habit sleep = new Habit("Príprava na spánok", "Americká organizácia National Sleep Foundation vo výskume zaoberajúcom sa odporúčanou dĺžkou spánku zistila, že pre mladých dospelých je najvhodnejšia doba trvania spánku 7 - 8 hodín, pričom nedostatok spánku má negatívny vplyv na imunitu, pamäť, premýšľanie či koncentráciu. Odporúča sa vytvoriť si príjemné prostredie na spánok vopred.", "Odporúčaná doba spánku je 7 - 8 hodín. Ak to nie je možné, magnézium a vitamín D3 umožnia ľahšie vstávanie.", "sleep", 4);
         long idSleep = habitMainRepository.insert(sleep);
         planMainRepository.insertAssociaton(new PlanHabitAssociation(idSleep,4));
 
@@ -816,7 +847,7 @@ public class MainOverviewFragment extends Fragment{
         Habit tea = new Habit("Čaj","Antioxidanty v čaji slúžia ako prevencia proti viacerým chorobám. Hydratuje a povzbudzuje telo a znižuje úroveň stresových hormónov.","Pomôže ti zrelaxovať a lepšie sa sústrediť.","tea",1);
         long idTea = habitMainRepository.insert(tea);
 
-        Habit air = new Habit("Čerstvý vzduch", "Ak si v uzavretej miestnosti, je dobré sa ísť nadýchnuť pri okno, pozorovať okolie. Prekrví ti to mozog a i krátka prechádzka je nápomocná. Vôňa čerstvého vzduchu znižuje stres a zvyšuje pocit šťastia.","Nadýchaj sa čerstvého vzduchu aj z izby","air",1);
+        Habit air = new Habit("Čerstvý vzduch", "Ak si v uzavretej miestnosti, je dobré sa ísť nadýchnuť pri okno, pozorovať okolie. Prekrví ti to mozog a i krátka prechádzka je nápomocná. Vôňa čerstvého vzduchu znižuje stres a zvyšuje pocit šťastia.","Nadýchaj sa čerstvého vzduchu aj z izby.","air",1);
         long idAir = habitMainRepository.insert(air);
         planMainRepository.insertAssociaton(new PlanHabitAssociation(idAir,1));
 

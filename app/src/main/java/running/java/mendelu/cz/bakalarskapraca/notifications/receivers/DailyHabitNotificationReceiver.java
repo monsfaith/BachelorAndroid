@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 
 import running.java.mendelu.cz.bakalarskapraca.R;
 import running.java.mendelu.cz.bakalarskapraca.notifications.HabitNotificationActivity;
@@ -21,17 +22,23 @@ public class DailyHabitNotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        /*MediaPlayer mediaPlayer = MediaPlayer.create(context, Settings.System.DEFAULT_NOTIFICATION_URI);
-        mediaPlayer.start();*/
+        //MediaPlayer mediaPlayer = MediaPlayer.create(context, Settings.System.DEFAULT_NOTIFICATION_URI);
+        //mediaPlayer.start();
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent shownIntent = new Intent(context, HabitNotificationActivity.class);
-        //shownIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 200, shownIntent, 0);
+        Intent shownIntent = new Intent(context, StudyBreakReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 25, shownIntent, 0);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context).setContentIntent(pendingIntent).setSmallIcon(R.drawable.ic_menu_camera).setSound(Settings.System.DEFAULT_NOTIFICATION_URI).setContentTitle("Rano robi den").setContentText("Je cas na splnenie tvojich ritualov. Zo svojich vybranych aktivit si zrealizuj lubovolne mnozstvo. Je vsak dolezite zrealizovat aspon jednu. Nastartuj sa!").setAutoCancel(true);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.ic_lens_black_24dp)
+                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                .setColor(ContextCompat.getColor(context, R.color.lime_700))
+                .setLights(0xf9cc00, 300, 3000)
+                .setContentTitle("Koniec prestávky")
+                .setAutoCancel(true);
 
-        notificationManager.notify(200, builder.build());
+        notificationManager.notify(25, builder.build());
 
 
     }

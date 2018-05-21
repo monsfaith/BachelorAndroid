@@ -83,10 +83,6 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
             startActivity(new Intent(MainViewActivity.this, IntroActivity.class));
         }
 
-        /*butt = (Button) findViewById(R.id.buttonMoreee);
-        butt = (Button) findViewById(R.id.planShowMore);
-        floatingButton = (FloatingActionButton) findViewById(R.id.floatingActionButtonAdd);
-        listView = (ListView) findViewById(R.id.examListView);*/
 
         mainOverviewFragment = new MainOverviewFragment();
         resultsFragment = new ResultsFragment();
@@ -154,23 +150,6 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
 
 
 
-
-
-
-
-    /*public void loadListView(){
-        examMainRepository = new ExamMainRepository(getApplicationContext());
-        listView = (ListView) findViewById(R.id.examListView);
-        examAdapter = new ExamAdapter(this);
-        listView.setAdapter(examAdapter);
-    }
-
-    public void onResume(){
-        super.onResume();
-        loadListView();
-
-    }*/
-
     private void setQuoteVisible(){
         if (quotes.size() > 40){
             fab.setVisibility(View.VISIBLE);
@@ -234,30 +213,7 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation_main, menu);
-        return true;
-    }*/
 
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.mainFrameLayout, new SettingsFragment());
-            ft.commit();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
@@ -270,10 +226,7 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            /*if (getApplicationContext() != MainViewActivity.this){
-                Intent i = new Intent(this, MainViewActivity.class);
-                startActivity(i);
-            }*/
+
 
             android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -303,25 +256,6 @@ public class MainViewActivity extends AppCompatActivity implements NavigationVie
         return true;
     }
 
-    /*public void detailShow(View view){
-        Intent i = new Intent(MainViewActivity.this, TasksDetailActivity.class);
-        startActivity(i);
-    }
-
-    public void showMore(View view){
-        Intent i = new Intent(this, MyPlanTabsActivity.class);
-        startActivity(i);
-    }
-
-    public void addExamShow(View view){
-        Intent i = new Intent(this, CreateExamActivity.class);
-        startActivity(i);
-    }
-
-    public void addExamMainButton(View view){
-        Intent i = new Intent(getApplicationContext(),CreateExamActivity.class);
-        startActivity(i);
-    }*/
 
 
     }

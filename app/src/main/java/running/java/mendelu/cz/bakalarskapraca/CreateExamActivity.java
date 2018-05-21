@@ -386,9 +386,12 @@ public class CreateExamActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 if (selectedMinute == 0){
                     chosenTime.setText(selectedHour + ":" + selectedMinute + "0");
+                } else if (selectedMinute < 10){
+                    chosenTime.setText(selectedHour + ":0" + selectedMinute);
                 } else {
                     chosenTime.setText(selectedHour + ":" + selectedMinute);
                 }
+
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.HOUR_OF_DAY, selectedHour);
                 cal.set(Calendar.MINUTE, selectedMinute);

@@ -80,7 +80,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
-        android:text="Celodenný plán máš nastavený primárne. Pokrýva možnosť, ked sa v daný deň nechceš venovať učeniu na skúšky alebo sa nenachádzaš v skúškovom období, avšak uvítaš efektívnu organizáciu času. V tomto pláne nemáš aktivity viazané k časovému úseku dňa, ako je to v prípade ranného, obedného a večerného plánu."
+        android:text="Celodenný plán máš nastavený primárne. Pokrýva možnosť, ked sa v daný deň nechceš venovať učeniu na skúšky alebo sa nenachádzaš v skúškovom období, avšak uvítaš efektívnu organizáciu času. V tomto pláne nemáš aktivity viazané k časovému úseku dňa, ako je to v prípade ranného, obedného a večerného plánu. Upozornenia na tento plán sú primárne nastavené na každých 90 minút."
         />
 
     <ImageView
@@ -113,7 +113,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="25dp"
-        android:text="Ranný, obedný a večerný plán sa Ti spustia, ak si reakciou na notifikáciu alebo tlačidlo prepnutia v predchádzajúcej obrazovke zvolíš skúšku (skúšky), na ktoré sa chceš učiť. Tento plán je narozdiel od celodenného plánu intenzívnejší a nachádzajú sa v ňom aktivity vykonávané v určitom časovom úseku dňa."
+        android:text="Ranný, obedný a večerný plán sa Ti spustia, ak si reakciou na notifikáciu alebo tlačidlo prepnutia v predchádzajúcej obrazovke zvolíš skúšku (skúšky), na ktoré sa chceš učiť. Tento plán je narozdiel od celodenného plánu intenzívnejší a nachádzajú sa v ňom aktivity vykonávané v určitom časovom úseku dňa. Upozornenia na tieto plány sú primárne nastavené na každých 50 minút."
         />
 
 

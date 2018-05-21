@@ -114,7 +114,13 @@ public class MyPlanTab1Fragment extends Fragment {
     private TextView txMorning;
     private TextView txLunch;
     private TextView txEvening;
+
     private TextView focusText;
+
+    private TextView txDaily;
+    private TextView txMorningGone;
+    private TextView txLunchGone;
+    private TextView txEveningGone;
 
     private ImageButton settingsButtonDaily;
     private ImageButton settingsButtonMorning;
@@ -167,6 +173,11 @@ public class MyPlanTab1Fragment extends Fragment {
         focusText = (TextView) view.findViewById(R.id.focusText);
         infoPlan = (ImageButton) view.findViewById(R.id.infoAboutPlan);
 
+        txDaily = (TextView) view.findViewById(R.id.txDaily);
+        txMorningGone = (TextView) view.findViewById(R.id.txMorningGone);
+        txLunchGone = (TextView) view.findViewById(R.id.txLunchGone);
+        txEveningGone = (TextView) view.findViewById(R.id.txEveningGone);
+
         examNotificationAdapter = new ExamNotificationAdapter(getActivity(), getExamResults());
 
         setAdapters();
@@ -175,13 +186,12 @@ public class MyPlanTab1Fragment extends Fragment {
         morningPlanCardView = (CardView) view.findViewById(R.id.card_view_morning_plan);
         lunchPlanCardView = (CardView) view.findViewById(R.id.card_view_lunch_plan);
         eveningPlanCardView = (CardView) view.findViewById(R.id.card_view_evening_plan);
-        createTextViews();
+        //createTextViews();
 
         dailyRecyclerView.setNestedScrollingEnabled(false);
         morningRecyclerView.setNestedScrollingEnabled(false);
         lunchRecyclerView.setNestedScrollingEnabled(false);
         eveningRecyclerView.setNestedScrollingEnabled(false);
-        //tx.setVisibility(View.GONE);
 
         setHabitsSize();
         checkPlans();
@@ -201,7 +211,18 @@ public class MyPlanTab1Fragment extends Fragment {
 
         sequence.setConfig(config);
 
-        sequence.addSequenceItem(focusText,
+        sequence.addSequenceItem(create(focusText,
+                "Tento zoznam ti zobrazuje aktivity, ktoré boli vložené do plánu. "));
+
+        sequence.addSequenceItem(create(dailyPlanCardView, "Kliknutím na zaškrtávacie políčko udávaš, že si danú činnosť vykonal."));
+
+        sequence.addSequenceItem(create(switchDaily,
+                "Toto tlačidlo slúži na prepínanie medzi plánmi. Jeho prepnutím si zvolíš skúšku, na ktorú sa chceš učiť."));
+
+        sequence.addSequenceItem(create(settingsButtonDaily,
+                "Môžeš si nastaviť interval upozornení. Celodenný plán je primárne nastavený na 90 minút, čiastkové na 50 minút."));
+
+        /*sequence.addSequenceItem(focusText,
                 "Tento zoznam ti zobrazuje aktivity, ktoré boli vložené do plánu. ", "Rozumiem!");
 
         sequence.addSequenceItem(dailyPlanCardView, "Kliknutím na zaškrtávacie políčko udávaš, že si danú činnosť vykonal.","Rozumiem!");
@@ -210,7 +231,7 @@ public class MyPlanTab1Fragment extends Fragment {
                 "Toto tlačidlo slúži na prepínanie medzi plánmi. Jeho prepnutím si zvolíš skúšku, na ktorú sa chceš učiť.", "Rozumiem!");
 
         sequence.addSequenceItem(settingsButtonDaily,
-                "Môžeš si nastaviť interval upozornení.", "Rozumiem!");
+                "Môžeš si nastaviť interval upozornení.", "Rozumiem!");*/
 
 
         sequence.start();
@@ -266,7 +287,6 @@ public class MyPlanTab1Fragment extends Fragment {
                                     dailyPlanCardView.setVisibility(View.GONE);
                                     settingsButtonDaily.setVisibility(View.GONE);
 
-                                    tx.setVisibility(View.GONE);
                                     ContentValues contentValues = new ContentValues();
                                     contentValues.put("enabled", false);
                                     planMainRepository.update2(1, contentValues);
@@ -314,7 +334,6 @@ public class MyPlanTab1Fragment extends Fragment {
                                 progressDailyBar.setVisibility(View.VISIBLE);
                                 dailyPlanCardView.setVisibility(View.VISIBLE);
                                 settingsButtonDaily.setVisibility(View.VISIBLE);
-                                tx.setVisibility(View.VISIBLE);
                                 //Toast.makeText(getActivity(), "Je nastaveny denny plan " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
                                 setVisible(0);
 
@@ -332,7 +351,6 @@ public class MyPlanTab1Fragment extends Fragment {
                         progressDailyBar.setVisibility(View.VISIBLE);
                         dailyPlanCardView.setVisibility(View.VISIBLE);
                         settingsButtonDaily.setVisibility(View.VISIBLE);
-                        tx.setVisibility(View.VISIBLE);
                         ContentValues contentValues = new ContentValues();
                         contentValues.put("enabled", true);
                         planMainRepository.update2(1, contentValues);
@@ -353,7 +371,6 @@ public class MyPlanTab1Fragment extends Fragment {
             progressDailyBar.setVisibility(View.VISIBLE);
             dailyPlanCardView.setVisibility(View.VISIBLE);
             settingsButtonDaily.setVisibility(View.VISIBLE);
-            tx.setVisibility(View.VISIBLE);
            // Toast.makeText(getActivity(), "Je nastaveny denny plan spodna cast " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
             setVisible(0);
 
@@ -362,7 +379,6 @@ public class MyPlanTab1Fragment extends Fragment {
             progressDailyBar.setVisibility(View.GONE);
             dailyPlanCardView.setVisibility(View.GONE);
             settingsButtonDaily.setVisibility(View.GONE);
-            tx.setVisibility(View.GONE);
             //Toast.makeText(getActivity(), "Je nastaveny deleny plan spodna cast " + planMainRepository.getByType(1).getEnabled(), Toast.LENGTH_SHORT).show();
             setVisible(1);
         }
@@ -542,7 +558,7 @@ public class MyPlanTab1Fragment extends Fragment {
     private void setPlanNotification(int minute, int idPlan){
         PlanMainRepository planMainRepository = new PlanMainRepository(getActivity());
         ContentValues contentValues = new ContentValues();
-        int min = 50;
+        int min = minute;
         if (minute == 25){
             min = 30;
         } else if (minute == 50){
@@ -559,13 +575,6 @@ public class MyPlanTab1Fragment extends Fragment {
     public List<PlanHabitAssociation> getDailyHabits(){
         List<PlanHabitAssociation> habits = habitMainRepository.getDailyPlanHabits();
 
-        /*List<Exam> exams = new ArrayList<>();
-        String[] titles = {"ahj","dkd","fdfd"};
-        for (int i=0; i < titles.length; i++){
-            Exam ex = new Exam(new Date(),new Time(5655),3,2,2,"d",5);
-            ex.setClassroom(titles[i]);
-            exams.add(ex);
-        }*/
         return habits;
 
     }
@@ -656,7 +665,7 @@ public class MyPlanTab1Fragment extends Fragment {
                 contentValues.put("study_date", 0);
                 if (studying != 0) {
                     examMainRepository.update2(e.getId(), contentValues);
-                    Toast.makeText(getActivity(), " id exam " + e.getId(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), " id exam " + e.getId(), Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -727,75 +736,53 @@ public class MyPlanTab1Fragment extends Fragment {
 
 
             if (getDailyHabits().size() == 0) {
-                dailyPlanCardView.removeAllViews();
-                dailyPlanCardView.addView(tx);
+                //dailyPlanCardView.removeAllViews();
+                //dailyPlanCardView.addView(tx);
+                txDaily.setVisibility(View.VISIBLE);
             } else {
-                dailyPlanCardView.removeView(tx);
+                //dailyPlanCardView.removeView(tx);
+                txDaily.setVisibility(View.GONE);
+
+
+                //LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.mydailyView);
+                //dailyPlanCardView.addView(layout);
                 //LinearLayout view = (LinearLayout) myView.findViewById(R.id.mydailyView);
                 //dailyPlanCardView.addView(view);
             }
 
             if (getMorningHabits().size() == 0) {
-                morningPlanCardView.removeAllViews();
-                morningPlanCardView.addView(txMorning);
+                //morningPlanCardView.removeAllViews();
+                //morningPlanCardView.addView(txMorning);
+                txMorningGone.setVisibility(View.VISIBLE);
             } else {
-                morningPlanCardView.removeView(txMorning);
+                //morningPlanCardView.removeView(txMorning);
+                txMorningGone.setVisibility(View.GONE);
 
             }
 
             if (getLunchHabits().size() == 0) {
-                lunchPlanCardView.removeAllViews();
-                lunchPlanCardView.addView(txLunch);
+                //lunchPlanCardView.removeAllViews();
+                //lunchPlanCardView.addView(txLunch);
+                txLunchGone.setVisibility(View.VISIBLE);
             } else {
-                lunchPlanCardView.removeView(txLunch);
+                //lunchPlanCardView.removeView(txLunch);
+                txLunchGone.setVisibility(View.GONE);
 
             }
 
             if (getEveningHabits().size() == 0) {
-                eveningPlanCardView.removeAllViews();
-                eveningPlanCardView.addView(txEvening);
+                //eveningPlanCardView.removeAllViews();
+                //eveningPlanCardView.addView(txEvening);
+                txEveningGone.setVisibility(View.VISIBLE);
             } else {
-                eveningPlanCardView.removeView(txEvening);
+                //eveningPlanCardView.removeView(txEvening);
+                txEveningGone.setVisibility(View.GONE);
 
 
             }
         }
 
 
-
-
-    /*@Override
-    public void fragmentSwitchToVisible() {
-
-        if (getDailyHabits().size() == 0 || getMorningHabits().size() == 0 || getLunchHabits().size() == 0 || getEveningHabits().size() == 0) {
-            checkPlans();
-        }
-
-        if (dailyHabits != getDailyHabits().size()){
-            setAdapterDaily();
-            dailyHabits = getDailyHabits().size();
-        };
-
-        if (morningHabits != getMorningHabits().size()){
-            setAdapterMorning();
-            morningHabits = getMorningHabits().size();
-        };
-
-        if (lunchHabits != getLunchHabits().size()){
-            setAdapterLunch();
-            lunchHabits = getLunchHabits().size();
-        }
-
-        if (eveningHabits != getEveningHabits().size()){
-            setAdapterEvening();
-            eveningHabits = getEveningHabits().size();
-        }
-
-        setAdapters();
-        updateProgressBars();
-        checkPlans();
-
-    }*/
 
     private void setVisible(int visibility){
         switch (visibility){
@@ -816,9 +803,6 @@ public class MyPlanTab1Fragment extends Fragment {
                 eveningTextView.setVisibility(View.GONE);
                 lunchTextView.setVisibility(View.GONE);
 
-                txEvening.setVisibility(View.GONE);
-                txMorning.setVisibility(View.GONE);
-                txLunch.setVisibility(View.GONE);
 
                 infoAboutDailyPlan.setText(R.string.infoAboutDailyPlanVisible);
 
@@ -841,21 +825,13 @@ public class MyPlanTab1Fragment extends Fragment {
                 eveningTextView.setVisibility(View.VISIBLE);
                 lunchTextView.setVisibility(View.VISIBLE);
 
-                txEvening.setVisibility(View.VISIBLE);
-                txMorning.setVisibility(View.VISIBLE);
-                txLunch.setVisibility(View.VISIBLE);
-
                 infoAboutDailyPlan.setText(R.string.infoAboutDailyPlan);
                 break;
         }
 
     }
 
-    /*private Cursor getExamResults(){
-        MainOpenHelper mainOpenHelper = new MainOpenHelper(getActivity());
-        SQLiteDatabase database = mainOpenHelper.getWritableDatabase();
-        return database.rawQuery("SELECT e.*, s.name, s.color FROM exam e left join subject s on e.subject_id = s._id where e.date > ? order by e.date",new String[]{String.valueOf(System.currentTimeMillis())});
-    }*/
+
 
     private List<Exam> getExamResults(){
         return examMainRepository.getExamResultsListNotification();
@@ -908,6 +884,20 @@ public class MyPlanTab1Fragment extends Fragment {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    private MaterialShowcaseView create(View view, String content){
+        MaterialShowcaseView.Builder builder = new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(view)
+                .setDismissText("Rozumiem!")
+                .setDismissTextColor(getResources().getColor(R.color.yellow_700))
+                //.setMaskColour(Color.argb(195, 0, 0, 0))
+                .setContentText(content)
+                .setDelay(300)
+                .setDismissOnTouch(true);
+
+        MaterialShowcaseView showcaseView = builder.build();
+        return showcaseView;
     }
 
     @Override

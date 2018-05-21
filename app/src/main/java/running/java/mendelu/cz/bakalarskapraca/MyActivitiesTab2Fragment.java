@@ -43,6 +43,7 @@ import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.CancelEveningHabitNotificationReceiver;
 import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
@@ -107,7 +108,7 @@ public class MyActivitiesTab2Fragment extends Fragment{
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_my_activities_tab, container, false);
 
 
@@ -147,8 +148,13 @@ public class MyActivitiesTab2Fragment extends Fragment{
                 MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(getActivity(), "15");
 
                 sequence.setConfig(config);
+                sequence.addSequenceItem(create(timeTextViewDaily,"Ikony zobrazujú dostupné činnosti k vykonaniu, ktoré si môžeš pridať do plánu."));
+                sequence.addSequenceItem(create(hiddenButton,"V tejto časti si tvoríš plán pridávaním a odoberaním aktivít."));
+                sequence.addSequenceItem(create(timeButtonDaily,"Ikona budíka charakterizuje dobu upozorňovania na aktivity v pláne."));
+                sequence.addSequenceItem(create(floatingActionButton,"Dokonca si môžeš vytvoriť i vlastnú aktivitu!"));
+                //sequence.start();
 
-                sequence.addSequenceItem(timeTextViewDaily, "Jednotlivé ikony zobrazujú všetky dostupné činnosti k vykonaniu, ktoré si môžeš pridať do plánu.","Rozumiem!");
+                /*sequence.addSequenceItem(timeTextViewDaily, "Ikony zobrazujú dostupné činnosti k vykonaniu, ktoré si môžeš pridať do plánu.","Rozumiem!");
 
                 sequence.addSequenceItem(hiddenButton, "V tejto časti si tvoríš plán a jeho aktivity podľa seba.","Rozumiem!");
 
@@ -156,7 +162,7 @@ public class MyActivitiesTab2Fragment extends Fragment{
                         "Ikona budíka charakterizuje dobu upozorňovania na aktivity v pláne.", "Rozumiem!");
 
                 sequence.addSequenceItem(floatingActionButton,
-                        "Dokonca si môžeš vytvoriť i vlastnú aktivitu!", "Rozumiem!");
+                        "Dokonca si môžeš vytvoriť i vlastnú aktivitu!", "Rozumiem!");*/
 
 
                 sequence.start();
@@ -208,25 +214,7 @@ public class MyActivitiesTab2Fragment extends Fragment{
 
     }
 
-    /*public void setListeners(MyPlanTab1Fragment fragment){
-        setDialogDaily(fragment);
-        setDialogEvening(fragment);
-        setDialogLunch(fragment);
-        setDialogMorning(fragment);
-    }
 
-
-    public void setDialogDaily(final MyPlanTab1Fragment fragment){
-        if (dailyHabitToChooseAdapter != null){
-            dailyDialog = dailyHabitToChooseAdapter.getDialog();
-            dailyDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    fragment.updateFragment();
-                }
-            });
-        }
-    }*/
 
 
     private void setListeners(ImageButton button, final int idPlan){
@@ -324,21 +312,13 @@ public class MyActivitiesTab2Fragment extends Fragment{
 
                                     if (System.currentTimeMillis() < from.getTimeInMillis()) {
                                             setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
-                                            //Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
                                         } else if (System.currentTimeMillis() < to.getTimeInMillis()) {
-                                            //if (getNotificationClass(idPlan) != null){
 
                                             setHabitNotification(System.currentTimeMillis(), idPlan, to.getTimeInMillis());
-                                            //}
-                                            //Toast.makeText(getActivity(), "Upozornenie do " + sdf.format(getCurrentTime()) + " " + sdf.format(to.getTimeInMillis()), Toast.LENGTH_LONG).show();
+
 
                                         } else {
-                                            /*Calendar calendar = Calendar.getInstance();
-                                            calendar.setTime(from.getTime());
-                                            calendar.add(Calendar.DAY_OF_MONTH, 1);
-                                            Calendar calendar1 = Calendar.getInstance();
-                                            calendar1.setTime(to.getTime());
-                                            calendar1.add(Calendar.DAY_OF_MONTH,1);*/
+
                                             from.add(Calendar.DAY_OF_MONTH,1);
                                             to.add(Calendar.DAY_OF_MONTH,1);
                                             setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
@@ -366,20 +346,13 @@ public class MyActivitiesTab2Fragment extends Fragment{
                                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
                                 if (System.currentTimeMillis() < from.getTimeInMillis()) {
                                     setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
-                                    //Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()), Toast.LENGTH_LONG).show();
                                 } else if (System.currentTimeMillis() < to.getTimeInMillis()) {
                                     //if (getNotificationClass(idPlan) != null){
                                     setHabitNotification(System.currentTimeMillis(), idPlan, to.getTimeInMillis());
                                     //}
-                                    //Toast.makeText(getActivity(), "Upozornenie od " + sdf.format(from.getTimeInMillis()) + " " + sdf.format(to.getTimeInMillis()) + " " , Toast.LENGTH_LONG).show();
 
                                 } else {
-                                    /*Calendar calendar = Calendar.getInstance();
-                                    calendar.setTime(from.getTime());
-                                    calendar.add(Calendar.DAY_OF_MONTH, 1);
-                                    Calendar calendar1 = Calendar.getInstance();
-                                    calendar1.setTime(to.getTime());
-                                    calendar1.add(Calendar.DAY_OF_MONTH,1);*/
+
                                     from.add(Calendar.DAY_OF_MONTH,1);
                                     to.add(Calendar.DAY_OF_MONTH,1);
                                     setHabitNotification(from.getTimeInMillis(), idPlan, to.getTimeInMillis());
@@ -415,13 +388,7 @@ public class MyActivitiesTab2Fragment extends Fragment{
     public List<Habit> getAllHabits(){
         List<Habit> habits = habitMainRepository.getAllHabits();
 
-        /*List<Exam> exams = new ArrayList<>();
-        String[] titles = {"ahj","dkd","fdfd"};
-        for (int i=0; i < titles.length; i++){
-            Exam ex = new Exam(new Date(),new Time(5655),3,2,2,"d",5);
-            ex.setClassroom(titles[i]);
-            exams.add(ex);
-        }*/
+
         return habits;
 
     }
@@ -439,6 +406,20 @@ public class MyActivitiesTab2Fragment extends Fragment{
         setTimeTextViews(timeTextViewMorning,2);
         setTimeTextViews(timeTextViewLunch,3);
         setTimeTextViews(timeTextViewEvening,4);
+    }
+
+    private MaterialShowcaseView create(View view, String content){
+        MaterialShowcaseView.Builder builder = new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(view)
+                .setDismissText("Rozumiem!")
+                .setDismissTextColor(getResources().getColor(R.color.yellow_700))
+                //.setMaskColour(Color.argb(195, 0, 0, 0))
+                .setContentText(content)
+                .setDelay(300)
+                .setDismissOnTouch(true);
+
+        MaterialShowcaseView showcaseView = builder.build();
+        return showcaseView;
     }
 
     private void setTimeTextViews(TextView button, long id){
@@ -492,13 +473,6 @@ public class MyActivitiesTab2Fragment extends Fragment{
     public List<Habit> getDailyHabits(){
         List<Habit> habits = habitMainRepository.getAllHabits();
 
-        /*List<Exam> exams = new ArrayList<>();
-        String[] titles = {"ahj","dkd","fdfd"};
-        for (int i=0; i < titles.length; i++){
-            Exam ex = new Exam(new Date(),new Time(5655),3,2,2,"d",5);
-            ex.setClassroom(titles[i]);
-            exams.add(ex);
-        }*/
         return habits;
 
     }

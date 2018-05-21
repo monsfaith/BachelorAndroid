@@ -141,9 +141,24 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="houby"
+                android:text="Ciele"
                 android:id="@+id/focusText"
                 android:visibility="gone"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nie je momentálne zvolený žiadny plán."
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:id="@+id/txDaily"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:visibility="gone"
+
                 />
 
 
@@ -227,6 +242,21 @@
             android:orientation="vertical"
             android:layout_height="match_parent">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nie je momentálne zvolený žiadny plán."
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:id="@+id/txMorningGone"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:visibility="gone"
+
+                />
+
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewMorningHabits"
@@ -306,6 +336,21 @@
             android:id="@+id/mylunchView"
             android:layout_height="match_parent">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nie je momentálne zvolený žiadny plán."
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:id="@+id/txLunchGone"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:visibility="gone"
+
+                />
+
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewLunchHabits"
@@ -376,6 +421,21 @@
             android:orientation="vertical"
             android:id="@+id/myeveningView"
             android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nie je momentálne zvolený žiadny plán."
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:id="@+id/txEveningGone"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:visibility="gone"
+
+                />
 
 
             <android.support.v7.widget.RecyclerView

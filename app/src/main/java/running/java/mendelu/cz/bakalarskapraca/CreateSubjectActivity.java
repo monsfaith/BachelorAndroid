@@ -70,19 +70,6 @@ public class CreateSubjectActivity extends AppCompatActivity implements SimpleDi
 
 
 
-    /*public void newSubjectCreation(View v){
-        String subjectName = subjectNameInput.getText().toString();
-        String subjectShortcut = subjectShortcutInput.getText().toString().toUpperCase();
-        Subject sub = new Subject(subjectName,subjectShortcut);
-        Long lastInsertedId = subjectMainRepository.insert(sub);
-
-        Toast.makeText(CreateSubjectActivity.this,"" + lastInsertedId + "id",Toast.LENGTH_LONG).show();
-
-        Intent i = new Intent();
-        i.putExtra(SUB_ID, lastInsertedId);
-        setResult(RESULT_OK,i);
-        finish();
-    }*/
 
     public void createSubject(MenuItem item) {
         String subjectName = subjectNameInput.getText().toString();

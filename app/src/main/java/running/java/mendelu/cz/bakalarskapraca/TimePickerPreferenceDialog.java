@@ -103,14 +103,7 @@ public class TimePickerPreferenceDialog extends PreferenceDialogFragmentCompat {
     private void setExamNotification(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-            /*contentValues.put("enabled",false);
-            planMainRepository.update2(1, contentValues);*/
 
-        //calendar.add(Calendar.MINUTE, 1);
-
-        //nova cast, podla mna
-        //calendar.set(Calendar.MINUTE,00);
-        //calendar.set(Calendar.HOUR_OF_DAY,8);
 
         //po upraveni settings
         calendar.set(Calendar.MINUTE,subjectMainRepository.getProjectById(1).getMinute());
@@ -123,7 +116,7 @@ public class TimePickerPreferenceDialog extends PreferenceDialogFragmentCompat {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 500, i, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        //Toast.makeText(getContext(),"Nastavené na " + subjectMainRepository.getProjectById(1).getHour() + ":" + subjectMainRepository.getProjectById(1).getMinute() + " hod", Toast.LENGTH_SHORT).show();
+
 
     }
 }

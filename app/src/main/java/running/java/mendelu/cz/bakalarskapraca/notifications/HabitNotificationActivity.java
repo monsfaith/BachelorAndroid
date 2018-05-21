@@ -1,5 +1,8 @@
 package running.java.mendelu.cz.bakalarskapraca.notifications;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -17,6 +20,7 @@ import com.daimajia.androidanimations.library.YoYo;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
 import java.util.List;
 
 import running.java.mendelu.cz.bakalarskapraca.MyActivitiesTab2Fragment;
@@ -25,9 +29,13 @@ import running.java.mendelu.cz.bakalarskapraca.R;
 import running.java.mendelu.cz.bakalarskapraca.db.ExamMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitAdapter;
 import running.java.mendelu.cz.bakalarskapraca.db.HabitMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.db.Plan;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.DailyHabitNotificationReceiver;
+import running.java.mendelu.cz.bakalarskapraca.notifications.receivers.EveningHabitNotificationReceiver;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
@@ -92,9 +100,9 @@ public class HabitNotificationActivity extends AppCompatActivity{
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "20");
         config.setDismissTextColor(getResources().getColor(R.color.yellow_700));
         sequence.setConfig(config);
-        sequence.addSequenceItem(hiddenText,
-                "Teraz je čas na študijnú prestávku. Označ aktivitu, ktorú ideš vykonať.", "Rozumiem!");
-        sequence.addSequenceItem(hiddenText2, "Máš k dispozícii vždy celý zoznam aktivít pre voľnosť realizácie.", "Rozumiem!");
+        sequence.addSequenceItem(create(hiddenText,
+                "Teraz je čas na študijnú prestávku. Označ aktivitu, ktorú ideš vykonať."));
+        sequence.addSequenceItem(create(hiddenText2, "Máš k dispozícii vždy celý zoznam pridaných aktivít pre voľnosť realizácie."));
         sequence.start();
 
         /*fabAccept.setOnClickListener(new View.OnClickListener() {
@@ -166,6 +174,9 @@ public class HabitNotificationActivity extends AppCompatActivity{
                 @Override
                 public void onClick(View v) {
                     if (getHabits(idPlan).size() != 0){
+                        if (idPlan != 1) {
+                            setBreak(idPlan);
+                        }
                         finish();
                     } else {
                         noRituals();
@@ -175,6 +186,39 @@ public class HabitNotificationActivity extends AppCompatActivity{
             });
         actualRecyclerView.setAdapter(habitAdapter);
         actualRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+    }
+
+    private void setBreak(int idPlan){
+        Plan plan = planMainRepository.getByType(idPlan);
+        long repetition = plan.getRepetition();
+        int min = 10;
+        if (repetition == 1800000){
+            min = 5;
+        } else if ((repetition == 3600000) || (repetition == 6000000)){
+            min = 10;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE,min);
+
+        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(getApplicationContext(), DailyHabitNotificationReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 25, i, 0);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
+
+    private MaterialShowcaseView create(View view, String content){
+        MaterialShowcaseView.Builder builder = new MaterialShowcaseView.Builder(this)
+                .setTarget(view)
+                .setDismissText("Rozumiem!")
+                .setDismissTextColor(getResources().getColor(R.color.yellow_700))
+                //.setMaskColour(Color.argb(195, 0, 0, 0))
+                .setContentText(content)
+                .setDelay(300)
+                .setDismissOnTouch(true);
+
+        MaterialShowcaseView showcaseView = builder.build();
+        return showcaseView;
     }
 
 

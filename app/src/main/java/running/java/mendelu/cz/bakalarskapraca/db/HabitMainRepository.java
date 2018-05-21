@@ -607,4 +607,36 @@ public class HabitMainRepository {
         calendar.set(Calendar.SECOND,55);
         return calendar.getTimeInMillis();
     }
+
+    public List<PlanHabitAssociation> getMessagePlanHabits(int idPlan){
+        SQLiteDatabase db = mainOpenHelper.getReadableDatabase();
+
+        try {
+            List<PlanHabitAssociation> result = new LinkedList<>();
+
+            //Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.id_plan = 1 and plan_habit.date = ? ", new String[]{String.valueOf(getCurrentDate())});
+
+            Cursor c = db.rawQuery("SELECT plan_habit.* FROM plan_habit left join habit on plan_habit.id_habit = habit._id where plan_habit.done = 0 AND plan_habit.id_plan = ? " , new String[]{String.valueOf(idPlan)});
+
+            // Cursor c = db.rawQuery("SELECT habit.* FROM habit right join plan_habit on habit._id = plan_habit.id_habit where plan_habit.id_plan = 1", null);
+
+
+            try {
+
+                while (c.moveToNext()) {
+                    result.add(new PlanHabitAssociation(c));
+
+                }
+                c.close();
+                return result;
+
+            } finally {
+                db.close();
+            }
+
+        } finally {
+            db.close();
+        }
+
+    }
 }

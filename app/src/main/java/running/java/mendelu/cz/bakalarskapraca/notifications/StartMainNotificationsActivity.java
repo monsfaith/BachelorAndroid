@@ -163,8 +163,10 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
                     cancelExam();
                     setExamNotificationTomorrow();
                     examNotificationAdapter.deleteCheckedExams();
+                    examNotificationAdapter.clearCount();
                     finish();
                 } else {
+                    examNotificationAdapter.deleteCheckedExams();
                     Toast.makeText(getApplicationContext(), "Nutné zvoliť skúšku, na ktorú sa ideš pripravovať", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -178,6 +180,8 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
                     //dala som to prec
                     //examNotificationAdapter.setNoExams();
                 }
+                examNotificationAdapter.deleteCheckedExams();
+                examNotificationAdapter.clearCount();
                 finish();
             }
         });
@@ -276,13 +280,24 @@ public class StartMainNotificationsActivity extends AppCompatActivity {
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), cancelPendingIntent);
     }
 
+    private boolean sameDay(long time){
+        Calendar calendarCurrent = Calendar.getInstance();
+        Calendar calendarMy = Calendar.getInstance();
+        calendarMy.setTimeInMillis(time);
+        boolean sameDay = calendarCurrent.get(Calendar.YEAR) == calendarMy.get(Calendar.YEAR) &&
+                calendarCurrent.get(Calendar.DAY_OF_YEAR) == calendarMy.get(Calendar.DAY_OF_YEAR);
+        return sameDay;
+    }
+
     private void updateCheckedExams(List<Exam> exams){
         if (exams.size() != 0) {
             for (int i = 0; i < exams.size(); i++) {
                 Exam e = exams.get(i);
                 ContentValues contentValues = new ContentValues();
                 int studying = e.getStudying();
-                contentValues.put("studying", studying + 1);
+                if (sameDay(e.getStudyDate()) == false) {
+                    contentValues.put("studying", studying + 1);
+                }
                 contentValues.put("study_date", System.currentTimeMillis());
                 examMainRepository.update2(e.getId(), contentValues);
                 //Toast.makeText(, " id exam " + e.getId(), Toast.LENGTH_SHORT).show();

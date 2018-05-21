@@ -6,6 +6,14 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:xlargeScreens="true"
+        android:smallScreens="false"
+         />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/myicon"
@@ -80,9 +88,7 @@
             android:theme="@style/AppTheme"></activity>
 
         <receiver
-            android:name=".notifications.receivers.DailyHabitNotificationReceiver"
-            android:enabled="true"
-            android:exported="true" />
+            android:name=".notifications.receivers.DailyHabitNotificationReceiver" />
         <receiver android:name=".notifications.receivers.ExamNotificationReceiver" />
         <receiver android:name=".notifications.receivers.DatabaseRecordReceiver" />
         <receiver android:name=".notifications.receivers.AfterBootReceiver">
@@ -96,6 +102,7 @@
         <receiver android:name=".notifications.receivers.CancelExamReceiver" />
         <receiver android:name=".notifications.receivers.ExamTomorrowReceiver"></receiver>
         <receiver android:name=".notifications.receivers.SleepReceiver" />
+        <receiver android:name=".notifications.receivers.StudyBreakReceiver"></receiver>
 
         <activity
             android:name=".IconsActivity"

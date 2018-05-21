@@ -114,7 +114,7 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                                 planMainRepository.deleteAssociation(idOfPlan, id);
-                                Toast.makeText(context, "Odobrané z plánu ", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(context, "Odobrané z plánu ", Toast.LENGTH_SHORT).show();
                                 holder.habitImage.setColorFilter(opacityPicture, PorterDuff.Mode.SRC_ATOP);
                                 myPlanTabFragment.updateFragment();
 
@@ -129,7 +129,7 @@ public class HabitToChooseAdapter extends RecyclerView.Adapter<HabitToChooseAdap
                         public void onClick(DialogInterface dialogInterface, int i) {
                                 PlanHabitAssociation pha = new PlanHabitAssociation(id, idOfPlan);
                                 planMainRepository.insertAssociaton(pha);
-                                Toast.makeText(context, "Pridané do plánu ", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(context, "Pridané do plánu ", Toast.LENGTH_SHORT).show();
                                 holder.habitImage.setColorFilter(null);
                                 myPlanTabFragment.updateFragment();
                         }

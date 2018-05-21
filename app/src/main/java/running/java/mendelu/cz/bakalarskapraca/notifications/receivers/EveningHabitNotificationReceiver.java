@@ -13,7 +13,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.widget.Toast;
 
+import java.util.List;
+import java.util.Random;
+
 import running.java.mendelu.cz.bakalarskapraca.R;
+import running.java.mendelu.cz.bakalarskapraca.db.Habit;
+import running.java.mendelu.cz.bakalarskapraca.db.HabitMainRepository;
+import running.java.mendelu.cz.bakalarskapraca.db.PlanHabitAssociation;
 import running.java.mendelu.cz.bakalarskapraca.db.PlanMainRepository;
 import running.java.mendelu.cz.bakalarskapraca.notifications.HabitNotificationActivity;
 
@@ -59,16 +65,16 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
 
         if (requestCode == 200) {
             builder.setSmallIcon(R.drawable.ic_brightness_5_black_24dp);
-            contentTitle = "Ranný plán";
+            contentTitle = getDailyMessage(context,2);
             if (name.trim().length() != 0){
                 contentText = name + ", naštartuj sa do nového dňa! ";
-                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Študijná prestávka").addLine(contentText));
+                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Ranný plán").addLine(contentText));
                 builder.setContentText("");
 
 
             } else {
                 contentText = "Naštartuj sa do nového dňa! ";
-                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Študijná prestávka").addLine(contentText));
+                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Ranný plán").addLine(contentText));
                 builder.setContentText("");
 
 
@@ -78,16 +84,16 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
 
         if (requestCode == 300) {
             builder.setSmallIcon(R.drawable.ic_brightness_medium_black_24dp);
-            contentTitle = "Obedný plán";
+            contentTitle = getDailyMessage(context,3);
             if (name.trim().length() != 0){
-                contentText = name + ", nezabúdaj si oddýchnuť ani v priebehu dňa";
-                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Študijná prestávka").addLine(contentText));
+                contentText = name + ", oddýchni si aj v priebehu dňa";
+                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Obedný plán").addLine(contentText));
                 builder.setContentText("");
 
 
             } else {
                 contentText = "Nezabúdaj si oddýchnuť ani v priebehu dňa";
-                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Študijná prestávka").addLine(contentText));
+                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Obedný plán").addLine(contentText));
                 builder.setContentText("");
 
             }
@@ -95,15 +101,15 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
 
         if (requestCode == 400) {
             builder.setSmallIcon(R.drawable.ic_brightness_3_black_24dp);
-            contentTitle = "Večerný plán";
+            contentTitle = getDailyMessage(context,4);
             if (name.trim().length() != 0){
-                contentText = name + ", ostaň bez stresu i ku koncu dňa";
-                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Študijná prestávka").addLine(contentText));
+                contentText = name + ", ostaň bez stresu i ku koncu dňa!";
+                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Večerný plán").addLine(contentText));
                 builder.setContentText("");
 
             } else {
-                contentText = "Ostaň bez stresu i ku koncu dňa";
-                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Študijná prestávka").addLine(contentText));
+                contentText = "Ostaň bez stresu i ku koncu dňa ";
+                builder.setStyle(new NotificationCompat.InboxStyle().setSummaryText("Večerný plán").addLine(contentText));
                 builder.setContentText("");
 
             }
@@ -111,7 +117,7 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
 
         if (requestCode == 100) {
             builder.setSmallIcon(R.drawable.ic_lens_black_24dp);
-            contentTitle = "Denný plán";
+            contentTitle = "Denný plán | " + getDailyMessage(context,1);
             if (name.trim().length() != 0){
                 contentText = name + ", buď bližšie k svojím cieľom!";
                 builder.setContentText(contentText);
@@ -146,4 +152,64 @@ public class EveningHabitNotificationReceiver extends BroadcastReceiver {
             return false;
         }
     }
+
+    private List<PlanHabitAssociation> getPlan(Context context, int idPlan){
+        HabitMainRepository habitMainRepository = new HabitMainRepository(context);
+        List<PlanHabitAssociation> pha1 = null;
+
+        switch (idPlan) {
+            case 1:
+                pha1 = habitMainRepository.getDailyPlanHabits();
+                break;
+            case 2:
+                pha1 = habitMainRepository.getMorningPlanHabits();
+                break;
+            case 3:
+                pha1 = habitMainRepository.getLunchPlanHabits();
+                break;
+            case 4:
+                pha1 = habitMainRepository.getEveningPlanHabits();
+                break;
+        }
+        return pha1;
+
+    }
+
+
+
+    private String getDailyMessage(Context context, int idPlan) {
+        String text = "";
+        HabitMainRepository habitMainRepository = new HabitMainRepository(context);
+        List<PlanHabitAssociation> pha = habitMainRepository.getMessagePlanHabits(idPlan);
+
+        if (pha != null & pha.size() != 0) {
+            Random rand = new Random();
+            int n = rand.nextInt(pha.size());
+            Habit habit = habitMainRepository.getById(pha.get(n).getIdHabit());
+            text = "Tip: " + habit.getName();
+        } else if (getPlan(context, idPlan) != null) {
+            if (getPlan(context, idPlan).size() != 0) {
+                List<PlanHabitAssociation> planHabit = getPlan(context, idPlan);
+                Random rand = new Random();
+                int n = rand.nextInt(planHabit.size());
+                Habit habit = habitMainRepository.getById(planHabit.get(n).getIdHabit());
+                text = "Tip: " + habit.getName();
+            } else {
+                text = "Čas na oddych";
+            }
+
+        }
+
+        else {
+            text = "Čas na oddych";
+        }
+
+        return text;
+    }
+
+
+
+
+
+
 }
